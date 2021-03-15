@@ -9,7 +9,6 @@
   
     data.forEach(d => {
       // TODO
-      console.log('reading data');
     });
 
   

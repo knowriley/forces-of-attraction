@@ -13,7 +13,6 @@ class ForceDirectedGraph {
 
     initVis() {
         let vis = this;
-        console.log('init force directed');
         // TODO
     }
 

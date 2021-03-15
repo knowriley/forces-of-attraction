@@ -13,7 +13,6 @@ class BarChart {
 
     initVis() {
         let vis = this;
-        console.log('init barchart');
         // TODO
     }
 

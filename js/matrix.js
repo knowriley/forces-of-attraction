@@ -13,7 +13,6 @@ class Matrix {
 
     initVis() {
         let vis = this;
-        console.log('init matrix');
         // TODO
     }
 
