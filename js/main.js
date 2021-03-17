@@ -3,7 +3,7 @@
  */
 const NUM_OF_FIELDS = 19;
 const NUM_OF_CAREERS = 18;
-const NUM_OF_RACES = 7;
+const NUM_OF_RACES = 7; //MAX_AGE (6) + 1
 const NUM_OF_AGES = 56; //MAX_AGE (55) + 1
 
 const fieldCodeToFieldGroupMapping = [ // 7 unique groups
@@ -62,27 +62,46 @@ d3.csv('data/speedDating.csv').then(data => {
     });
   });
 
-  console.log(data);
+  let femaleData = getGenderedData(data, 0);
+  let maleData = getGenderedData(data, 1);
+  
+  let femaleMatchData = getMatches(femaleData, 0);
+  let maleMatchData = getMatches(maleData, 1);
 
-  let matchData = getMatches(data);
-  console.log(matchData);
   let demographicData = getSubjectDemographicdata(data);
-  console.log(demographicData);
 
-  getMatchingProbabilityByCareer(data, matchData, demographicData);
-  getMatchingProbabilityByField(data, matchData, demographicData);
-  getMatchingProbabilityByRace(data, matchData, demographicData);
-  getMatchingProbabilityByAge(data, matchData, demographicData);
+  getMatchingProbabilityMatrix(maleData, maleMatchData, demographicData, 'career_c', NUM_OF_CAREERS);
+
+  getMatchingProbabilityMatrix(maleData, maleMatchData, demographicData, 'field_cd', NUM_OF_FIELDS);
+
+  getMatchingProbabilityMatrix(maleData, maleMatchData, demographicData, 'race', NUM_OF_RACES);
+
+  getMatchingProbabilityMatrix(maleData, maleMatchData, demographicData, 'age', NUM_OF_AGES);
+
+  getMatchingProbabilityBars(maleData, maleMatchData, demographicData, 'career_c', NUM_OF_CAREERS);
+  getMatchingProbabilityBars(femaleData, femaleMatchData, demographicData, 'career_c', NUM_OF_CAREERS);
+
+  getMatchingProbabilityBars(maleData, maleMatchData, demographicData, 'field_cd', NUM_OF_FIELDS);
+  getMatchingProbabilityBars(femaleData, femaleMatchData, demographicData, 'field_cd', NUM_OF_FIELDS);
+
+  getMatchingProbabilityBars(maleData, maleMatchData, demographicData, 'race', NUM_OF_RACES);
+  getMatchingProbabilityBars(femaleData, femaleMatchData, demographicData, 'race', NUM_OF_RACES);
+
+  getMatchingProbabilityBars(maleData, maleMatchData, demographicData, 'age', NUM_OF_AGES);
+  getMatchingProbabilityBars(femaleData, femaleMatchData, demographicData, 'age', NUM_OF_AGES);
 
   // Init charts
   barChart = new BarChart({ parentElement: '#bar'}, data);
   forceDirectedGraph = new ForceDirectedGraph({ parentElement: '#forceDirected'}, data);
   matrix = new Matrix({ parentElement: '#matric'}, data);
-
 });
 
+var getGenderedData = (data, gender) => {
+  return data.filter(d => d.gender == gender);
+}
+
 var getMatches = (data) => {
-  return data.filter(d => d.match == 1 && d.gender == 1);
+  return data.filter(d => d.match == 1);
 }
 
 var getSubjectDemographicdata = (data) => {
@@ -102,150 +121,83 @@ var getSubjectDemographicdata = (data) => {
   return map;
 }
 
-var getMatchingProbabilityByCareer = (data, matchData, demographicData) => {
-  let allCount = new Array(NUM_OF_CAREERS);
-  let matchCount = new Array(NUM_OF_CAREERS);
-  let probability = new Array(NUM_OF_CAREERS);
+/**
+  * Data pre-processing for adjacency matrix
+  * The gender used for @param matchData and @param data does not influence the change the result BUT they MUST match,
+  * the gender used for will be the row, and the opposite gender on the column.
+  */
+var getMatchingProbabilityMatrix = (data, matchData, demographicData, attribute, limit) => {
+  let allCount = new Array(limit);
+  let matchCount = new Array(limit);
+  let probability = new Array(limit);
 
-  for (let i = 0; i < NUM_OF_CAREERS; i++) {
-    allCount[i] = new Array(NUM_OF_CAREERS);
+  for (let i = 0; i < limit; i++) {
+    allCount[i] = new Array(limit);
     allCount[i].fill(0);
-    matchCount[i] = new Array(NUM_OF_CAREERS);
+    matchCount[i] = new Array(limit);
     matchCount[i].fill(0);
-    probability[i] = new Array(NUM_OF_CAREERS);
+    probability[i] = new Array(limit);
     probability[i].fill(0);
   }
 
   data.forEach(d => {
     if (d.pid) {
-      allCount[d.career_c][demographicData.get(d.pid).career_c]++;
+      allCount[d[attribute]][demographicData.get(d.pid)[attribute]]++;
     }
   });
 
   matchData.forEach(d => {
     if (d.pid) {
-      matchCount[d.career_c][demographicData.get(d.pid).career_c]++;
+      matchCount[d[attribute]][demographicData.get(d.pid)[attribute]]++;
     }
   });
 
-  for (let i = 0; i < NUM_OF_CAREERS; i++) {
-    for (let j = 0; j < NUM_OF_CAREERS; j++) {
+  for (let i = 0; i < limit; i++) {
+    for (let j = 0; j < limit; j++) {
       probability[i][j] = allCount[i][j] == 0 ? 0 : matchCount[i][j]/allCount[i][j];
     }
   }
-
-  console.log(probability);
 
   return probability;
 }
 
-var getMatchingProbabilityByField = (data, matchData, demographicData) => {
-  let allCount = new Array(NUM_OF_FIELDS);
-  let matchCount = new Array(NUM_OF_FIELDS);
-  let probability = new Array(NUM_OF_FIELDS);
+/**
+  * Data pre-processing for bar chart
+  * The gender used for @param matchData and @param data will the result AND they MUST match,
+  */
+var getMatchingProbabilityBars = (data, matchData, demographicData, attribute, limit) => {
+  let total = new Array(limit); //total number of pairing for each value of an attribute for a gender;
+  let totalMatches = new Array(limit); //total number of matches for each value of an attribute;
+  total.fill(0);
+  totalMatches.fill(0);
 
-  for (let i = 0; i < NUM_OF_FIELDS; i++) {
-    allCount[i] = new Array(NUM_OF_FIELDS);
-    allCount[i].fill(0);
-    matchCount[i] = new Array(NUM_OF_FIELDS);
+  let matchCount = new Array(limit);
+  let probability = new Array(limit);
+
+  for (let i = 0; i < limit; i++) {
+    matchCount[i] = new Array(limit);
     matchCount[i].fill(0);
-    probability[i] = new Array(NUM_OF_FIELDS);
+    probability[i] = new Array(limit+1);
     probability[i].fill(0);
   }
 
   data.forEach(d => {
-    if (d.pid) {
-      allCount[d.field_cd][demographicData.get(d.pid).field_cd]++;
-    }
+    total[d[attribute]]++;
   });
 
   matchData.forEach(d => {
     if (d.pid) {
-      matchCount[d.field_cd][demographicData.get(d.pid).field_cd]++;
+      matchCount[d[attribute]][demographicData.get(d.pid)[attribute]]++;
+      totalMatches[d[attribute]]++;
     }
   });
 
-  for (let i = 0; i < NUM_OF_FIELDS; i++) {
-    for (let j = 0; j < NUM_OF_FIELDS; j++) {
-      probability[i][j] = allCount[i][j] == 0 ? 0 : matchCount[i][j]/allCount[i][j];
+  for (let i = 0; i < limit; i++) {
+    for (let j = 0; j < limit; j++) {
+      probability[i][j] = total[i] == 0 ? 0 : matchCount[i][j]/total[i];
     }
+    probability[i][limit] = total[i] == 0 ? 0 : (total[i]-totalMatches[i])/total[i]; //last column indicates probability of not getting any match
   }
-
-  console.log(probability);
-
-  return probability;
-}
-
-var getMatchingProbabilityByRace = (data, matchData, demographicData) => {
-  let allCount = new Array(NUM_OF_RACES);
-  let matchCount = new Array(NUM_OF_RACES);
-  let probability = new Array(NUM_OF_RACES);
-
-  for (let i = 0; i < NUM_OF_RACES; i++) {
-    allCount[i] = new Array(NUM_OF_RACES);
-    allCount[i].fill(0);
-    matchCount[i] = new Array(NUM_OF_RACES);
-    matchCount[i].fill(0);
-    probability[i] = new Array(NUM_OF_RACES);
-    probability[i].fill(0);
-  }
-
-  data.forEach(d => {
-    if (d.pid) {
-      allCount[d.race][demographicData.get(d.pid).race]++;
-    }
-  });
-
-  matchData.forEach(d => {
-    if (d.pid) {
-      matchCount[d.race][demographicData.get(d.pid).race]++;
-    }
-  });
-
-  for (let i = 0; i < NUM_OF_RACES; i++) {
-    for (let j = 0; j < NUM_OF_RACES; j++) {
-      probability[i][j] = allCount[i][j] == 0 ? 0 : matchCount[i][j]/allCount[i][j];
-    }
-  }
-
-  console.log(probability);
-
-  return probability;
-}
-
-var getMatchingProbabilityByAge = (data, matchData, demographicData) => {
-  let allCount = new Array(NUM_OF_AGES);
-  let matchCount = new Array(NUM_OF_AGES);
-  let probability = new Array(NUM_OF_AGES);
-
-  for (let i = 0; i < NUM_OF_AGES; i++) {
-    allCount[i] = new Array(NUM_OF_AGES);
-    allCount[i].fill(0);
-    matchCount[i] = new Array(NUM_OF_AGES);
-    matchCount[i].fill(0);
-    probability[i] = new Array(NUM_OF_AGES);
-    probability[i].fill(0);
-  }
-
-  data.forEach(d => {
-    if (d.pid) {
-      allCount[d.age][demographicData.get(d.pid).age]++;
-    }
-  });
-
-  matchData.forEach(d => {
-    if (d.pid) {
-      matchCount[d.age][demographicData.get(d.pid).age]++;
-    }
-  });
-
-  for (let i = 0; i < NUM_OF_AGES; i++) {
-    for (let j = 0; j < NUM_OF_AGES; j++) {
-      probability[i][j] = allCount[i][j] == 0 ? 0 : matchCount[i][j]/allCount[i][j];
-    }
-  }
-
-  console.log(probability);
 
   return probability;
 }
