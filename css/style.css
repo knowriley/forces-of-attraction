@@ -25,10 +25,26 @@ body {
     display: flex;
 }
 
-#visA {
+#vis-container.landscape {
+    flex-direction: row;
+}
+
+.landscape #visA {
     width: 50%;
 }
 
-#visB {
+.landscape #visB {
     width: 50%;
+}
+
+#vis-container.portrait {
+    flex-direction: column;
+}
+
+.portrait #visA {
+    height: 50%;
+}
+
+.portrait #visB {
+    height: 50%;
 }
