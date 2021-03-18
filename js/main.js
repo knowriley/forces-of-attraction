@@ -6,11 +6,16 @@ const NUM_OF_CAREERS = 18;
 const NUM_OF_RACES = 7; //MAX_AGE (6) + 1
 const NUM_OF_AGES = 56; //MAX_AGE (55) + 1
 
+/**
+ * Attribute group mapping
+ * the index of the array correspond to the coded value, which map to a group
+ */
+
 const fieldCodeToFieldGroupMapping = [ // 7 unique groups
   null,
   'Law', //Law
   'Science', //Math
-  'Science', //Social Science, Psychologist 
+  'Arts', //Social Science, Psychologist 
   'Science', //Medical Science, Pharmaceuticals, and Bio Tech
   'Engineering', //Engineering
   'Arts', //English/Creative Writing/ Journalism
@@ -95,31 +100,6 @@ d3.csv('data/speedDating.csv').then(data => {
   forceDirectedGraph = new ForceDirectedGraph({ parentElement: '#forceDirected'}, data);
   matrix = new Matrix({ parentElement: '#matric'}, data);
 });
-
-var getGenderedData = (data, gender) => {
-  return data.filter(d => d.gender == gender);
-}
-
-var getMatches = (data) => {
-  return data.filter(d => d.match == 1);
-}
-
-var getSubjectDemographicdata = (data) => {
-  let map = new Map();
-  data.forEach(d => {
-    if (!map.has(d.iid)) {
-      map.set(d.iid, {
-        age: d.age,
-        field_cd: d.field_cd,
-        career_c: d.career_c,
-        race: d.race,
-        from: d.from
-      });
-    }
-  });
-
-  return map;
-}
 
 /**
   * Data pre-processing for adjacency matrix
