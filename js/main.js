@@ -16,6 +16,7 @@
     let updateSize = () => {
         let height = container.clientHeight;
         let width = container.clientWidth;
+        console.log(width, height);
         d3.select(`#${container.id}`)
             .attr('class', width > height ? 'landscape' : 'portrait');
     }
