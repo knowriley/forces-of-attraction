@@ -1,0 +1,50 @@
+html {
+    font-family: 'Courier New', Courier, monospace;
+    height: 100%;
+}
+
+body {
+    height: 100%;
+}
+
+#content {
+    height: 98%;
+    margin-left: 5px;
+    margin-right: 5px;
+    display: flex;
+    flex-direction: column;
+}
+
+#top {
+    padding: 1px;
+    text-align: center;
+}
+
+#vis-container {
+    height: 100%;
+    display: flex;
+}
+
+#vis-container.landscape {
+    flex-direction: row;
+}
+
+.landscape #visA {
+    width: 50%;
+}
+
+.landscape #visB {
+    width: 50%;
+}
+
+#vis-container.portrait {
+    flex-direction: column;
+}
+
+.portrait #visA {
+    height: 50%;
+}
+
+.portrait #visB {
+    height: 50%;
+}
