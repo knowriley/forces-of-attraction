@@ -48,3 +48,7 @@ body {
 .portrait #visB {
     height: 50%;
 }
+
+.tick line, .domain {
+    display: none;
+}
