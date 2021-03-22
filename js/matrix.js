@@ -53,7 +53,7 @@ const raceCodeToRaceMapping = [
 
 class Matrix {
 
-  constructor(_config, _data) {
+  constructor(_config, _data, _attribute) {
     this.config = {
       parentElement: _config.parentElement,
       containerWidth: 500,
@@ -61,6 +61,7 @@ class Matrix {
       margin: { top: 100, right: 20, bottom: 20, left: 100 }
     }
     this.data = _data;
+    this.attribute = _attribute;
     this.initVis();
   }
 
@@ -113,13 +114,13 @@ class Matrix {
 
     vis.cellData = [];
 
-    for (let i = 0; i < vis.data.length; i++) {
-      for (let j = 0; j < vis.data[0].length; j++) {
+    for (let i = 1; i < vis.data.length; i++) {
+      for (let j = 1; j < vis.data[0].length; j++) {
         vis.cellData.push({
           row: i,
           col: j,
-          rowLabel: careerCodeToCareerMapping[i],
-          colLabel: careerCodeToCareerMapping[j],
+          rowLabel: vis.getLabel(i),
+          colLabel: vis.getLabel(j),
           value: vis.data[i][j]
         });
       }
@@ -150,13 +151,37 @@ class Matrix {
 
     // Enter + update
     cellEnter.merge(cell)
+      .transition().duration(1000)
       .attr('class', 'cell')
-      .attr('x', d => d.col*cellWidth)
-      .attr('y', d => d.row*cellHeight)
+      .attr('x', d => (d.col - 1) * cellWidth) //-1 because code are 1-indexed
+      .attr('y', d => (d.row - 1) * cellHeight)
       .attr('width', cellWidth)
       .attr('height', cellHeight)
-      .attr('stroke', 'white')
+      .attr('stroke', d => {
+        if (vis.attribute == 'age') {
+          if (d.col < d.row/2+7 || d.row < d.col/2+7 ) {
+            return 'grey';
+          } // show "Half-your-age-plus-seven" rule
+        }
+
+        return 'white';
+      })
       .attr('fill', d => d.col == 0 || d.row == 0 ? 'white' : vis.colorScale(vis.colorValue(d)));
+
+    cellEnter.on('mouseover', (e, d) => { //Tooltip: https://github.com/UBC-InfoVis/2021-436V-case-studies/blob/097d13b05d587f4fab3e3fcd23f5e99274397c2c/case-study_measles-and-vaccines/css/style.css
+      d3.select('#tooltip')
+        .style('display', 'block')
+        .style('left', (e.pageX) + 'px')
+        .style('top', (e.pageY) + 'px')
+        .html(`
+          <div>A male ${vis.getLabel(d.row)} and </div>
+          <div>a female ${vis.getLabel(d.col)} </div>
+          <div>matches ${d3.format('.0%')(d.value)} of the time.</div>
+        `);
+    })
+    .on('mouseout', (e, d) => {
+      d3.select('#tooltip').style('display', 'none');
+    });
 
     // Exit
     cell.exit().remove();
@@ -169,5 +194,16 @@ class Matrix {
       .attr('transform', 'rotate(90)')
       .style('text-anchor', 'end'); //https://bl.ocks.org/mbostock/4403522;
     vis.yAxisGroup.call(vis.yAxis);
+  }
+
+  getLabel = (code) => {
+    let vis = this;
+    switch (vis.attribute) {
+      case 'career_c': return careerCodeToCareerMapping[code];
+      case 'field_cd': return fieldCodeToFieldMapping[code];
+      case 'race': return raceCodeToRaceMapping[code];
+      case 'age': return code;
+      default: return '';
+    }
   }
 }
