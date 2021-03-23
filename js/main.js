@@ -75,25 +75,28 @@ d3.csv('data/speedDating.csv').then(data => {
 
   let demographicData = getSubjectDemographicdata(data);
 
-  getMatchingProbabilityMatrix(maleData, maleMatchData, demographicData, 'career_c', NUM_OF_CAREERS);
 
-  getMatchingProbabilityMatrix(maleData, maleMatchData, demographicData, 'field_cd', NUM_OF_FIELDS);
+  let matrixData = getMatchingProbabilityMatrix(maleData, maleMatchData, demographicData, 'career_c');
+  let barChartData = getMatchingProbabilityBars(maleData, maleMatchData, demographicData, 'career_c');
+  // getMatchingProbabilityMatrix(maleData, maleMatchData, demographicData, 'career_c', NUM_OF_CAREERS);
 
-  getMatchingProbabilityMatrix(maleData, maleMatchData, demographicData, 'race', NUM_OF_RACES);
+  // getMatchingProbabilityMatrix(maleData, maleMatchData, demographicData, 'field_cd', NUM_OF_FIELDS);
 
-  getMatchingProbabilityMatrix(maleData, maleMatchData, demographicData, 'age', NUM_OF_AGES);
+  // getMatchingProbabilityMatrix(maleData, maleMatchData, demographicData, 'race', NUM_OF_RACES);
 
-  getMatchingProbabilityBars(maleData, maleMatchData, demographicData, 'career_c', NUM_OF_CAREERS);
-  getMatchingProbabilityBars(femaleData, femaleMatchData, demographicData, 'career_c', NUM_OF_CAREERS);
+  // getMatchingProbabilityMatrix(maleData, maleMatchData, demographicData, 'age', NUM_OF_AGES);
 
-  getMatchingProbabilityBars(maleData, maleMatchData, demographicData, 'field_cd', NUM_OF_FIELDS);
-  getMatchingProbabilityBars(femaleData, femaleMatchData, demographicData, 'field_cd', NUM_OF_FIELDS);
+  // getMatchingProbabilityBars(maleData, maleMatchData, demographicData, 'career_c', NUM_OF_CAREERS);
+  // getMatchingProbabilityBars(femaleData, femaleMatchData, demographicData, 'career_c', NUM_OF_CAREERS);
 
-  getMatchingProbabilityBars(maleData, maleMatchData, demographicData, 'race', NUM_OF_RACES);
-  getMatchingProbabilityBars(femaleData, femaleMatchData, demographicData, 'race', NUM_OF_RACES);
+  // getMatchingProbabilityBars(maleData, maleMatchData, demographicData, 'field_cd', NUM_OF_FIELDS);
+  // getMatchingProbabilityBars(femaleData, femaleMatchData, demographicData, 'field_cd', NUM_OF_FIELDS);
 
-  getMatchingProbabilityBars(maleData, maleMatchData, demographicData, 'age', NUM_OF_AGES);
-  getMatchingProbabilityBars(femaleData, femaleMatchData, demographicData, 'age', NUM_OF_AGES);
+  // getMatchingProbabilityBars(maleData, maleMatchData, demographicData, 'race', NUM_OF_RACES);
+  // getMatchingProbabilityBars(femaleData, femaleMatchData, demographicData, 'race', NUM_OF_RACES);
+
+  // getMatchingProbabilityBars(maleData, maleMatchData, demographicData, 'age', NUM_OF_AGES);
+  // getMatchingProbabilityBars(femaleData, femaleMatchData, demographicData, 'age', NUM_OF_AGES);
 
   const container = document.getElementById('vis-container');
 
@@ -105,9 +108,9 @@ d3.csv('data/speedDating.csv').then(data => {
   }
 
   // Init charts
-  barChart = new BarChart({ parentElement: '#bar'}, data);
+  barChart = new BarChart({ parentElement: '#bar'}, barChartData, 'career_c');
   forceDirectedGraph = new ForceDirectedGraph({ parentElement: '#forceDirected'}, data);
-  matrix = new Matrix({ parentElement: '#matric'}, data);
+  matrix = new Matrix({ parentElement: '#matric'}, matrixData);
 
   let update = () => {
       updateSize();
@@ -166,7 +169,8 @@ var getMatchingProbabilityMatrix = (data, matchData, demographicData, attribute,
   * Data pre-processing for bar chart
   * The gender used for @param matchData and @param data will the result AND they MUST match,
   */
-var getMatchingProbabilityBars = (data, matchData, demographicData, attribute, limit) => {
+ var getMatchingProbabilityBars = (data, matchData, demographicData, attribute) => {
+  let limit = getAttributeSize(attribute);
   let total = new Array(limit); //total number of pairing for each value of an attribute for a gender;
   let totalMatches = new Array(limit); //total number of matches for each value of an attribute;
   total.fill(0);
@@ -202,3 +206,4 @@ var getMatchingProbabilityBars = (data, matchData, demographicData, attribute, l
 
   return probability;
 }
+
