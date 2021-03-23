@@ -102,6 +102,7 @@ d3.csv('data/speedDating.csv').then(data => {
     matrix.attribute = attribute;
 
     barChartData = getMatchingProbabilityBars(maleData, maleMatchData, demographicData, attribute);
+    console.log(barChartData);
     //getMatchingProbabilityBars(femaleData, femaleMatchData, demographicData, attribute);
 
     update();

@@ -114,15 +114,29 @@ class Matrix {
 
     vis.cellData = [];
 
-    for (let i = 1; i < vis.data.length; i++) {
-      for (let j = 1; j < vis.data[0].length; j++) {
-        vis.cellData.push({
-          row: i,
-          col: j,
-          rowLabel: vis.getLabel(i),
-          colLabel: vis.getLabel(j),
-          value: vis.data[i][j]
-        });
+    if (vis.attribute == 'age') {
+      for (let i = 18; i <= 45; i++) {
+        for (let j = 18; j <= 45; j++) {
+          vis.cellData.push({
+            row: i - 17,
+            col: j - 17,
+            rowLabel: vis.getLabel(i),
+            colLabel: vis.getLabel(j),
+            value: vis.data[i][j]
+          });
+        }
+      }
+    } else {
+      for (let i = 1; i < vis.data.length; i++) {
+        for (let j = 1; j < vis.data[0].length; j++) {
+          vis.cellData.push({
+            row: i,
+            col: j,
+            rowLabel: vis.getLabel(i),
+            colLabel: vis.getLabel(j),
+            value: vis.data[i][j]
+          });
+        }
       }
     }
 
@@ -157,15 +171,7 @@ class Matrix {
       .attr('y', d => (d.row - 1) * cellHeight)
       .attr('width', cellWidth)
       .attr('height', cellHeight)
-      .attr('stroke', d => {
-        if (vis.attribute == 'age') {
-          if (d.col < d.row/2+7 || d.row < d.col/2+7 ) {
-            return 'grey';
-          } // show "Half-your-age-plus-seven" rule
-        }
-
-        return 'white';
-      })
+      .attr('stroke', 'white')
       .attr('fill', d => d.col == 0 || d.row == 0 ? 'white' : vis.colorScale(vis.colorValue(d)));
 
     cellEnter.on('mouseover', (e, d) => { //Tooltip: https://github.com/UBC-InfoVis/2021-436V-case-studies/blob/097d13b05d587f4fab3e3fcd23f5e99274397c2c/case-study_measles-and-vaccines/css/style.css
@@ -179,18 +185,44 @@ class Matrix {
           <div>matches ${d3.format('.0%')(d.value)} of the time.</div>
         `);
     })
-    .on('mouseout', (e, d) => {
-      d3.select('#tooltip').style('display', 'none');
-    });
+      .on('mouseout', (e, d) => {
+        d3.select('#tooltip').style('display', 'none');
+      });
 
     // Exit
     cell.exit().remove();
 
+    // Add 'Half-your-age-plus-seven' rule lines
+    vis.ageLine1 = vis.chartArea.append('line')
+      .attr('class', 'age-line');
+    vis.ageLine2 = vis.chartArea.append('line')
+      .attr('class', 'age-line');
+
+    if (vis.attribute == 'age') {
+      vis.ageLine1
+        .attr('x1', (17 - 17) * cellWidth)
+        .attr('y1', (20 - 17) * cellWidth)
+        .attr('x2', (29.5 - 17) * cellWidth)
+        .attr('y2', (45 - 17) * cellWidth)
+        .style('stroke', 'black')
+        .style('stroke-width', 1);
+
+      vis.ageLine2
+        .attr('x1', (20 - 17) * cellWidth)
+        .attr('y1', (17 - 17) * cellWidth)
+        .attr('x2', (45 - 17) * cellWidth)
+        .attr('y2', (29.5 - 17) * cellWidth)
+        .style('stroke', 'black')
+        .style('stroke-width', 1);
+    } else {
+      vis.chartArea.selectAll('line').remove();
+    }
+
     // Update axes
     vis.xAxisGroup.call(vis.xAxis)
       .selectAll('text')
-      .attr("y", 0)
-      .attr("x", -10)
+      .attr('y', 0)
+      .attr('x', -10)
       .attr('transform', 'rotate(90)')
       .style('text-anchor', 'end'); //https://bl.ocks.org/mbostock/4403522;
     vis.yAxisGroup.call(vis.yAxis);
