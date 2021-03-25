@@ -36,6 +36,10 @@ class View {
         return this.chart;
     }
 
+    getData() {
+        return this.data;
+    }
+
     updateSize() {
         // set the usable size as seen by subclass, i.e. the size of chartArea
         let svgHeight = document.getElementById(this.config.parentId).clientHeight;
