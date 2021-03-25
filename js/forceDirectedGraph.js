@@ -1,14 +1,4 @@
-const data = {
-    nodes: [
-        {"id": "Myriel", "group": 1},
-        {"id": "Napoleon", "group": 1},
-        {"id": "Mlle.Baptistine", "group": 1},
-    ],
-    links: [
-        {"source": "Napoleon", "target": "Myriel", "value": 1},
-        {"source": "Mlle.Baptistine", "target": "Myriel", "value": 8},
-    ],
-};
+const NODE_REPEL_STRENGTH = 50;
 
 class ForceDirectedGraph extends View {
 
@@ -16,15 +6,9 @@ class ForceDirectedGraph extends View {
         super.initVis();
         let vis = this;
         vis.graph = d3.forceSimulation()
-            .force('link', d3.forceLink().id(d => d.id))
-            .force('charge', d3.forceManyBody().strength(-10));
+            .force('link', d3.forceLink().id(d => d.id).distance(d => d.value))
+            .force('charge', d3.forceManyBody().strength(-NODE_REPEL_STRENGTH));
         vis.updateVis();
-    }
-
-    // override
-    getData() {
-        // STUB
-        return data;
     }
 
     updateVis() {
@@ -48,7 +32,7 @@ class ForceDirectedGraph extends View {
         const nodes = vis.getChart().selectAll('circle')
             .data(vis.getData().nodes, d => d.id)
             .join('circle')
-            .attr('r', 10);
+            .attr('r', 3);
 
         vis.graph.on('tick', () => {
             nodes

@@ -6,6 +6,8 @@ const NUM_OF_CAREERS = 18;
 const NUM_OF_RACES = 7; //MAX_AGE (6) + 1
 const NUM_OF_AGES = 56; //MAX_AGE (55) + 1
 
+const GRAPH_LIMIT = 100;
+
 /**
  * Attribute group mapping
  * the index of the array correspond to the coded value, which map to a group
@@ -75,26 +77,6 @@ d3.csv('data/speedDating.csv').then(data => {
 
   let demographicData = getSubjectDemographicdata(data);
 
-  getMatchingProbabilityMatrix(maleData, maleMatchData, demographicData, 'career_c', NUM_OF_CAREERS);
-
-  getMatchingProbabilityMatrix(maleData, maleMatchData, demographicData, 'field_cd', NUM_OF_FIELDS);
-
-  getMatchingProbabilityMatrix(maleData, maleMatchData, demographicData, 'race', NUM_OF_RACES);
-
-  getMatchingProbabilityMatrix(maleData, maleMatchData, demographicData, 'age', NUM_OF_AGES);
-
-  getMatchingProbabilityBars(maleData, maleMatchData, demographicData, 'career_c', NUM_OF_CAREERS);
-  getMatchingProbabilityBars(femaleData, femaleMatchData, demographicData, 'career_c', NUM_OF_CAREERS);
-
-  getMatchingProbabilityBars(maleData, maleMatchData, demographicData, 'field_cd', NUM_OF_FIELDS);
-  getMatchingProbabilityBars(femaleData, femaleMatchData, demographicData, 'field_cd', NUM_OF_FIELDS);
-
-  getMatchingProbabilityBars(maleData, maleMatchData, demographicData, 'race', NUM_OF_RACES);
-  getMatchingProbabilityBars(femaleData, femaleMatchData, demographicData, 'race', NUM_OF_RACES);
-
-  getMatchingProbabilityBars(maleData, maleMatchData, demographicData, 'age', NUM_OF_AGES);
-  getMatchingProbabilityBars(femaleData, femaleMatchData, demographicData, 'age', NUM_OF_AGES);
-
   const container = document.getElementById('vis-container');
 
   let updateSize = () => {
@@ -106,7 +88,7 @@ d3.csv('data/speedDating.csv').then(data => {
 
   // Init charts
   barChart = new BarChart({ parentElement: '#bar'}, data);
-  forceDirectedGraph = new ForceDirectedGraph({ parentElement: '#forceDirected'}, data);
+  forceDirectedGraph = new ForceDirectedGraph({ parentElement: '#forceDirected'}, getGraphData(data));
   matrix = new Matrix({ parentElement: '#matric'}, data);
 
   let update = () => {
@@ -201,4 +183,28 @@ var getMatchingProbabilityBars = (data, matchData, demographicData, attribute, l
   }
 
   return probability;
+}
+
+const getGraphData = (data) => {
+    let nodes = {};
+    let links = [];
+    data.slice(0,GRAPH_LIMIT).forEach(d => {
+        const iid = `${d['iid']}`;
+        const pid = `${d['pid']}`;
+        if (!nodes[iid]) {
+            nodes[iid] = {'id': iid}
+        }
+        if (!nodes[pid]) {
+            nodes[pid] = {'id': pid}
+        }
+        links.push({
+            source: iid,
+            target: pid,
+            value: 1/d['like']
+        });
+    });
+    return {
+        nodes: Object.keys(nodes).map(k => nodes[k]),
+        links
+    }
 }
