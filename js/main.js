@@ -6,7 +6,7 @@ const NUM_OF_CAREERS = 18;
 const NUM_OF_RACES = 7; //MAX_AGE (6) + 1
 const NUM_OF_AGES = 56; //MAX_AGE (55) + 1
 
-const GRAPH_LIMIT = 100;
+const GRAPH_LIMIT = 1000;
 
 /**
  * Attribute group mapping
@@ -200,7 +200,7 @@ const getGraphData = (data) => {
         links.push({
             source: iid,
             target: pid,
-            value: 1/d['like']
+            value: 10 - d['like']
         });
     });
     return {

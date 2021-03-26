@@ -1,4 +1,5 @@
-const NODE_REPEL_STRENGTH = 50;
+const NODE_REPEL_STRENGTH = 30;
+const NODE_DISTANCE_FACTOR = 10;
 
 class ForceDirectedGraph extends View {
 
@@ -6,8 +7,11 @@ class ForceDirectedGraph extends View {
         super.initVis();
         let vis = this;
         vis.graph = d3.forceSimulation()
-            .force('link', d3.forceLink().id(d => d.id).distance(d => d.value))
-            .force('charge', d3.forceManyBody().strength(-NODE_REPEL_STRENGTH));
+            .force('link', d3.forceLink()
+                .id(d => d.id)
+                .distance(d => d.value*NODE_DISTANCE_FACTOR))
+            .force('charge', d3.forceManyBody()
+                .strength(-NODE_REPEL_STRENGTH));
         vis.updateVis();
     }
 
@@ -15,6 +19,7 @@ class ForceDirectedGraph extends View {
         super.updateVis();
         let vis = this;
 
+        console.log(vis.getWidth() / 2, vis.getHeight() / 2);
         //update graph center
         vis.graph.force('center', 
             d3.forceCenter(vis.getWidth() / 2, vis.getHeight() / 2));
