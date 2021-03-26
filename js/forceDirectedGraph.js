@@ -1,5 +1,6 @@
-const NODE_REPEL_STRENGTH = 30;
-const NODE_DISTANCE_FACTOR = 10;
+// TODO: these should be proportioned to the vis dimensions
+const NODE_REPEL_STRENGTH = 1.2;
+const NODE_DISTANCE_FACTOR = 5;
 
 class ForceDirectedGraph extends View {
 

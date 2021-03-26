@@ -6,8 +6,6 @@ const NUM_OF_CAREERS = 18;
 const NUM_OF_RACES = 7; //MAX_AGE (6) + 1
 const NUM_OF_AGES = 56; //MAX_AGE (55) + 1
 
-const GRAPH_LIMIT = 1000;
-
 /**
  * Attribute group mapping
  * the index of the array correspond to the coded value, which map to a group
@@ -188,7 +186,7 @@ var getMatchingProbabilityBars = (data, matchData, demographicData, attribute, l
 const getGraphData = (data) => {
     let nodes = {};
     let links = [];
-    data.slice(0,GRAPH_LIMIT).forEach(d => {
+    data.forEach(d => {
         const iid = `${d['iid']}`;
         const pid = `${d['pid']}`;
         if (!nodes[iid]) {
