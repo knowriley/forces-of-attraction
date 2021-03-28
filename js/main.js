@@ -46,6 +46,60 @@ const careerCodeToCareerGroupMapping = [ // 8 unique groups
   'Engineering', // Architecture
 ]
 
+// For matrix and barChart TODO: Do we but this in a utils or constants file?
+const careerCodeToCareerMapping = [
+  '',
+  'Lawyer',
+  'Academic/ Research',
+  'Psychologist',
+  'Doctor/Medicine',
+  'Engineer',
+  'Creative Arts/Entertainment',
+  'Banking/Consulting/Finance/Marketing/Business/CEO/Entrepreneur/Admin',
+  'Real Estate',
+  'International/Humanitarian Affairs',
+  'Undecided',
+  'Social Work',
+  'Speech Pathology',
+  'Politics',
+  'Pro sports/Athletics',
+  'Other',
+  'Journalism',
+  'Architecture'
+]
+
+const fieldCodeToFieldMapping = [
+  '',
+  'Law',
+  'Math',
+  'Social Science, Psychologist',
+  'Medical Science, Pharmaceuticals, and Bio Tech',
+  'Engineering',
+  'English/Creative Writing/ Journalism',
+  'History/Religion/Philosophy',
+  'Business/Econ/Finance',
+  'Education, Academia',
+  'Biological Sciences/Chemistry/Physics',
+  'Social Work',
+  'Undergrad/ undecided',
+  'Political Science/International Affairs',
+  'Film',
+  'Fine Arts/Arts Administration',
+  'Languages',
+  'Architecture',
+  'Other'
+]
+
+const raceCodeToRaceMapping = [
+  '',
+  'Black/African American',
+  'European/Caucasian-American',
+  'Latino/Hispanic American',
+  'Asian/Pacific Islander/Asian-American',
+  'Native American',
+  'Other'
+]
+
 /**
  * Load data from CSV file asynchronously and render charts
  */
@@ -81,7 +135,7 @@ d3.csv('data/speedDating.csv').then(data => {
   }
 
   // Init charts
-  barChart = new BarChart({ parentElement: '#bar'}, data);
+  barChart = new BarChart({ parentElement: '#bar'}, barChartData, 'career_c', 'Lawyer');
   forceDirectedGraph = new ForceDirectedGraph({ parentElement: '#forceDirected'}, data);
   matrix = new Matrix({ parentElement: '#matrix'}, matrixData, 'career_c');
 
@@ -193,3 +247,4 @@ var getMatchingProbabilityBars = (data, matchData, demographicData, attribute) =
 
   return probability;
 }
+
