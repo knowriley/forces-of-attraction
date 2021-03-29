@@ -40,7 +40,7 @@ const decode = (attr) => (d) => {
             return v ? "Male" : "Female";
         case 'field_cd':
             return v ? fieldCodeToFieldGroupMapping[v] : defaultNA;
-        case 'career':
+        case 'career_c':
             return v ? careerCodeToCareerGroupMapping[v] : defaultNA;
         default:
             return v;
