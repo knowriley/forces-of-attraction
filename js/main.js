@@ -1,12 +1,4 @@
 /**
- * Global Constants
- */
-const NUM_OF_FIELDS = 19;
-const NUM_OF_CAREERS = 18;
-const NUM_OF_RACES = 7; //MAX_AGE (6) + 1
-const NUM_OF_AGES = 56; //MAX_AGE (55) + 1
-
-/**
  * Attribute group mapping
  * the index of the array correspond to the coded value, which map to a group
  */
@@ -54,6 +46,60 @@ const careerCodeToCareerGroupMapping = [ // 8 unique groups
   'Engineering', // Architecture
 ]
 
+// For matrix and barChart TODO: Do we but this in a utils or constants file?
+const careerCodeToCareerMapping = [
+  '',
+  'Lawyer',
+  'Academic/ Research',
+  'Psychologist',
+  'Doctor/Medicine',
+  'Engineer',
+  'Creative Arts/Entertainment',
+  'Banking/Consulting/Finance/Marketing/Business/CEO/Entrepreneur/Admin',
+  'Real Estate',
+  'International/Humanitarian Affairs',
+  'Undecided',
+  'Social Work',
+  'Speech Pathology',
+  'Politics',
+  'Pro sports/Athletics',
+  'Other',
+  'Journalism',
+  'Architecture'
+]
+
+const fieldCodeToFieldMapping = [
+  '',
+  'Law',
+  'Math',
+  'Social Science, Psychologist',
+  'Medical Science, Pharmaceuticals, and Bio Tech',
+  'Engineering',
+  'English/Creative Writing/ Journalism',
+  'History/Religion/Philosophy',
+  'Business/Econ/Finance',
+  'Education, Academia',
+  'Biological Sciences/Chemistry/Physics',
+  'Social Work',
+  'Undergrad/ undecided',
+  'Political Science/International Affairs',
+  'Film',
+  'Fine Arts/Arts Administration',
+  'Languages',
+  'Architecture',
+  'Other'
+]
+
+const raceCodeToRaceMapping = [
+  '',
+  'Black/African American',
+  'European/Caucasian-American',
+  'Latino/Hispanic American',
+  'Asian/Pacific Islander/Asian-American',
+  'Native American',
+  'Other'
+]
+
 /**
  * Load data from CSV file asynchronously and render charts
  */
@@ -75,6 +121,10 @@ d3.csv('data/speedDating.csv').then(data => {
 
   let demographicData = getSubjectDemographicdata(data);
 
+  let matrixData = getMatchingProbabilityMatrix(maleData, maleMatchData, demographicData, 'career_c');
+  let barChartData = getMatchingProbabilityBars(maleData, maleMatchData, demographicData, 'career_c');
+  //getMatchingProbabilityBars(femaleData, femaleMatchData, demographicData, 'career_c');
+
   const container = document.getElementById('vis-container');
 
   let updateSize = () => {
@@ -85,9 +135,9 @@ d3.csv('data/speedDating.csv').then(data => {
   }
 
   // Init charts
-  barChart = new BarChart({ parentElement: '#bar'}, data);
+  barChart = new BarChart({ parentElement: '#bar'}, barChartData, 'career_c', 'Lawyer');
   forceDirectedGraph = new ForceDirectedGraph({ parentElement: '#forceDirected'}, getGraphData(data));
-  matrix = new Matrix({ parentElement: '#matric'}, data);
+  matrix = new Matrix({ parentElement: '#matrix'}, matrixData, 'career_c');
 
   let update = () => {
       updateSize();
@@ -98,6 +148,19 @@ d3.csv('data/speedDating.csv').then(data => {
 
   update();
 
+  document.getElementById("colorByAttributeSelector").onchange = d => {
+    let attribute = document.getElementById("colorByAttributeSelector").value;
+
+    matrixData = getMatchingProbabilityMatrix(maleData, maleMatchData, demographicData, attribute);
+    matrix.data = matrixData;
+    matrix.attribute = attribute;
+
+    barChartData = getMatchingProbabilityBars(maleData, maleMatchData, demographicData, attribute);
+    //getMatchingProbabilityBars(femaleData, femaleMatchData, demographicData, attribute);
+
+    update();
+  }
+
   d3.select(window).on('resize', update);
 
 });
@@ -107,7 +170,8 @@ d3.csv('data/speedDating.csv').then(data => {
   * The gender used for @param matchData and @param data does not influence the change the result BUT they MUST match,
   * the gender used for will be the row, and the opposite gender on the column.
   */
-var getMatchingProbabilityMatrix = (data, matchData, demographicData, attribute, limit) => {
+var getMatchingProbabilityMatrix = (data, matchData, demographicData, attribute) => {
+  let limit = getAttributeSize(attribute);
   let allCount = new Array(limit);
   let matchCount = new Array(limit);
   let probability = new Array(limit);
@@ -122,7 +186,7 @@ var getMatchingProbabilityMatrix = (data, matchData, demographicData, attribute,
   }
 
   data.forEach(d => {
-    if (d.pid) {
+    if (d.pid && d[attribute]) {
       allCount[d[attribute]][demographicData.get(d.pid)[attribute]]++;
     }
   });
@@ -146,7 +210,8 @@ var getMatchingProbabilityMatrix = (data, matchData, demographicData, attribute,
   * Data pre-processing for bar chart
   * The gender used for @param matchData and @param data will the result AND they MUST match,
   */
-var getMatchingProbabilityBars = (data, matchData, demographicData, attribute, limit) => {
+var getMatchingProbabilityBars = (data, matchData, demographicData, attribute) => {
+  let limit = getAttributeSize(attribute);
   let total = new Array(limit); //total number of pairing for each value of an attribute for a gender;
   let totalMatches = new Array(limit); //total number of matches for each value of an attribute;
   total.fill(0);
@@ -183,6 +248,7 @@ var getMatchingProbabilityBars = (data, matchData, demographicData, attribute, l
   return probability;
 }
 
+<<<<<<< HEAD
 const detailFields = [
     'gender', 'age', 'field_cd', 'undergrd', 'race', 'from', 'zipcode', 'career'
 ];
@@ -216,3 +282,5 @@ const getGraphData = (data) => {
         links
     }
 }
+=======
+>>>>>>> view-base

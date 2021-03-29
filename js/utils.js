@@ -1,3 +1,11 @@
+/**
+ * Global Constants
+ */
+const NUM_OF_FIELDS = 19;
+const NUM_OF_CAREERS = 18;
+const NUM_OF_RACES = 7; //MAX_AGE (6) + 1
+const NUM_OF_AGES = 56; //MAX_AGE (55) + 1
+
 var getGenderedData = (data, gender) => {
   return data.filter(d => d.gender == gender);
 }
@@ -37,4 +45,14 @@ const decode = (attr) => (d) => {
         default:
             return v;
     }
+}
+
+var getAttributeSize = (attribute) => {
+  switch(attribute) {
+    case 'career_c': return NUM_OF_CAREERS;
+    case 'field_cd': return NUM_OF_FIELDS;
+    case 'race': return NUM_OF_RACES;
+    case 'age': return NUM_OF_AGES;
+    default: return 0;
+  }
 }

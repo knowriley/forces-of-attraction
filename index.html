@@ -1,15 +1,26 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Forces of Attraction</title>
     <link rel="icon" href="data:;base64,iVBORwOKGO=" />
     <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body>
     <div id="content">
         <div id="top">
             <h1>Forces of Attraction</h1>
         </div>
+
+        Color by:
+        <select id="colorByAttributeSelector">
+            <option value="career_c">Career</option>
+            <option value="field_cd">Field of Study</option>
+            <option value="race">Race</option>
+            <option value="age">Age</option>
+        </select>
+
         <div id="vis-container">
             <div id="visA">
                 <div id="forceDirected" class="chart"></div>
@@ -20,8 +31,9 @@
             </div>
         </div>
     </div>
+
     <div id="tooltip"></div>
-    
+
     <script src="js/d3.v6.min.js"></script>
     <script src="js/utils.js"></script>
     <script src="js/View.js"></script>
@@ -30,4 +42,5 @@
     <script src="js/matrix.js"></script>
     <script src="js/main.js"></script>
 </body>
+
 </html>
