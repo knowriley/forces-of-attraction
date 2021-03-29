@@ -35,10 +35,26 @@ class ForceDirectedGraph extends View {
         super.renderVis();
         let vis = this;
         
+        // TODO: use custom enter-update-exit pattern for updates
         const nodes = vis.getChart().selectAll('circle')
             .data(vis.getData().nodes, d => d.id)
             .join('circle')
-            .attr('r', 3);
+            .attr('r', 3)
+        .on('mouseover', (e, d) => {
+            console.log(d);
+            d3.select('#tooltip')
+                .style('display', 'block')
+                .style('left', (e.pageX) + 'px')
+                .style('top', (e.pageY) + 'px')
+                .html(`
+                <h1>Participant ${decode('id')(d)}</h1>
+                <p>Field: ${decode('field_cd')(d)}<p>
+                <p>From: ${decode('from')(d)}<p>
+                `);
+        })
+        .on('mouseout', (e, d) => {
+            d3.select('#tooltip').style('display', 'none');
+          });
 
         vis.graph.on('tick', () => {
             nodes

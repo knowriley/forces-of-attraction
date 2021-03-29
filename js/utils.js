@@ -22,3 +22,19 @@ var getSubjectDemographicdata = (data, countries) => {
 
   return map;
 }
+
+const defaultNA = "Not specified";
+
+const decode = (attr) => (d) => {
+    const v = d[attr];
+    switch (attr) {
+        case 'gender':
+            return v ? "Male" : "Female";
+        case 'field_cd':
+            return v ? fieldCodeToFieldGroupMapping[v] : defaultNA;
+        case 'career':
+            return v ? careerCodeToCareerGroupMapping[v] : defaultNA;
+        default:
+            return v;
+    }
+}

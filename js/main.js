@@ -183,6 +183,16 @@ var getMatchingProbabilityBars = (data, matchData, demographicData, attribute, l
   return probability;
 }
 
+const detailFields = [
+    'gender', 'age', 'field_cd', 'undergrd', 'race', 'from', 'zipcode', 'career'
+];
+
+const mapDetails = (d) => {
+    const dts = {};
+    detailFields.forEach(f => dts[f] = d[f]);
+    return dts;
+};
+
 const getGraphData = (data) => {
     let nodes = {};
     let links = [];
@@ -190,10 +200,10 @@ const getGraphData = (data) => {
         const iid = `${d['iid']}`;
         const pid = `${d['pid']}`;
         if (!nodes[iid]) {
-            nodes[iid] = {'id': iid}
+            nodes[iid] = {'id': iid, ... mapDetails(d)}
         }
         if (!nodes[pid]) {
-            nodes[pid] = {'id': pid}
+            nodes[pid] = {'id': pid, ... mapDetails(d)}
         }
         links.push({
             source: iid,
