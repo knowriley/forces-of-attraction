@@ -1,12 +1,13 @@
 class View {
 
-    constructor(_config, _data) {
+    constructor(_config, _data, _attribute) {
         this.config = {
             parentId: _config.parentElement.substring(1),
             parentElement: _config.parentElement,
             margin: {top: 10, right: 10, bottom: 10, left: 10} // default margin
         }
         this.data = _data;
+        this.attribute = _attribute;
         this.initVis();
     }
 
@@ -38,6 +39,14 @@ class View {
 
     getData() {
         return this.data;
+    }
+
+    setAttribute(a) {
+        this.attribute = a;
+    }
+
+    getAttribute() {
+        return this.attribute;
     }
 
     updateSize() {

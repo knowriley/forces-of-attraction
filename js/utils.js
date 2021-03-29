@@ -56,3 +56,7 @@ var getAttributeSize = (attribute) => {
     default: return 0;
   }
 }
+
+const unique = (data, acc) => {
+    return new Set(d3.map(data, acc));
+}

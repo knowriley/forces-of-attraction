@@ -136,7 +136,7 @@ d3.csv('data/speedDating.csv').then(data => {
 
   // Init charts
   barChart = new BarChart({ parentElement: '#bar'}, barChartData, 'career_c', 'Lawyer');
-  forceDirectedGraph = new ForceDirectedGraph({ parentElement: '#forceDirected'}, getGraphData(data));
+  forceDirectedGraph = new ForceDirectedGraph({ parentElement: '#forceDirected'}, getGraphData(data), 'career_c');
   matrix = new Matrix({ parentElement: '#matrix'}, matrixData, 'career_c');
 
   let update = () => {
@@ -157,6 +157,8 @@ d3.csv('data/speedDating.csv').then(data => {
 
     barChartData = getMatchingProbabilityBars(maleData, maleMatchData, demographicData, attribute);
     //getMatchingProbabilityBars(femaleData, femaleMatchData, demographicData, attribute);
+
+    forceDirectedGraph.setAttribute(attribute);
 
     update();
   }
@@ -249,7 +251,7 @@ var getMatchingProbabilityBars = (data, matchData, demographicData, attribute) =
 }
 
 const detailFields = [
-    'gender', 'age', 'field_cd', 'undergrd', 'race', 'from', 'zipcode', 'career'
+    'gender', 'age', 'field_cd', 'undergrd', 'race', 'from', 'zipcode', 'career_c'
 ];
 
 const mapDetails = (d) => {
