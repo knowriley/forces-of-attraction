@@ -248,7 +248,6 @@ var getMatchingProbabilityBars = (data, matchData, demographicData, attribute) =
   return probability;
 }
 
-<<<<<<< HEAD
 const detailFields = [
     'gender', 'age', 'field_cd', 'undergrd', 'race', 'from', 'zipcode', 'career'
 ];
@@ -282,5 +281,3 @@ const getGraphData = (data) => {
         links
     }
 }
-=======
->>>>>>> view-base
