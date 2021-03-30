@@ -55,6 +55,20 @@ class Matrix {
     vis.yAxisGroup = vis.chart.append('g')
       .attr('class', 'axis y-axis');
 
+    // Append text labels (https://bl.ocks.org/d3noob/23e42c8f67210ac6c678db2cd07a747e)
+    vis.chart.append('text')
+    .attr('transform', 'rotate(90)')
+    .attr('x', -20)
+    .attr('y', 10)
+    .style('text-anchor', 'end')
+    .text('Female');
+
+    vis.chart.append('text')
+    .attr('x', -20)
+    .attr('y', -10)
+    .style('text-anchor', 'end')
+    .text('Male');
+
     vis.updateVis();
   }
 

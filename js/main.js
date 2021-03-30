@@ -123,7 +123,6 @@ d3.csv('data/speedDating.csv').then(data => {
 
   let matrixData = getMatchingProbabilityMatrix(maleData, maleMatchData, demographicData, 'career_c');
   let barChartData = getMatchingProbabilityBars(maleData, maleMatchData, demographicData, 'career_c');
-  //getMatchingProbabilityBars(femaleData, femaleMatchData, demographicData, 'career_c');
 
   const container = document.getElementById('vis-container');
 
@@ -159,10 +158,11 @@ d3.csv('data/speedDating.csv').then(data => {
     matrix.attribute = attribute;
 
     barChartData = getMatchingProbabilityBars(maleData, maleMatchData, demographicData, attribute);
+
+    barChart.data = barChartData;
     barChart.attribute = attribute;
     barChart.selected = getDefaultLabel(attribute);
     barChart.gender = 'male';
-    barChart.data = barChartData;
 
     update();
   }
@@ -174,6 +174,8 @@ d3.csv('data/speedDating.csv').then(data => {
     } else {
       barChartData = getMatchingProbabilityBars(femaleData, femaleMatchData, demographicData, matrix.attribute);
     }
+
+    barChart.data = barChartData;
     barChart.selected = selected;
     barChart.gender = gender;
     barChart.updateVis();

@@ -36,7 +36,7 @@ class BarChart {
     vis.xScale = d3.scaleLinear()
       .range([0, vis.width]);
     vis.yScale = d3.scaleBand()
-      .range([vis.height, 0])
+      .range([0, vis.height])
       .paddingInner(0.2);
 
     // init axes
@@ -68,19 +68,29 @@ class BarChart {
     let vis = this;
 
     vis.barData = [];
-    for (let i = 1; i < vis.data.length; i++) {
-      vis.barData.push({
-        row: i,
-        rowLabel: getLabel(vis.attribute, i),
-        value: vis.data[getCode(vis.attribute, vis.selected)][i] * 100
-      });
+    if (vis.attribute == 'age') {
+      for (let i = 18; i <= 45; i++) {
+        vis.barData.push({
+          row: i - 17,
+          rowLabel: getLabel(vis.attribute, i),
+          value: vis.data[getCode(vis.attribute, vis.selected)][i] * 100
+        });
+      }
+    } else {
+      for (let i = 1; i < vis.data.length; i++) {
+        vis.barData.push({
+          row: i,
+          rowLabel: getLabel(vis.attribute, i),
+          value: vis.data[getCode(vis.attribute, vis.selected)][i] * 100
+        });
+      }
     }
 
     // Add bar for any match probability
     vis.barData.push({
-      row: vis.data.length,
-      rowLabel: 'Any',
-      value: (1-vis.data[getCode(vis.attribute, vis.selected)][vis.data.length]) * 100
+      row: vis.barData.length,
+      rowLabel: 'Total',
+      value: vis.data[getCode(vis.attribute, vis.selected)][vis.data.length] == 0 ? 0 : (1 - vis.data[getCode(vis.attribute, vis.selected)][vis.data.length]) * 100
     });
 
     vis.xValue = d => d.value;
@@ -98,6 +108,7 @@ class BarChart {
     vis.bars = vis.chart.selectAll('.bar')
       .data(vis.barData, vis.yValue)
       .join('rect')
+      .transition().duration(1000)
       .attr('class', 'bar')
       .attr('y', d => vis.yScale(vis.yValue(d)))
       .attr('width', d => vis.xScale(vis.xValue(d)))

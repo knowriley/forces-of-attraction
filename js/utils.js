@@ -56,7 +56,7 @@ var getDefaultLabel = (attribute) => {
     case 'career_c': return careerCodeToCareerMapping[1];
     case 'field_cd': return fieldCodeToFieldMapping[1];
     case 'race': return raceCodeToRaceMapping[1];
-    case 'age': return '18';
+    case 'age': return '20';
     default: return '';
   }
 }
