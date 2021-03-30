@@ -134,10 +134,13 @@ d3.csv('data/speedDating.csv').then(data => {
           .attr('class', width > height ? 'landscape' : 'portrait');
   }
 
+  // Events are triggered and handled using D3-dispatch
+  let dispatch = d3.dispatch('matrixClick');
+
   // Init charts
   barChart = new BarChart({ parentElement: '#bar'}, barChartData, 'career_c', 'Lawyer');
   forceDirectedGraph = new ForceDirectedGraph({ parentElement: '#forceDirected'}, data);
-  matrix = new Matrix({ parentElement: '#matrix'}, matrixData, 'career_c');
+  matrix = new Matrix({ parentElement: '#matrix', dispatch: dispatch}, matrixData, 'career_c');
 
   let update = () => {
       updateSize();
@@ -156,10 +159,25 @@ d3.csv('data/speedDating.csv').then(data => {
     matrix.attribute = attribute;
 
     barChartData = getMatchingProbabilityBars(maleData, maleMatchData, demographicData, attribute);
-    //getMatchingProbabilityBars(femaleData, femaleMatchData, demographicData, attribute);
+    barChart.attribute = attribute;
+    barChart.selected = getDefaultLabel(attribute);
+    barChart.gender = 'male';
+    barChart.data = barChartData;
 
     update();
   }
+
+  // Event handler for matrix
+  dispatch.on('matrixClick', (selected, gender) => {
+    if (gender == 'male') {
+      barChartData = getMatchingProbabilityBars(maleData, maleMatchData, demographicData, matrix.attribute);
+    } else {
+      barChartData = getMatchingProbabilityBars(femaleData, femaleMatchData, demographicData, matrix.attribute);
+    }
+    barChart.selected = selected;
+    barChart.gender = gender;
+    barChart.updateVis();
+  });
 
   d3.select(window).on('resize', update);
 

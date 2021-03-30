@@ -40,3 +40,33 @@ var getAttributeSize = (attribute) => {
     default: return 0;
   }
 }
+
+var getLabel = (attribute, code) => {
+  switch (attribute) {
+    case 'career_c': return careerCodeToCareerMapping[code];
+    case 'field_cd': return fieldCodeToFieldMapping[code];
+    case 'race': return raceCodeToRaceMapping[code];
+    case 'age': return code;
+    default: return '';
+  }
+}
+
+var getDefaultLabel = (attribute) => {
+  switch (attribute) {
+    case 'career_c': return careerCodeToCareerMapping[1];
+    case 'field_cd': return fieldCodeToFieldMapping[1];
+    case 'race': return raceCodeToRaceMapping[1];
+    case 'age': return '18';
+    default: return '';
+  }
+}
+
+var getCode = (attribute, label) => {
+  switch (attribute) {
+    case 'career_c': return careerCodeToCareerMapping.indexOf(label);
+    case 'field_cd': return fieldCodeToFieldMapping.indexOf(label);
+    case 'race': return raceCodeToRaceMapping.indexOf(label);
+    case 'age': return label;
+    default: return '';
+  }
+}

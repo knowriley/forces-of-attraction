@@ -3,12 +3,14 @@ class Matrix {
   constructor(_config, _data, _attribute) {
     this.config = {
       parentElement: _config.parentElement,
+      dispatch: _config.dispatch || null,
       containerWidth: 500,
       containerHeight: 500,
       margin: { top: 100, right: 20, bottom: 20, left: 100 }
     }
     this.data = _data;
     this.attribute = _attribute;
+    this.dispatch = this.config.dispatch;
     this.initVis();
   }
 
@@ -67,8 +69,8 @@ class Matrix {
           vis.cellData.push({
             row: i - 17,
             col: j - 17,
-            rowLabel: vis.getLabel(i),
-            colLabel: vis.getLabel(j),
+            rowLabel: getLabel(vis.attribute, i),
+            colLabel: getLabel(vis.attribute, j),
             value: vis.data[i][j]
           });
         }
@@ -79,8 +81,8 @@ class Matrix {
           vis.cellData.push({
             row: i,
             col: j,
-            rowLabel: vis.getLabel(i),
-            colLabel: vis.getLabel(j),
+            rowLabel: getLabel(vis.attribute, i),
+            colLabel: getLabel(vis.attribute, j),
             value: vis.data[i][j]
           });
         }
@@ -127,8 +129,8 @@ class Matrix {
         .style('left', (e.pageX) + 'px')
         .style('top', (e.pageY) + 'px')
         .html(`
-          <div>A male ${vis.getLabel(d.row)} and </div>
-          <div>a female ${vis.getLabel(d.col)} </div>
+          <div>A male ${getLabel(vis.attribute, d.row)} and </div>
+          <div>a female ${getLabel(vis.attribute, d.col)} </div>
           <div>matches ${d3.format('.0%')(d.value)} of the time.</div>
         `);
     })
@@ -173,16 +175,15 @@ class Matrix {
       .attr('transform', 'rotate(90)')
       .style('text-anchor', 'end'); //https://bl.ocks.org/mbostock/4403522;
     vis.yAxisGroup.call(vis.yAxis);
-  }
 
-  getLabel = (code) => {
-    let vis = this;
-    switch (vis.attribute) {
-      case 'career_c': return careerCodeToCareerMapping[code];
-      case 'field_cd': return fieldCodeToFieldMapping[code];
-      case 'race': return raceCodeToRaceMapping[code];
-      case 'age': return code;
-      default: return '';
-    }
+    d3.selectAll(`${vis.config.parentElement} .y-axis .tick`) //https://stackoverflow.com/a/32658330
+      .on('click', function (event, selected) {
+        vis.dispatch.call('matrixClick', selected, selected, 'male');
+      });
+
+    d3.selectAll(`${vis.config.parentElement} .x-axis .tick`)
+      .on('click', function (event, selected) {
+        vis.dispatch.call('matrixClick', selected, selected, 'female');
+      });
   }
 }
