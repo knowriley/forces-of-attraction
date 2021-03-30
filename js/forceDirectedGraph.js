@@ -42,8 +42,9 @@ class ForceDirectedGraph extends View {
         const nodes = vis.getChart().selectAll('circle')
             .data(vis.getData().nodes, d => d.id)
             .join('circle')
-            .attr('r', 3)
+            .attr('r', 4)
             .attr('fill', d => vis.colorScale(decode(vis.attribute)(d)))
+            .attr('stroke', 'black')
         .on('mouseover', (e, d) => {
             console.log(d);
             d3.select('#tooltip')
