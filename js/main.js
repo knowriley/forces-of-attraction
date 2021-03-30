@@ -136,7 +136,7 @@ d3.csv('data/speedDating.csv').then(data => {
 
   // Init charts
   barChart = new BarChart({ parentElement: '#bar'}, barChartData, 'career_c', 'Lawyer');
-  forceDirectedGraph = new ForceDirectedGraph({ parentElement: '#forceDirected'}, getGraphData(data), 'career_c');
+  forceDirectedGraph = new ForceDirectedGraph({ parentElement: '#forceDirected'}, getGraphData(data), 'career_c', '');
   matrix = new Matrix({ parentElement: '#matrix'}, matrixData, 'career_c');
 
   let update = () => {
@@ -160,6 +160,12 @@ d3.csv('data/speedDating.csv').then(data => {
 
     forceDirectedGraph.setAttribute(attribute);
 
+    update();
+  }
+
+  document.getElementById("attractByAttributeSelector").onchange = _ => {
+    let dist = document.getElementById("attractByAttributeSelector").value;
+    forceDirectedGraph.setNodeDistance(dist);
     update();
   }
 
@@ -275,7 +281,8 @@ const getGraphData = (data) => {
         links.push({
             source: iid,
             target: pid,
-            value: 10 - d['like']
+            like: d['like'],
+            match: d['match'] 
         });
     });
     return {
