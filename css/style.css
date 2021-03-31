@@ -4,7 +4,7 @@ html {
 }
 
 body {
-    height: 100%;
+    height: 200%;
 }
 
 #content {
@@ -23,48 +23,52 @@ body {
 #vis-container {
     height: 100%;
     display: flex;
-}
-
-#vis-container.landscape {
-    flex-direction: row;
-}
-
-.landscape #visA {
-    width: 50%;
-}
-
-.landscape #visB {
-    width: 50%;
-}
-
-#vis-container.portrait {
     flex-direction: column;
 }
 
-.portrait #visA {
-    height: 50%;
+#color {
+    height: 10%;
 }
 
-.portrait #visB {
-    height: 50%;
+#visA {
+    width: 100%;
+    height: 45%;
+}
+
+#visB {
+    width: 100%;
+    height: 45%;
+    display: flex;
+    flex-direction: row;
 }
 
 .chart {
-    width: 100%;
     height: 100%;
 }
 
 #visA {
-    padding: 50px;
+    padding: 20px;
 }
 
 .tick line, .domain {
     display: none;
 }
 
+#matrix {
+    width: 50%;
+}
+
 #matrix .tick:hover {
     cursor: pointer;
     font-weight: bold;
+}
+
+#bar {
+    width: 50%;
+}
+
+#legend {
+    height: 100%;
 }
 
 /* Tooltip: https://github.com/UBC-InfoVis/2021-436V-case-studies/blob/097d13b05d587f4fab3e3fcd23f5e99274397c2c/case-study_measles-and-vaccines/css/style.css */
