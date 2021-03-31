@@ -52,11 +52,11 @@ class Legend extends View {
     // a maximum of n items vertically and extend in the horizontal direction
     positionLegendItem (i, n) {
         let vis = this;
-        const itemHeight = vis.getHeight() / n;
+        const itemHeight = (vis.getHeight() / n) * 0.7;
         let y = i % n;
         let x = (i - y) / n;
         if (x % 2 == 1) {
-            y -= 0.5; // stagger
+            y += 0.5; // stagger
         }
         return `translate(${x*ITEM_WIDTH}, ${y*itemHeight})`;
     }
