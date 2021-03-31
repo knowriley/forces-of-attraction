@@ -82,7 +82,7 @@ class ForceDirectedGraph extends View {
                 <p>From: ${decode('from')(d)}<p>
                 `);
       })
-      .on('mouseout', (e, d) => {
+      .on('mouseout', (_, __) => {
         d3.select('#tooltip').style('display', 'none');
       });
 

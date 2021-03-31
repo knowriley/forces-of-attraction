@@ -19,8 +19,10 @@ class Matrix {
     const vis = this;
 
     // Calculate inner chart size. Margin specifies the space around the actual chart.
-    vis.config.width = vis.config.containerWidth - vis.config.margin.left - vis.config.margin.right;
-    vis.config.height = vis.config.containerHeight - vis.config.margin.top - vis.config.margin.bottom;
+    vis.config.width = vis.config.containerWidth
+        - vis.config.margin.left - vis.config.margin.right;
+    vis.config.height = vis.config.containerHeight
+        - vis.config.margin.top - vis.config.margin.bottom;
 
     // Define size of SVG drawing area
     vis.svg = d3.select(vis.config.parentElement).append('svg')
@@ -84,9 +86,9 @@ class Matrix {
 
     vis.cellData = [];
 
-    if (vis.attribute == 'age') {
-      for (let i = 18; i <= 45; i++) {
-        for (let j = 18; j <= 45; j++) {
+    if (vis.attribute === 'age') {
+      for (let i = 18; i <= 45; i += 1) {
+        for (let j = 18; j <= 45; j += 1) {
           vis.cellData.push({
             row: i - 17,
             col: j - 17,
@@ -97,8 +99,8 @@ class Matrix {
         }
       }
     } else {
-      for (let i = 1; i < vis.data.length; i++) {
-        for (let j = 1; j < vis.data[0].length; j++) {
+      for (let i = 1; i < vis.data.length; i += 1) {
+        for (let j = 1; j < vis.data[0].length; j += 1) {
           vis.cellData.push({
             row: i,
             col: j,
@@ -142,7 +144,7 @@ class Matrix {
       .attr('width', cellWidth)
       .attr('height', cellHeight)
       .attr('stroke', 'white')
-      .attr('fill', (d) => (d.col == 0 || d.row == 0 ? 'white' : vis.colorScale(vis.colorValue(d))));
+      .attr('fill', (d) => (d.col === 0 || d.row === 0 ? 'white' : vis.colorScale(vis.colorValue(d))));
 
     cellEnter.on('mouseover', (e, d) => { // Tooltip: https://github.com/UBC-InfoVis/2021-436V-case-studies/blob/097d13b05d587f4fab3e3fcd23f5e99274397c2c/case-study_measles-and-vaccines/css/style.css
       d3.select('#tooltip')
@@ -154,7 +156,7 @@ class Matrix {
           <div>a female ${getLabel(vis.attribute, d.col)} </div>
           <div>matches ${d3.format('.0%')(d.value)} of the time.</div>
         `);
-    }).on('mouseout', (e, d) => {
+    }).on('mouseout', (_, __) => {
       d3.select('#tooltip').style('display', 'none');
     });
 
@@ -167,7 +169,7 @@ class Matrix {
     vis.ageLine2 = vis.chartArea.append('line')
       .attr('class', 'age-line');
 
-    if (vis.attribute == 'age') {
+    if (vis.attribute === 'age') {
       vis.ageLine1
         .attr('x1', (17 - 17) * cellWidth)
         .attr('y1', (20 - 17) * cellWidth)

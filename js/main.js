@@ -107,7 +107,7 @@ d3.csv('data/speedDating.csv').then((data) => {
   // Convert columns to numerical values
   data.forEach((d) => {
     Object.keys(d).forEach((attr) => {
-      if (attr != 'from') {
+      if (attr !== 'from') {
         d[attr] = +d[attr];
       }
     });
@@ -150,7 +150,7 @@ d3.csv('data/speedDating.csv').then((data) => {
 
   update();
 
-  document.getElementById('colorByAttributeSelector').onchange = (d) => {
+  document.getElementById('colorByAttributeSelector').onchange = (_) => {
     const attribute = document.getElementById('colorByAttributeSelector').value;
 
     matrixData = getMatchingProbabilityMatrix(maleData, maleMatchData, demographicData, attribute);
@@ -177,10 +177,12 @@ d3.csv('data/speedDating.csv').then((data) => {
 
   // Event handler for matrix
   dispatch.on('matrixClick', (selected, gender) => {
-    if (gender == 'male') {
-      barChartData = getMatchingProbabilityBars(maleData, maleMatchData, demographicData, matrix.attribute);
+    if (gender === 'male') {
+      barChartData = getMatchingProbabilityBars(maleData,
+        maleMatchData, demographicData, matrix.attribute);
     } else {
-      barChartData = getMatchingProbabilityBars(femaleData, femaleMatchData, demographicData, matrix.attribute);
+      barChartData = getMatchingProbabilityBars(femaleData,
+        femaleMatchData, demographicData, matrix.attribute);
     }
 
     barChart.data = barChartData;
@@ -194,16 +196,17 @@ d3.csv('data/speedDating.csv').then((data) => {
 
 /**
   * Data pre-processing for adjacency matrix
-  * The gender used for @param matchData and @param data does not influence the change the result BUT they MUST match,
+  * The gender used for @param matchData and @param data does not influence the
+  * change the result BUT they MUST match,
   * the gender used for will be the row, and the opposite gender on the column.
   */
-var getMatchingProbabilityMatrix = (data, matchData, demographicData, attribute) => {
+const getMatchingProbabilityMatrix = (data, matchData, demographicData, attribute) => {
   const limit = getAttributeSize(attribute);
   const allCount = new Array(limit);
   const matchCount = new Array(limit);
   const probability = new Array(limit);
 
-  for (let i = 0; i < limit; i++) {
+  for (let i = 0; i < limit; i += 1) {
     allCount[i] = new Array(limit);
     allCount[i].fill(0);
     matchCount[i] = new Array(limit);
@@ -214,19 +217,19 @@ var getMatchingProbabilityMatrix = (data, matchData, demographicData, attribute)
 
   data.forEach((d) => {
     if (d.pid && d[attribute]) {
-      allCount[d[attribute]][demographicData.get(d.pid)[attribute]]++;
+      allCount[d[attribute]][demographicData.get(d.pid)[attribute]] += 1;
     }
   });
 
   matchData.forEach((d) => {
     if (d.pid) {
-      matchCount[d[attribute]][demographicData.get(d.pid)[attribute]]++;
+      matchCount[d[attribute]][demographicData.get(d.pid)[attribute]] += 1;
     }
   });
 
-  for (let i = 0; i < limit; i++) {
-    for (let j = 0; j < limit; j++) {
-      probability[i][j] = allCount[i][j] == 0 ? 0 : matchCount[i][j] / allCount[i][j];
+  for (let i = 0; i < limit; i += 1) {
+    for (let j = 0; j < limit; j += 1) {
+      probability[i][j] = allCount[i][j] === 0 ? 0 : matchCount[i][j] / allCount[i][j];
     }
   }
 
@@ -237,9 +240,9 @@ var getMatchingProbabilityMatrix = (data, matchData, demographicData, attribute)
   * Data pre-processing for bar chart
   * The gender used for @param matchData and @param data will the result AND they MUST match,
   */
-var getMatchingProbabilityBars = (data, matchData, demographicData, attribute) => {
+const getMatchingProbabilityBars = (data, matchData, demographicData, attribute) => {
   const limit = getAttributeSize(attribute);
-  const total = new Array(limit); // total number of pairing for each value of an attribute for a gender;
+  const total = new Array(limit); // total no of pairing for each value of an attribute for a gender
   const totalMatches = new Array(limit); // total number of matches for each value of an attribute;
   total.fill(0);
   totalMatches.fill(0);
@@ -247,7 +250,7 @@ var getMatchingProbabilityBars = (data, matchData, demographicData, attribute) =
   const matchCount = new Array(limit);
   const probability = new Array(limit);
 
-  for (let i = 0; i < limit; i++) {
+  for (let i = 0; i < limit; i += 1) {
     matchCount[i] = new Array(limit);
     matchCount[i].fill(0);
     probability[i] = new Array(limit + 1);
@@ -255,21 +258,23 @@ var getMatchingProbabilityBars = (data, matchData, demographicData, attribute) =
   }
 
   data.forEach((d) => {
-    total[d[attribute]]++;
+    total[d[attribute]] += 1;
   });
 
   matchData.forEach((d) => {
     if (d.pid) {
-      matchCount[d[attribute]][demographicData.get(d.pid)[attribute]]++;
-      totalMatches[d[attribute]]++;
+      matchCount[d[attribute]][demographicData.get(d.pid)[attribute]] += 1;
+      totalMatches[d[attribute]] += 1;
     }
   });
 
-  for (let i = 0; i < limit; i++) {
-    for (let j = 0; j < limit; j++) {
-      probability[i][j] = total[i] == 0 ? 0 : matchCount[i][j] / total[i];
+  for (let i = 0; i < limit; i += 1) {
+    for (let j = 0; j < limit; j += 1) {
+      probability[i][j] = total[i] === 0 ? 0 : matchCount[i][j] / total[i];
     }
-    probability[i][limit] = total[i] == 0 ? 0 : (total[i] - totalMatches[i]) / total[i]; // last column indicates probability of not getting any match
+    // last column indicates probability of not getting any match
+    probability[i][limit] = total[i] === 0
+      ? 0 : (total[i] - totalMatches[i]) / total[i];
   }
 
   return probability;
@@ -281,7 +286,7 @@ const detailFields = [
 
 const mapDetails = (d) => {
   const dts = {};
-  detailFields.forEach((f) => dts[f] = d[f]);
+  detailFields.forEach((f) => { dts[f] = d[f]; });
   return dts;
 };
 
