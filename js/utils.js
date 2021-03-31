@@ -139,6 +139,13 @@ const getSubjectDemographicdata = (data, _) => {
 
 const defaultNA = 'Not specified';
 
+/*
+    Accepts an attribute name and produces a map
+    for an arbitrary value in that attribute's domain
+    to a more meaningful representative. For example,
+    maps gender codes from their numerical value to
+    the human-readable name.
+*/
 // eslint-disable-next-line no-unused-vars
 const decode = (attr) => (d) => {
   const v = d[attr];
@@ -154,6 +161,9 @@ const decode = (attr) => (d) => {
   }
 };
 
+/*
+    Determine the cardinality of the given attribute
+*/
 // eslint-disable-next-line no-unused-vars
 const getAttributeSize = (attribute) => {
   switch (attribute) {
@@ -165,8 +175,12 @@ const getAttributeSize = (attribute) => {
   }
 };
 
+/*
+    Produce all unique values of an attribute
+*/
 // eslint-disable-next-line no-unused-vars
 const unique = (data, acc) => new Set(d3.map(data, acc));
+
 // eslint-disable-next-line no-unused-vars
 const getLabel = (attribute, code) => {
   switch (attribute) {
