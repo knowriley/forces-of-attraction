@@ -6,11 +6,11 @@ const NUM_OF_CAREERS = 18;
 const NUM_OF_RACES = 7; // MAX_AGE (6) + 1
 const NUM_OF_AGES = 56; // MAX_AGE (55) + 1
 
-const getGenderedData = (data, gender) => data.filter((d) => d.gender == gender);
+const getGenderedData = (data, gender) => data.filter((d) => d.gender === gender);
 
-const getMatches = (data) => data.filter((d) => d.match == 1);
+const getMatches = (data) => data.filter((d) => d.match === 1);
 
-const getSubjectDemographicdata = (data, countries) => {
+const getSubjectDemographicdata = (data, _) => {
   const map = new Map();
   data.forEach((d) => {
     if (!map.has(d.iid)) {

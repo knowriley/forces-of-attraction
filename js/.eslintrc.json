@@ -10,6 +10,7 @@
         "ecmaVersion": 12
     },
     "rules": {
+        "no-unused-vars": ["error", { "argsIgnorePattern": "^_" }]
     },
     "ignorePatterns": ["d3.v6.min.js"]
 }
