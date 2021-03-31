@@ -23,6 +23,16 @@
 
         <div id="vis-container">
             <div id="visA">
+                Each circle is a participant in the study. Colors correspond to
+                the selection above. The distance
+                between any pair of participants is inversely proportional
+                to
+                <select id="attractByAttributeSelector">
+                    <option value="like">how much the they liked each other</option>
+                    <option value="match">whether or not they matched</option>
+                </select>.
+                Try dragging the nodes to see which other nodes have high linkage
+                (i.e. attract each other in the study).
                 <div id="forceDirected" class="chart"></div>
             </div>
             <div id="visB">
@@ -36,6 +46,7 @@
 
     <script src="js/d3.v6.min.js"></script>
     <script src="js/utils.js"></script>
+    <script src="js/View.js"></script>
     <script src="js/forceDirectedGraph.js"></script>
     <script src="js/barChart.js"></script>
     <script src="js/matrix.js"></script>

@@ -31,6 +31,22 @@ var getSubjectDemographicdata = (data, countries) => {
   return map;
 }
 
+const defaultNA = "Not specified";
+
+const decode = (attr) => (d) => {
+    const v = d[attr];
+    switch (attr) {
+        case 'gender':
+            return v ? "Male" : "Female";
+        case 'field_cd':
+            return v ? fieldCodeToFieldGroupMapping[v] : defaultNA;
+        case 'career_c':
+            return v ? careerCodeToCareerGroupMapping[v] : defaultNA;
+        default:
+            return v;
+    }
+}
+
 var getAttributeSize = (attribute) => {
   switch(attribute) {
     case 'career_c': return NUM_OF_CAREERS;
@@ -41,6 +57,9 @@ var getAttributeSize = (attribute) => {
   }
 }
 
+const unique = (data, acc) => {
+    return new Set(d3.map(data, acc));
+}
 var getLabel = (attribute, code) => {
   switch (attribute) {
     case 'career_c': return careerCodeToCareerMapping[code];

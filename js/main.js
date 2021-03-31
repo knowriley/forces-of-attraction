@@ -138,7 +138,7 @@ d3.csv('data/speedDating.csv').then(data => {
 
   // Init charts
   barChart = new BarChart({ parentElement: '#bar'}, barChartData, 'career_c', 'Lawyer');
-  forceDirectedGraph = new ForceDirectedGraph({ parentElement: '#forceDirected'}, data);
+  forceDirectedGraph = new ForceDirectedGraph({ parentElement: '#forceDirected'}, getGraphData(data), 'career_c');
   matrix = new Matrix({ parentElement: '#matrix', dispatch: dispatch}, matrixData, 'career_c');
 
   let update = () => {
@@ -164,6 +164,14 @@ d3.csv('data/speedDating.csv').then(data => {
     barChart.selected = getDefaultLabel(attribute);
     barChart.gender = 'male';
 
+    forceDirectedGraph.setAttribute(attribute);
+
+    update();
+  }
+
+  document.getElementById("attractByAttributeSelector").onchange = _ => {
+    let dist = document.getElementById("attractByAttributeSelector").value;
+    forceDirectedGraph.setNodeDistance(dist);
     update();
   }
 
@@ -268,3 +276,37 @@ var getMatchingProbabilityBars = (data, matchData, demographicData, attribute) =
   return probability;
 }
 
+const detailFields = [
+    'gender', 'age', 'field_cd', 'undergrd', 'race', 'from', 'zipcode', 'career_c'
+];
+
+const mapDetails = (d) => {
+    const dts = {};
+    detailFields.forEach(f => dts[f] = d[f]);
+    return dts;
+};
+
+const getGraphData = (data) => {
+    let nodes = {};
+    let links = [];
+    data.forEach(d => {
+        const iid = `${d['iid']}`;
+        const pid = `${d['pid']}`;
+        if (!nodes[iid]) {
+            nodes[iid] = {'id': iid, ... mapDetails(d)}
+        }
+        if (!nodes[pid]) {
+            nodes[pid] = {'id': pid, ... mapDetails(d)}
+        }
+        links.push({
+            source: iid,
+            target: pid,
+            like: d['like'],
+            match: d['match'] 
+        });
+    });
+    return {
+        nodes: Object.keys(nodes).map(k => nodes[k]),
+        links
+    }
+}
