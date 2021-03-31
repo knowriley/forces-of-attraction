@@ -1,13 +1,14 @@
 class BarChart {
-
   constructor(_config, _data, _attribute, _selected) {
     this.config = {
       parentElement: _config.parentElement,
       containerWidth: 600,
       containerHeight: 350,
-      margin: { top: 20, right: 20, bottom: 20, left: 100 }
+      margin: {
+        top: 20, right: 20, bottom: 20, left: 100,
+      },
       // TODO: Margin is super large to accomodate super large labels
-    }
+    };
     this.data = _data;
     this.attribute = _attribute;
     this.selected = _selected;
@@ -16,7 +17,7 @@ class BarChart {
   }
 
   initVis() {
-    let vis = this;
+    const vis = this;
 
     vis.width = vis.config.containerWidth - vis.config.margin.left - vis.config.margin.right;
     vis.height = vis.config.containerHeight - vis.config.margin.top - vis.config.margin.bottom;
@@ -26,7 +27,7 @@ class BarChart {
       .attr('width', vis.config.containerWidth)
       .attr('height', vis.config.containerHeight);
 
-    // Append group element that will contain our actual chart 
+    // Append group element that will contain our actual chart
     // and position it according to the given margin config
     vis.chartArea = vis.svg.append('g')
       .attr('transform', `translate(${vis.config.margin.left},${vis.config.margin.top})`);
@@ -43,7 +44,7 @@ class BarChart {
     vis.xAxis = d3.axisBottom(vis.xScale)
       .ticks(10)
       .tickSizeOuter(0)
-      .tickFormat(d3.format(".0%"));
+      .tickFormat(d3.format('.0%'));
     vis.yAxis = d3.axisLeft(vis.yScale);
 
     // Append empty x-axis group and move it to the bottom of the chart
@@ -51,7 +52,7 @@ class BarChart {
       .attr('class', 'axis x-axis')
       .attr('transform', `translate(0,${vis.height})`);
 
-    // Append y-axis group 
+    // Append y-axis group
     vis.yAxisG = vis.chartArea.append('g')
       .attr('class', 'axis y-axis');
 
@@ -65,7 +66,7 @@ class BarChart {
   }
 
   updateVis() {
-    let vis = this;
+    const vis = this;
 
     vis.barData = [];
     if (vis.attribute == 'age') {
@@ -73,7 +74,7 @@ class BarChart {
         vis.barData.push({
           row: i - 17,
           rowLabel: getLabel(vis.attribute, i),
-          value: vis.data[getCode(vis.attribute, vis.selected)][i]
+          value: vis.data[getCode(vis.attribute, vis.selected)][i],
         });
       }
     } else {
@@ -81,7 +82,7 @@ class BarChart {
         vis.barData.push({
           row: i,
           rowLabel: getLabel(vis.attribute, i),
-          value: vis.data[getCode(vis.attribute, vis.selected)][i]
+          value: vis.data[getCode(vis.attribute, vis.selected)][i],
         });
       }
     }
@@ -90,11 +91,11 @@ class BarChart {
     vis.barData.push({
       row: vis.barData.length,
       rowLabel: 'Total',
-      value: vis.data[getCode(vis.attribute, vis.selected)][vis.data.length] == 0 ? 0 : (1 - vis.data[getCode(vis.attribute, vis.selected)][vis.data.length])
+      value: vis.data[getCode(vis.attribute, vis.selected)][vis.data.length] == 0 ? 0 : (1 - vis.data[getCode(vis.attribute, vis.selected)][vis.data.length]),
     });
 
-    vis.xValue = d => d.value;
-    vis.yValue = d => d.rowLabel;
+    vis.xValue = (d) => d.value;
+    vis.yValue = (d) => d.rowLabel;
 
     vis.xScale.domain([0, 0.2]);
     vis.yScale.domain(vis.barData.map(vis.yValue));
@@ -103,15 +104,16 @@ class BarChart {
   }
 
   renderVis() {
-    let vis = this;
+    const vis = this;
 
     vis.bars = vis.chart.selectAll('.bar')
       .data(vis.barData, vis.yValue)
       .join('rect')
-      .transition().duration(1000)
+      .transition()
+      .duration(1000)
       .attr('class', 'bar')
-      .attr('y', d => vis.yScale(vis.yValue(d)))
-      .attr('width', d => vis.xScale(vis.xValue(d)))
+      .attr('y', (d) => vis.yScale(vis.yValue(d)))
+      .attr('width', (d) => vis.xScale(vis.xValue(d)))
       .attr('height', vis.yScale.bandwidth())
       .attr('fill', 'green');
 
@@ -122,7 +124,6 @@ class BarChart {
       .attr('x', -5)
       .style('text-anchor', 'end');
 
-    vis.axisTitle.text(`Probability of ${vis.gender} ${vis.selected} matching with another person`); //https://stackoverflow.com/a/36707865
+    vis.axisTitle.text(`Probability of ${vis.gender} ${vis.selected} matching with another person`); // https://stackoverflow.com/a/36707865
   }
-
 }
