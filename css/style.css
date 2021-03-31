@@ -54,6 +54,10 @@ body {
     height: 100%;
 }
 
+#visA {
+    padding: 50px;
+}
+
 .tick line, .domain {
     display: none;
 }
