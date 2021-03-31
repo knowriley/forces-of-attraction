@@ -53,6 +53,7 @@ d3.csv('data/speedDating.csv').then((data) => {
   barChart = new BarChart({ parentElement: '#bar' }, barChartData, 'career_c', 'Lawyer');
   forceDirectedGraph = new ForceDirectedGraph({ parentElement: '#forceDirected' }, getGraphData(data), 'career_c');
   matrix = new Matrix({ parentElement: '#matrix', dispatch }, matrixData, 'career_c');
+  legend = new Legend('#legend', forceDirectedGraph.colorDomain, forceDirectedGraph.colorScale);
 
   // Set up a routine to call any required functions when document state changes
   const update = () => {
@@ -60,6 +61,8 @@ d3.csv('data/speedDating.csv').then((data) => {
     barChart.updateVis();
     forceDirectedGraph.updateVis();
     matrix.updateVis();
+    legend.set(forceDirectedGraph.colorDomain, forceDirectedGraph.colorScale);
+    legend.updateVis();
   };
 
   // Do the first update
