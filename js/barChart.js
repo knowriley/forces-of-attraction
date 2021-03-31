@@ -3,9 +3,9 @@ class BarChart {
   constructor(_config, _data, _attribute, _selected) {
     this.config = {
       parentElement: _config.parentElement,
-      containerWidth: 500,
+      containerWidth: 600,
       containerHeight: 350,
-      margin: { top: 15, right: 15, bottom: 20, left: 170 }
+      margin: { top: 20, right: 20, bottom: 20, left: 100 }
       // TODO: Margin is super large to accomodate super large labels
     }
     this.data = _data;
@@ -42,7 +42,8 @@ class BarChart {
     // init axes
     vis.xAxis = d3.axisBottom(vis.xScale)
       .ticks(10)
-      .tickSizeOuter(0);
+      .tickSizeOuter(0)
+      .tickFormat(d3.format(".0%"));
     vis.yAxis = d3.axisLeft(vis.yScale);
 
     // Append empty x-axis group and move it to the bottom of the chart
@@ -60,8 +61,7 @@ class BarChart {
       .attr('x', 0)
       .attr('y', 0)
       .attr('dy', '.80em')
-      .text(`Probability of ${vis.selected} Matching with Another Person`);
-
+      .text(`Probability of ${vis.gender} ${vis.selected} matching with another person`);
   }
 
   updateVis() {
@@ -73,7 +73,7 @@ class BarChart {
         vis.barData.push({
           row: i - 17,
           rowLabel: getLabel(vis.attribute, i),
-          value: vis.data[getCode(vis.attribute, vis.selected)][i] * 100
+          value: vis.data[getCode(vis.attribute, vis.selected)][i]
         });
       }
     } else {
@@ -81,7 +81,7 @@ class BarChart {
         vis.barData.push({
           row: i,
           rowLabel: getLabel(vis.attribute, i),
-          value: vis.data[getCode(vis.attribute, vis.selected)][i] * 100
+          value: vis.data[getCode(vis.attribute, vis.selected)][i]
         });
       }
     }
@@ -90,13 +90,13 @@ class BarChart {
     vis.barData.push({
       row: vis.barData.length,
       rowLabel: 'Total',
-      value: vis.data[getCode(vis.attribute, vis.selected)][vis.data.length] == 0 ? 0 : (1 - vis.data[getCode(vis.attribute, vis.selected)][vis.data.length]) * 100
+      value: vis.data[getCode(vis.attribute, vis.selected)][vis.data.length] == 0 ? 0 : (1 - vis.data[getCode(vis.attribute, vis.selected)][vis.data.length])
     });
 
     vis.xValue = d => d.value;
     vis.yValue = d => d.rowLabel;
 
-    vis.xScale.domain([0, 20]);
+    vis.xScale.domain([0, 0.2]);
     vis.yScale.domain(vis.barData.map(vis.yValue));
 
     vis.renderVis();
@@ -122,7 +122,7 @@ class BarChart {
       .attr('x', -5)
       .style('text-anchor', 'end');
 
-    vis.axisTitle.text(`Probability of ${vis.gender} ${vis.selected} Matching with Another Person`); //https://stackoverflow.com/a/36707865
+    vis.axisTitle.text(`Probability of ${vis.gender} ${vis.selected} matching with another person`); //https://stackoverflow.com/a/36707865
   }
 
 }

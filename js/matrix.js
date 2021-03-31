@@ -57,17 +57,23 @@ class Matrix {
 
     // Append text labels (https://bl.ocks.org/d3noob/23e42c8f67210ac6c678db2cd07a747e)
     vis.chart.append('text')
-    .attr('transform', 'rotate(90)')
-    .attr('x', -20)
-    .attr('y', 10)
-    .style('text-anchor', 'end')
-    .text('Female');
+      .attr('transform', 'rotate(90)')
+      .attr('x', -20)
+      .attr('y', 10)
+      .style('text-anchor', 'end')
+      .text('Female');
 
     vis.chart.append('text')
-    .attr('x', -20)
-    .attr('y', -10)
-    .style('text-anchor', 'end')
-    .text('Male');
+      .attr('x', -20)
+      .attr('y', -10)
+      .style('text-anchor', 'end')
+      .text('Male');
+
+    vis.chart.append('text')
+      .attr('x', -80)
+      .attr('y', vis.config.height + 15)
+      .style('text-anchor', 'start')
+      .text('* Click on axis labels to see detailed probability');
 
     vis.updateVis();
   }
@@ -147,8 +153,7 @@ class Matrix {
           <div>a female ${getLabel(vis.attribute, d.col)} </div>
           <div>matches ${d3.format('.0%')(d.value)} of the time.</div>
         `);
-    })
-      .on('mouseout', (e, d) => {
+    }).on('mouseout', (e, d) => {
         d3.select('#tooltip').style('display', 'none');
       });
 
