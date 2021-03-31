@@ -87,10 +87,25 @@ class ForceDirectedGraph extends View {
             d3.select('#tooltip').style('display', 'none');
           });
 
+        const matchLinks = d3.filter(vis.getData().links, 
+            l => l['match']);
+
+        const links = vis.chart.selectAll('line')
+          .data(matchLinks, d => [d.source, d.target])
+          .join('line')
+          .attr('opacity', 0.7)
+          .attr('stroke', 'black')
+          .attr('stroke-width', 0.1)
+
         vis.graph.on('tick', () => {
             nodes
                 .attr('cx', d => d.x)
                 .attr('cy', d => d.y);
+            links
+                .attr('x1', d => d.source.x)
+                .attr('y1', d => d.source.y)
+                .attr('x2', d => d.target.x)
+                .attr('y2', d => d.target.y);
             });
     }
 }
