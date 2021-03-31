@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-unused-vars
 class View {
   constructor(_config, _data, _attribute) {
     this.config = {

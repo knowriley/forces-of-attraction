@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-unused-vars
 class Matrix {
   constructor(_config, _data, _attribute) {
     this.config = {

@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-unused-vars
 class BarChart {
   constructor(_config, _data, _attribute, _selected) {
     this.config = {

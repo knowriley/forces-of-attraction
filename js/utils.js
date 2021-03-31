@@ -6,10 +6,13 @@ const NUM_OF_CAREERS = 18;
 const NUM_OF_RACES = 7; // MAX_AGE (6) + 1
 const NUM_OF_AGES = 56; // MAX_AGE (55) + 1
 
+// eslint-disable-next-line no-unused-vars
 const getGenderedData = (data, gender) => data.filter((d) => d.gender === gender);
 
+// eslint-disable-next-line no-unused-vars
 const getMatches = (data) => data.filter((d) => d.match === 1);
 
+// eslint-disable-next-line no-unused-vars
 const getSubjectDemographicdata = (data, _) => {
   const map = new Map();
   data.forEach((d) => {
@@ -29,6 +32,7 @@ const getSubjectDemographicdata = (data, _) => {
 
 const defaultNA = 'Not specified';
 
+// eslint-disable-next-line no-unused-vars
 const decode = (attr) => (d) => {
   const v = d[attr];
   switch (attr) {
@@ -43,6 +47,7 @@ const decode = (attr) => (d) => {
   }
 };
 
+// eslint-disable-next-line no-unused-vars
 const getAttributeSize = (attribute) => {
   switch (attribute) {
     case 'career_c': return NUM_OF_CAREERS;
@@ -53,7 +58,9 @@ const getAttributeSize = (attribute) => {
   }
 };
 
+// eslint-disable-next-line no-unused-vars
 const unique = (data, acc) => new Set(d3.map(data, acc));
+// eslint-disable-next-line no-unused-vars
 const getLabel = (attribute, code) => {
   switch (attribute) {
     case 'career_c': return careerCodeToCareerMapping[code];
@@ -64,6 +71,7 @@ const getLabel = (attribute, code) => {
   }
 };
 
+// eslint-disable-next-line no-unused-vars
 const getDefaultLabel = (attribute) => {
   switch (attribute) {
     case 'career_c': return careerCodeToCareerMapping[1];
@@ -74,6 +82,7 @@ const getDefaultLabel = (attribute) => {
   }
 };
 
+// eslint-disable-next-line no-unused-vars
 const getCode = (attribute, label) => {
   switch (attribute) {
     case 'career_c': return careerCodeToCareerMapping.indexOf(label);
@@ -82,30 +91,4 @@ const getCode = (attribute, label) => {
     case 'age': return label;
     default: return '';
   }
-};
-
-// Drag simulation code curtesy of
-// https://observablehq.com/@d3/force-directed-graph
-const drag = (simulation) => {
-  function dragstarted(event) {
-    if (!event.active) simulation.alphaTarget(0.3).restart();
-    event.subject.fx = event.subject.x;
-    event.subject.fy = event.subject.y;
-  }
-
-  function dragged(event) {
-    event.subject.fx = event.x;
-    event.subject.fy = event.y;
-  }
-
-  function dragended(event) {
-    if (!event.active) simulation.alphaTarget(0);
-    event.subject.fx = null;
-    event.subject.fy = null;
-  }
-
-  return d3.drag()
-    .on('start', dragstarted)
-    .on('drag', dragged)
-    .on('end', dragended);
 };

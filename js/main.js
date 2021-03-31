@@ -3,6 +3,7 @@
  * the index of the array correspond to the coded value, which map to a group
  */
 
+// eslint-disable-next-line no-unused-vars
 const fieldCodeToFieldGroupMapping = [ // 7 unique groups
   null,
   'Law', // Law
@@ -25,6 +26,7 @@ const fieldCodeToFieldGroupMapping = [ // 7 unique groups
   'Other', // Other
 ];
 
+// eslint-disable-next-line no-unused-vars
 const careerCodeToCareerGroupMapping = [ // 8 unique groups
   null,
   'Law', // Lawyer
@@ -47,6 +49,7 @@ const careerCodeToCareerGroupMapping = [ // 8 unique groups
 ];
 
 // For matrix and barChart TODO: Do we but this in a utils or constants file?
+// eslint-disable-next-line no-unused-vars
 const careerCodeToCareerMapping = [
   '',
   'Lawyer',
@@ -68,6 +71,7 @@ const careerCodeToCareerMapping = [
   'Architecture',
 ];
 
+// eslint-disable-next-line no-unused-vars
 const fieldCodeToFieldMapping = [
   '',
   'Law',
@@ -90,6 +94,7 @@ const fieldCodeToFieldMapping = [
   'Other',
 ];
 
+// eslint-disable-next-line no-unused-vars
 const raceCodeToRaceMapping = [
   '',
   'Black/African American',
