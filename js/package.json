@@ -1,6 +1,7 @@
 {
   "scripts": {
-    "lint": "yarn run eslint *.js"
+    "lint": "yarn run eslint *.js",
+    "fix": "yarn run eslint --fix *.js"
   },
   "devDependencies": {
     "eslint": "^7.23.0",
