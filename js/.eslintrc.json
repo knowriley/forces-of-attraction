@@ -12,7 +12,8 @@
     "rules": {
         "no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
         "no-use-before-define": "off",
-        "no-param-reassign": "off"
+        "no-param-reassign": "off",
+        "no-undef": "off"
     },
     "ignorePatterns": ["d3.v6.min.js"]
 }
