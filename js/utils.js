@@ -42,6 +42,8 @@ const decode = (attr) => (d) => {
             return v ? fieldCodeToFieldGroupMapping[v] : defaultNA;
         case 'career_c':
             return v ? careerCodeToCareerGroupMapping[v] : defaultNA;
+        case 'race':
+            return v ? raceCodeToRaceMapping[v] : defaultNA;
         default:
             return v;
     }
