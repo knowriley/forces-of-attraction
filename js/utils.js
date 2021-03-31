@@ -6,6 +6,113 @@ const NUM_OF_CAREERS = 18;
 const NUM_OF_RACES = 7; // MAX_AGE (6) + 1
 const NUM_OF_AGES = 56; // MAX_AGE (55) + 1
 
+/**
+ * Attribute group mapping
+ * the index of the array correspond to the coded value, which map to a group
+ */
+
+// eslint-disable-next-line no-unused-vars
+const fieldCodeToFieldGroupMapping = [ // 7 unique groups
+  null,
+  'Law', // Law
+  'Science', // Math
+  'Arts', // Social Science, Psychologist
+  'Science', // Medical Science, Pharmaceuticals, and Bio Tech
+  'Engineering', // Engineering
+  'Arts', // English/Creative Writing/ Journalism
+  'Arts', // History/Religion/Philosophy
+  'Business', // Business/Econ/Finance
+  'Education', // Education, Academia
+  'Science', // Biological Sciences/Chemistry/Physics
+  'Arts', // Social Work
+  'Other', // Undergrad/ undecided
+  'Arts', // Political Science/International Affairs
+  'Arts', // Film
+  'Arts', // Fine Arts/Arts Administration
+  'Arts', // Languages
+  'Engineering', // Architecture
+  'Other', // Other
+];
+
+// eslint-disable-next-line no-unused-vars
+const careerCodeToCareerGroupMapping = [ // 8 unique groups
+  null,
+  'Law', // Lawyer
+  'Arts', // Academic/ Research
+  'Science', // Psychologist
+  'Medicine', // Doctor/Medicine
+  'Engineering', // Engineer
+  'Arts', // Creative Arts/Entertainment
+  'Business', // Banking/Consulting/Finance/Marketing/Business/CEO/Entrepreneur/Admin
+  'Business', // Real Estate
+  'Law', // International/Humanitarian Affairs
+  'Other', // Undecided
+  'Arts', // Social Work
+  'Science', // Speech Pathology
+  'Law', // Politics
+  'Sports', // Pro sports/Athletics
+  'Other', // Other
+  'Arts', // Journalism
+  'Engineering', // Architecture
+];
+
+// For matrix and barChart TODO: Do we but this in a utils or constants file?
+// eslint-disable-next-line no-unused-vars
+const careerCodeToCareerMapping = [
+  '',
+  'Lawyer',
+  'Academic/ Research',
+  'Psychologist',
+  'Doctor/Medicine',
+  'Engineer',
+  'Creative Arts/Entertainment',
+  'Banking/Consulting/Finance/Marketing/Business/CEO/Entrepreneur/Admin',
+  'Real Estate',
+  'International/Humanitarian Affairs',
+  'Undecided',
+  'Social Work',
+  'Speech Pathology',
+  'Politics',
+  'Pro sports/Athletics',
+  'Other',
+  'Journalism',
+  'Architecture',
+];
+
+// eslint-disable-next-line no-unused-vars
+const fieldCodeToFieldMapping = [
+  '',
+  'Law',
+  'Math',
+  'Social Science, Psychologist',
+  'Medical Science, Pharmaceuticals, and Bio Tech',
+  'Engineering',
+  'English/Creative Writing/ Journalism',
+  'History/Religion/Philosophy',
+  'Business/Econ/Finance',
+  'Education, Academia',
+  'Biological Sciences/Chemistry/Physics',
+  'Social Work',
+  'Undergrad/ undecided',
+  'Political Science/International Affairs',
+  'Film',
+  'Fine Arts/Arts Administration',
+  'Languages',
+  'Architecture',
+  'Other',
+];
+
+// eslint-disable-next-line no-unused-vars
+const raceCodeToRaceMapping = [
+  '',
+  'Black/African American',
+  'European/Caucasian-American',
+  'Latino/Hispanic American',
+  'Asian/Pacific Islander/Asian-American',
+  'Native American',
+  'Other',
+];
+
 // eslint-disable-next-line no-unused-vars
 const getGenderedData = (data, gender) => data.filter((d) => d.gender === gender);
 
