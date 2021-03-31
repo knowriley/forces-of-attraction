@@ -55,6 +55,9 @@ class Legend extends View {
         const itemHeight = vis.getHeight() / n;
         let y = i % n;
         let x = (i - y) / n;
+        if (x % 2 == 1) {
+            y -= 0.5; // stagger
+        }
         return `translate(${x*ITEM_WIDTH}, ${y*itemHeight})`;
     }
 
