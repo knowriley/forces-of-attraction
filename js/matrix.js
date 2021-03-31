@@ -3,12 +3,14 @@ class Matrix {
   constructor(_config, _data, _attribute) {
     this.config = {
       parentElement: _config.parentElement,
+      dispatch: _config.dispatch || null,
       containerWidth: 500,
       containerHeight: 500,
       margin: { top: 100, right: 20, bottom: 20, left: 100 }
     }
     this.data = _data;
     this.attribute = _attribute;
+    this.dispatch = this.config.dispatch;
     this.initVis();
   }
 
@@ -53,6 +55,26 @@ class Matrix {
     vis.yAxisGroup = vis.chart.append('g')
       .attr('class', 'axis y-axis');
 
+    // Append text labels (https://bl.ocks.org/d3noob/23e42c8f67210ac6c678db2cd07a747e)
+    vis.chart.append('text')
+      .attr('transform', 'rotate(90)')
+      .attr('x', -20)
+      .attr('y', 10)
+      .style('text-anchor', 'end')
+      .text('Female');
+
+    vis.chart.append('text')
+      .attr('x', -20)
+      .attr('y', -10)
+      .style('text-anchor', 'end')
+      .text('Male');
+
+    vis.chart.append('text')
+      .attr('x', -80)
+      .attr('y', vis.config.height + 15)
+      .style('text-anchor', 'start')
+      .text('* Click on axis labels to see detailed probability');
+
     vis.updateVis();
   }
 
@@ -67,8 +89,8 @@ class Matrix {
           vis.cellData.push({
             row: i - 17,
             col: j - 17,
-            rowLabel: vis.getLabel(i),
-            colLabel: vis.getLabel(j),
+            rowLabel: getLabel(vis.attribute, i),
+            colLabel: getLabel(vis.attribute, j),
             value: vis.data[i][j]
           });
         }
@@ -79,8 +101,8 @@ class Matrix {
           vis.cellData.push({
             row: i,
             col: j,
-            rowLabel: vis.getLabel(i),
-            colLabel: vis.getLabel(j),
+            rowLabel: getLabel(vis.attribute, i),
+            colLabel: getLabel(vis.attribute, j),
             value: vis.data[i][j]
           });
         }
@@ -127,12 +149,11 @@ class Matrix {
         .style('left', (e.pageX) + 'px')
         .style('top', (e.pageY) + 'px')
         .html(`
-          <div>A male ${vis.getLabel(d.row)} and </div>
-          <div>a female ${vis.getLabel(d.col)} </div>
+          <div>A male ${getLabel(vis.attribute, d.row)} and </div>
+          <div>a female ${getLabel(vis.attribute, d.col)} </div>
           <div>matches ${d3.format('.0%')(d.value)} of the time.</div>
         `);
-    })
-      .on('mouseout', (e, d) => {
+    }).on('mouseout', (e, d) => {
         d3.select('#tooltip').style('display', 'none');
       });
 
@@ -173,16 +194,15 @@ class Matrix {
       .attr('transform', 'rotate(90)')
       .style('text-anchor', 'end'); //https://bl.ocks.org/mbostock/4403522;
     vis.yAxisGroup.call(vis.yAxis);
-  }
 
-  getLabel = (code) => {
-    let vis = this;
-    switch (vis.attribute) {
-      case 'career_c': return careerCodeToCareerMapping[code];
-      case 'field_cd': return fieldCodeToFieldMapping[code];
-      case 'race': return raceCodeToRaceMapping[code];
-      case 'age': return code;
-      default: return '';
-    }
+    d3.selectAll(`${vis.config.parentElement} .y-axis .tick`) //https://stackoverflow.com/a/32658330
+      .on('click', function (event, selected) {
+        vis.dispatch.call('matrixClick', selected, selected, 'male');
+      });
+
+    d3.selectAll(`${vis.config.parentElement} .x-axis .tick`)
+      .on('click', function (event, selected) {
+        vis.dispatch.call('matrixClick', selected, selected, 'female');
+      });
   }
 }
