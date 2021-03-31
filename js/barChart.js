@@ -69,8 +69,8 @@ class BarChart {
     const vis = this;
 
     vis.barData = [];
-    if (vis.attribute == 'age') {
-      for (let i = 18; i <= 45; i++) {
+    if (vis.attribute === 'age') {
+      for (let i = 18; i <= 45; i += 1) {
         vis.barData.push({
           row: i - 17,
           rowLabel: getLabel(vis.attribute, i),
@@ -78,7 +78,7 @@ class BarChart {
         });
       }
     } else {
-      for (let i = 1; i < vis.data.length; i++) {
+      for (let i = 1; i < vis.data.length; i += 1) {
         vis.barData.push({
           row: i,
           rowLabel: getLabel(vis.attribute, i),
@@ -91,7 +91,8 @@ class BarChart {
     vis.barData.push({
       row: vis.barData.length,
       rowLabel: 'Total',
-      value: vis.data[getCode(vis.attribute, vis.selected)][vis.data.length] == 0 ? 0 : (1 - vis.data[getCode(vis.attribute, vis.selected)][vis.data.length]),
+      value: vis.data[getCode(vis.attribute, vis.selected)][vis.data.length] === 0
+        ? 0 : (1 - vis.data[getCode(vis.attribute, vis.selected)][vis.data.length]),
     });
 
     vis.xValue = (d) => d.value;

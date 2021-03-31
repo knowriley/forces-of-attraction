@@ -62,8 +62,4 @@ class View {
   updateVis() {
     this.updateSize();
   }
-
-  renderVis() {
-    // placeholder
-  }
 }
