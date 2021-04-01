@@ -1,0 +1,11 @@
+{
+  "scripts": {
+    "lint": "yarn run eslint *.js",
+    "fix": "yarn run eslint --fix *.js"
+  },
+  "devDependencies": {
+    "eslint": "^7.23.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-plugin-import": "^2.22.1"
+  }
+}

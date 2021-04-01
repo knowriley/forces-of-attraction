@@ -3,66 +3,188 @@
  */
 const NUM_OF_FIELDS = 19;
 const NUM_OF_CAREERS = 18;
-const NUM_OF_RACES = 7; //MAX_AGE (6) + 1
-const NUM_OF_AGES = 56; //MAX_AGE (55) + 1
+const NUM_OF_RACES = 7; // MAX_AGE (6) + 1
+const NUM_OF_AGES = 56; // MAX_AGE (55) + 1
 
-var getGenderedData = (data, gender) => {
-  return data.filter(d => d.gender == gender);
-}
+/**
+ * Attribute group mapping
+ * the index of the array correspond to the coded value, which map to a group
+ */
 
-var getMatches = (data) => {
-  return data.filter(d => d.match == 1);
-}
+// eslint-disable-next-line no-unused-vars
+const fieldCodeToFieldGroupMapping = [ // 7 unique groups
+  null,
+  'Law', // Law
+  'Science', // Math
+  'Arts', // Social Science, Psychologist
+  'Science', // Medical Science, Pharmaceuticals, and Bio Tech
+  'Engineering', // Engineering
+  'Arts', // English/Creative Writing/ Journalism
+  'Arts', // History/Religion/Philosophy
+  'Business', // Business/Econ/Finance
+  'Education', // Education, Academia
+  'Science', // Biological Sciences/Chemistry/Physics
+  'Arts', // Social Work
+  'Other', // Undergrad/ undecided
+  'Arts', // Political Science/International Affairs
+  'Arts', // Film
+  'Arts', // Fine Arts/Arts Administration
+  'Arts', // Languages
+  'Engineering', // Architecture
+  'Other', // Other
+];
 
-var getSubjectDemographicdata = (data, countries) => {
-  let map = new Map();
-  data.forEach(d => {
+// eslint-disable-next-line no-unused-vars
+const careerCodeToCareerGroupMapping = [ // 8 unique groups
+  null,
+  'Law', // Lawyer
+  'Arts', // Academic/ Research
+  'Science', // Psychologist
+  'Medicine', // Doctor/Medicine
+  'Engineering', // Engineer
+  'Arts', // Creative Arts/Entertainment
+  'Business', // Banking/Consulting/Finance/Marketing/Business/CEO/Entrepreneur/Admin
+  'Business', // Real Estate
+  'Law', // International/Humanitarian Affairs
+  'Other', // Undecided
+  'Arts', // Social Work
+  'Science', // Speech Pathology
+  'Law', // Politics
+  'Sports', // Pro sports/Athletics
+  'Other', // Other
+  'Arts', // Journalism
+  'Engineering', // Architecture
+];
+
+// For matrix and barChart TODO: Do we but this in a utils or constants file?
+// eslint-disable-next-line no-unused-vars
+const careerCodeToCareerMapping = [
+  '',
+  'Lawyer',
+  'Academic/ Research',
+  'Psychologist',
+  'Doctor/Medicine',
+  'Engineer',
+  'Creative Arts/Entertainment',
+  'Banking/Consulting/Finance/Marketing/Business/CEO/Entrepreneur/Admin',
+  'Real Estate',
+  'International/Humanitarian Affairs',
+  'Undecided',
+  'Social Work',
+  'Speech Pathology',
+  'Politics',
+  'Pro sports/Athletics',
+  'Other',
+  'Journalism',
+  'Architecture',
+];
+
+// eslint-disable-next-line no-unused-vars
+const fieldCodeToFieldMapping = [
+  '',
+  'Law',
+  'Math',
+  'Social Science, Psychologist',
+  'Medical Science, Pharmaceuticals, and Bio Tech',
+  'Engineering',
+  'English/Creative Writing/ Journalism',
+  'History/Religion/Philosophy',
+  'Business/Econ/Finance',
+  'Education, Academia',
+  'Biological Sciences/Chemistry/Physics',
+  'Social Work',
+  'Undergrad/ undecided',
+  'Political Science/International Affairs',
+  'Film',
+  'Fine Arts/Arts Administration',
+  'Languages',
+  'Architecture',
+  'Other',
+];
+
+// eslint-disable-next-line no-unused-vars
+const raceCodeToRaceMapping = [
+  '',
+  'Black/African American',
+  'European/Caucasian-American',
+  'Latino/Hispanic American',
+  'Asian/Pacific Islander/Asian-American',
+  'Native American',
+  'Other',
+];
+
+// eslint-disable-next-line no-unused-vars
+const getGenderedData = (data, gender) => data.filter((d) => d.gender === gender);
+
+// eslint-disable-next-line no-unused-vars
+const getMatches = (data) => data.filter((d) => d.match === 1);
+
+// eslint-disable-next-line no-unused-vars
+const getSubjectDemographicdata = (data, _) => {
+  const map = new Map();
+  data.forEach((d) => {
     if (!map.has(d.iid)) {
       map.set(d.iid, {
         age: d.age,
         field_cd: d.field_cd,
         career_c: d.career_c,
         race: d.race,
-        from: d.from
+        from: d.from,
       });
     }
   });
 
   return map;
-}
+};
 
-const defaultNA = "Not specified";
+const defaultNA = 'Not specified';
 
+/*
+    Accepts an attribute name and produces a map
+    for an arbitrary value in that attribute's domain
+    to a more meaningful representative. For example,
+    maps gender codes from their numerical value to
+    the human-readable name.
+*/
+// eslint-disable-next-line no-unused-vars
 const decode = (attr) => (d) => {
-    const v = d[attr];
-    switch (attr) {
-        case 'gender':
-            return v ? "Male" : "Female";
-        case 'field_cd':
-            return v ? fieldCodeToFieldGroupMapping[v] : defaultNA;
-        case 'career_c':
-            return v ? careerCodeToCareerGroupMapping[v] : defaultNA;
-        case 'race':
-            return v ? raceCodeToRaceMapping[v] : defaultNA;
-        default:
-            return v;
-    }
-}
+  const v = d[attr];
+  switch (attr) {
+    case 'gender':
+      return v ? 'Male' : 'Female';
+    case 'field_cd':
+      return v ? fieldCodeToFieldGroupMapping[v] : defaultNA;
+    case 'career_c':
+      return v ? careerCodeToCareerGroupMapping[v] : defaultNA;
+    case 'race':
+      return v ? raceCodeToRaceMapping[v] : defaultNA;
+    default:
+      return v;
+  }
+};
 
-var getAttributeSize = (attribute) => {
-  switch(attribute) {
+/*
+    Determine the cardinality of the given attribute
+*/
+// eslint-disable-next-line no-unused-vars
+const getAttributeSize = (attribute) => {
+  switch (attribute) {
     case 'career_c': return NUM_OF_CAREERS;
     case 'field_cd': return NUM_OF_FIELDS;
     case 'race': return NUM_OF_RACES;
     case 'age': return NUM_OF_AGES;
     default: return 0;
   }
-}
+};
 
-const unique = (data, acc) => {
-    return new Set(d3.map(data, acc));
-}
-var getLabel = (attribute, code) => {
+/*
+    Produce all unique values of an attribute
+*/
+// eslint-disable-next-line no-unused-vars
+const unique = (data, acc) => new Set(d3.map(data, acc));
+
+// eslint-disable-next-line no-unused-vars
+const getLabel = (attribute, code) => {
   switch (attribute) {
     case 'career_c': return careerCodeToCareerMapping[code];
     case 'field_cd': return fieldCodeToFieldMapping[code];
@@ -70,9 +192,10 @@ var getLabel = (attribute, code) => {
     case 'age': return code;
     default: return '';
   }
-}
+};
 
-var getDefaultLabel = (attribute) => {
+// eslint-disable-next-line no-unused-vars
+const getDefaultLabel = (attribute) => {
   switch (attribute) {
     case 'career_c': return careerCodeToCareerMapping[1];
     case 'field_cd': return fieldCodeToFieldMapping[1];
@@ -80,9 +203,10 @@ var getDefaultLabel = (attribute) => {
     case 'age': return '20';
     default: return '';
   }
-}
+};
 
-var getCode = (attribute, label) => {
+// eslint-disable-next-line no-unused-vars
+const getCode = (attribute, label) => {
   switch (attribute) {
     case 'career_c': return careerCodeToCareerMapping.indexOf(label);
     case 'field_cd': return fieldCodeToFieldMapping.indexOf(label);
@@ -90,4 +214,4 @@ var getCode = (attribute, label) => {
     case 'age': return label;
     default: return '';
   }
-}
+};
