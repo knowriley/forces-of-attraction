@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>Forces of Attraction</title>
+    <title>Forces of Attraction ❤️</title>
     <link rel="icon" href="data:;base64,iVBORwOKGO=" />
     <link rel="stylesheet" href="css/style.css">
 </head>
@@ -11,20 +11,17 @@
     <div id="content">
         <div id="top">
             <h1>Forces of Attraction</h1>
+            This one goes out to the data-curious and the hopeless romantics. Our site visualizes a set of more than 
+            8000 pairings in experimental speed-dating 
+            events by Columbia Business School professors Ray Fisman and Sheena Iyengar for their paper 
+            "Gender Differences in Mate Selection: Evidence From a Speed Dating Experiment" 
+            (https://www.kaggle.com/annavictoria/speed-dating-experiment). The dating takes place
+            over multiple "waves", and participants get paired up with an array of partners from
+            a wide variety of backgrounds. We hope you enjoy exploring this data!
         </div>
         <div id="vis-container">
-            <div id="color">
-                Color by:
-                <select id="colorByAttributeSelector">
-                    <option value="career_c">Career</option>
-                    <option value="field_cd">Field of Study</option>
-                    <option value="race">Race</option>
-                    <option value="age">Age</option>
-                </select>
-                <div id="legend">
-                </div>
-            </div>
             <div id="visA">
+                <h2>Wave-by-Wave</h2>
                 Each circle is a participant in the study. Colors correspond to
                 the selection above. The distance
                 between any pair of participants is inversely proportional
@@ -32,16 +29,35 @@
                 <select id="attractByAttributeSelector">
                     <option value="like">how much the they liked each other</option>
                     <option value="match">whether or not they matched</option>
-                </select>.
+                </select>. A line between two nodes indicates that those participants
+                are a match in the current wave!
                 Try dragging the nodes to see which other nodes have high linkage
-                (i.e. attract each other in the study). <br>
+                (i.e. attract each other in the study) and using the slider to view all waves of the experiment. <br>
                 <div id="waveIndicator">Wave: 1</div> <br>
                 <input id="waveInput" type="range" min="1" max="21" value="1" class="slider">
                 <div id="forceDirected" class="chart"></div>
             </div>
+            <div id="color">
+                <div id="groupSelect">
+                    Group by:
+                <select id="colorByAttributeSelector">
+                    <option value="career_c">Career</option>
+                    <option value="field_cd">Field of Study</option>
+                    <option value="race">Race</option>
+                    <option value="age">Age</option>
+                </select>
+                </div>
+                <h4>Legend:</h4>
+                <div id="legend"></div>
+            </div>
             <div id="visB">
-                <div id="matrix" class="chart"></div>
-                <div id="bar" class="chart"></div>
+                <h2>Summary</h2>
+                Here we see statistics over all of the waves, divided by group. You can use the same drop-down above
+                to select the grouping type. Click away! You may find a secret hidden in one of the groups. <br> <br>
+                <div id="bCharts">
+                    <div id="matrix" class="chart"></div>
+                    <div id="bar" class="chart"></div>
+                </div>
             </div>
         </div>
     </div>
