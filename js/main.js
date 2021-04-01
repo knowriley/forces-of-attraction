@@ -115,7 +115,7 @@ d3.csv('data/speedDating.csv').then(data => {
 
   let femaleData = getGenderedData(data, 0);
   let maleData = getGenderedData(data, 1);
-  
+
   let femaleMatchData = getMatches(femaleData, 0);
   let maleMatchData = getMatches(maleData, 1);
 
@@ -127,10 +127,10 @@ d3.csv('data/speedDating.csv').then(data => {
   const container = document.getElementById('vis-container');
 
   let updateSize = () => {
-      let height = container.clientHeight;
-      let width = container.clientWidth;
-      d3.select(`#${container.id}`)
-          .attr('class', width > height ? 'landscape' : 'portrait');
+    let height = container.clientHeight;
+    let width = container.clientWidth;
+    d3.select(`#${container.id}`)
+      .attr('class', width > height ? 'landscape' : 'portrait');
   }
 
   // Events are triggered and handled using D3-dispatch
@@ -138,7 +138,7 @@ d3.csv('data/speedDating.csv').then(data => {
 
   // Init charts
   barChart = new BarChart({ parentElement: '#bar'}, barChartData, 'career_c', 'Lawyer');
-  forceDirectedGraph = new ForceDirectedGraph({ parentElement: '#forceDirected'}, getGraphData(data), 'career_c');
+  forceDirectedGraph = new ForceDirectedGraph({ parentElement: '#forceDirected'}, getGraphData(data, 1), 'career_c');
   matrix = new Matrix({ parentElement: '#matrix', dispatch: dispatch}, matrixData, 'career_c');
   legend = new Legend('#legend', forceDirectedGraph.colorDomain, forceDirectedGraph.colorScale);
 
@@ -175,6 +175,14 @@ d3.csv('data/speedDating.csv').then(data => {
   document.getElementById("attractByAttributeSelector").onchange = _ => {
     let dist = document.getElementById("attractByAttributeSelector").value;
     forceDirectedGraph.setNodeDistance(dist);
+    update();
+  }
+
+  document.getElementById("waveInput").onchange = _ => {
+    let wave = document.getElementById("waveInput").value;
+    d3.select('#waveIndicator')
+        .text(`Wave: ${wave}`);
+    forceDirectedGraph.data = getGraphData(data, wave);
     update();
   }
 
@@ -230,7 +238,7 @@ var getMatchingProbabilityMatrix = (data, matchData, demographicData, attribute)
 
   for (let i = 0; i < limit; i++) {
     for (let j = 0; j < limit; j++) {
-      probability[i][j] = allCount[i][j] == 0 ? 0 : matchCount[i][j]/allCount[i][j];
+      probability[i][j] = allCount[i][j] == 0 ? 0 : matchCount[i][j] / allCount[i][j];
     }
   }
 
@@ -254,7 +262,7 @@ var getMatchingProbabilityBars = (data, matchData, demographicData, attribute) =
   for (let i = 0; i < limit; i++) {
     matchCount[i] = new Array(limit);
     matchCount[i].fill(0);
-    probability[i] = new Array(limit+1);
+    probability[i] = new Array(limit + 1);
     probability[i].fill(0);
   }
 
@@ -271,45 +279,48 @@ var getMatchingProbabilityBars = (data, matchData, demographicData, attribute) =
 
   for (let i = 0; i < limit; i++) {
     for (let j = 0; j < limit; j++) {
-      probability[i][j] = total[i] == 0 ? 0 : matchCount[i][j]/total[i];
+      probability[i][j] = total[i] == 0 ? 0 : matchCount[i][j] / total[i];
     }
-    probability[i][limit] = total[i] == 0 ? 0 : (total[i]-totalMatches[i])/total[i]; //last column indicates probability of not getting any match
+    probability[i][limit] = total[i] == 0 ? 0 : (total[i] - totalMatches[i]) / total[i]; //last column indicates probability of not getting any match
   }
 
   return probability;
 }
 
 const detailFields = [
-    'gender', 'age', 'field_cd', 'undergrd', 'race', 'from', 'zipcode', 'career_c'
+  'gender', 'age', 'field_cd', 'undergrd', 'race', 'from', 'zipcode', 'career_c', 'wave'
 ];
 
 const mapDetails = (d) => {
-    const dts = {};
-    detailFields.forEach(f => dts[f] = d[f]);
-    return dts;
+  const dts = {};
+  detailFields.forEach(f => dts[f] = d[f]);
+  return dts;
 };
 
-const getGraphData = (data) => {
-    let nodes = {};
-    let links = [];
-    data.forEach(d => {
-        const iid = `${d['iid']}`;
-        const pid = `${d['pid']}`;
-        if (!nodes[iid]) {
-            nodes[iid] = {'id': iid, ... mapDetails(d)}
-        }
-        if (!nodes[pid]) {
-            nodes[pid] = {'id': pid, ... mapDetails(d)}
-        }
-        links.push({
-            source: iid,
-            target: pid,
-            like: d['like'],
-            match: d['match'] 
-        });
-    });
-    return {
-        nodes: Object.keys(nodes).map(k => nodes[k]),
-        links
+const getGraphData = (data, wave) => {
+  let nodes = {};
+  let links = [];
+
+  data.forEach(d => {
+    const iid = `${d['iid']}`;
+    const pid = `${d['pid']}`;
+    if (d['wave'] == wave) {
+      if (!nodes[iid]) {
+        nodes[iid] = { 'id': iid, ...mapDetails(d) }
+      }
+      if (!nodes[pid]) {
+        nodes[pid] = { 'id': pid, ...mapDetails(d) }
+      }
+      links.push({
+        source: iid,
+        target: pid,
+        like: d['like'],
+        match: d['match']
+      });
     }
+  });
+  return {
+    nodes: Object.keys(nodes).map(k => nodes[k]),
+    links
+  }
 }

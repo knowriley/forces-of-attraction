@@ -1,7 +1,7 @@
 // TODO: these should be proportioned to the vis dimensions
-const NODE_REPEL_STRENGTH = 0;
+const NODE_REPEL_STRENGTH = 50;
 const NODE_LIKE_DISTANCE_FACTOR = 50;
-const NODE_MATCH_DISTANCE_FACTOR = 250;
+const NODE_MATCH_DISTANCE_FACTOR = 10;
 
 const DEFAULT_DISTANCE = 'like';
 
@@ -12,8 +12,9 @@ class ForceDirectedGraph extends View {
         let vis = this;
         vis.distance = DEFAULT_DISTANCE;
         vis.graph = d3.forceSimulation();
-        vis.repel = d3.forceManyBody().strength(-NODE_REPEL_STRENGTH)
+        vis.repel = d3.forceManyBody().strength(-NODE_REPEL_STRENGTH);
         vis.graph.force('charge', vis.repel);
+        vis.graph.force('collision', d3.forceCollide().radius(4));
         vis.linkForce = d3.forceLink().id(d => d.id);
         vis.graph.force('link', vis.linkForce)
         // a categorical color scale
@@ -32,7 +33,7 @@ class ForceDirectedGraph extends View {
             case 'like':
                 return l => (10 - l['like'])*NODE_LIKE_DISTANCE_FACTOR;
             case 'match':
-                return l => (l['match'] ? 0 : 1)*NODE_MATCH_DISTANCE_FACTOR;
+                return NODE_MATCH_DISTANCE_FACTOR;
         }
     }
 
@@ -44,7 +45,7 @@ class ForceDirectedGraph extends View {
         vis.colorScale.domain(vis.colorDomain);
 
         // update attraction force
-        vis.linkForce.distance(vis.nodeDistance());
+        vis.linkForce.distance(vis.nodeDistance()).strength(0.1);
 
         //update graph center
         vis.graph.force('center', 
@@ -52,8 +53,9 @@ class ForceDirectedGraph extends View {
 
         const nodes = vis.getData().nodes;
 
+
         vis.graph.nodes(nodes);
-        vis.linkForce.links(vis.getData().links);
+        vis.linkForce.links(this.distance == 'match' ? d3.filter(vis.getData().links, l => l['match']) : vis.getData().links);
 
         vis.graph.stop();
         vis.graph.alpha(1).restart();
@@ -80,7 +82,10 @@ class ForceDirectedGraph extends View {
                 .style('top', (e.pageY) + 'px')
                 .html(`
                 <h1>Participant ${decode('id')(d)}</h1>
+                <p>Wave: ${decode('wave')(d)}<p>
                 <p>Field: ${decode('field_cd')(d)}<p>
+                <p>Career: ${decode('career_c')(d)}<p>
+                <p>race: ${decode('race')(d)}<p>
                 <p>From: ${decode('from')(d)}<p>
                 `);
         })
@@ -88,10 +93,25 @@ class ForceDirectedGraph extends View {
             d3.select('#tooltip').style('display', 'none');
           });
 
+        const matchLinks = d3.filter(vis.getData().links, 
+            l => l['match']);
+
+        const links = vis.chart.selectAll('line')
+          .data(matchLinks, d => [d.source, d.target])
+          .join('line')
+          .attr('opacity', 0.7)
+          .attr('stroke', 'black')
+          .attr('stroke-width', 0.1)
+
         vis.graph.on('tick', () => {
             nodes
-                .attr('cx', d => d.x)
-                .attr('cy', d => d.y);
+                .attr('cx', function(d) { return d.x = Math.max(4, Math.min(vis.getWidth() - 4, d.x)); }) //https://bl.ocks.org/mbostock/1129492
+                .attr('cy', function(d) { return d.y = Math.max(4, Math.min(vis.getHeight() - 4, d.y)); });
+            links
+                .attr('x1', d => d.source.x)
+                .attr('y1', d => d.source.y)
+                .attr('x2', d => d.target.x)
+                .attr('y2', d => d.target.y);
             });
     }
 }
