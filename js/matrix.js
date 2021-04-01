@@ -6,7 +6,7 @@ class Matrix {
       dispatch: _config.dispatch || null,
       containerWidth: 500,
       containerHeight: 500,
-      margin: { top: 100, right: 20, bottom: 20, left: 100 }
+      margin: { top: 100, right: 20, bottom: 65, left: 100 }
     }
     this.data = _data;
     this.attribute = _attribute;
@@ -32,6 +32,9 @@ class Matrix {
       .attr('transform', `translate(${vis.config.margin.left},${vis.config.margin.top})`);
 
     vis.chart = vis.chartArea.append('g');
+
+    vis.chartArea.append('text').text("Probability of match between groups")
+        .attr('y', vis.config.height + 55)
 
     // Initialize scales and axes
     vis.colorScale = d3.scaleSequential()
