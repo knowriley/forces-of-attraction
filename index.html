@@ -13,17 +13,6 @@
             <h1>Forces of Attraction</h1>
         </div>
         <div id="vis-container">
-            <div id="color">
-                Color by:
-                <select id="colorByAttributeSelector">
-                    <option value="career_c">Career</option>
-                    <option value="field_cd">Field of Study</option>
-                    <option value="race">Race</option>
-                    <option value="age">Age</option>
-                </select>
-                <div id="legend">
-                </div>
-            </div>
             <div id="visA">
                 Each circle is a participant in the study. Colors correspond to
                 the selection above. The distance
@@ -38,6 +27,17 @@
                 <div id="waveIndicator">Wave: 1</div> <br>
                 <input id="waveInput" type="range" min="1" max="21" value="1" class="slider">
                 <div id="forceDirected" class="chart"></div>
+            </div>
+            <div id="color">
+                Group by:
+                <select id="colorByAttributeSelector">
+                    <option value="career_c">Career</option>
+                    <option value="field_cd">Field of Study</option>
+                    <option value="race">Race</option>
+                    <option value="age">Age</option>
+                </select>
+                <div id="legend">
+                </div>
             </div>
             <div id="visB">
                 <div id="matrix" class="chart"></div>
