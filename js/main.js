@@ -180,6 +180,8 @@ d3.csv('data/speedDating.csv').then(data => {
 
   document.getElementById("waveInput").onchange = _ => {
     let wave = document.getElementById("waveInput").value;
+    d3.select('#waveIndicator')
+        .text(`Wave: ${wave}`);
     forceDirectedGraph.data = getGraphData(data, wave);
     update();
   }

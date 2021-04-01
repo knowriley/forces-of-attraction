@@ -85,3 +85,7 @@ body {
     min-width: 100px;
     color: #333;
 }
+
+#waveInput {
+    width: 100%;
+}
