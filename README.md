@@ -2,7 +2,7 @@
 ## Data
 Dataset is from experimental speed dating events by Columbia Business School professors Ray Fisman and Sheena Iyengar for their paper Gender Differences in Mate Selection: Evidence From a Speed Dating Experiment (​https://www.kaggle.com/annavictoria/speed-dating-experiment​).
 ## Tasks to Complete
-Pleas see the [issues page](https://github.students.cs.ubc.ca/cpsc436v-2020w-t2/436v-project_l9o1b_q9l1b_r6w0b/issues) for a list of tasks that still need to be done.
+Please see the [issues page](https://github.students.cs.ubc.ca/cpsc436v-2020w-t2/436v-project_l9o1b_q9l1b_r6w0b/issues) for a list of tasks that still need to be done, or visit the [project view](https://github.students.cs.ubc.ca/cpsc436v-2020w-t2/436v-project_l9o1b_q9l1b_r6w0b/projects/1) to see task status and completion.
 ## References
 ### Project-Wide
 - Built skeleton structure based off of previous programming assignment boilerplate
