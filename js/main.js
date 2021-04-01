@@ -138,7 +138,7 @@ d3.csv('data/speedDating.csv').then(data => {
 
   // Init charts
   barChart = new BarChart({ parentElement: '#bar'}, barChartData, 'career_c', 'Lawyer');
-  forceDirectedGraph = new ForceDirectedGraph({ parentElement: '#forceDirected'}, getGraphData(data), 'career_c');
+  forceDirectedGraph = new ForceDirectedGraph({ parentElement: '#forceDirected'}, getGraphData(data, 1), 'career_c');
   matrix = new Matrix({ parentElement: '#matrix', dispatch: dispatch}, matrixData, 'career_c');
   legend = new Legend('#legend', forceDirectedGraph.colorDomain, forceDirectedGraph.colorScale);
 
