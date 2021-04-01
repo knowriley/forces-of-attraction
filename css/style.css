@@ -89,3 +89,7 @@ body {
 #waveInput {
     width: 100%;
 }
+
+#groupSelect {
+    text-align: center;
+}
