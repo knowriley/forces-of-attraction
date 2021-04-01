@@ -40,7 +40,8 @@ class ForceDirectedGraph extends View {
         super.updateVis();
         let vis = this;
 
-        vis.colorScale.domain(unique(vis.getData().nodes, decode(vis.attribute)));
+        vis.colorDomain = unique(vis.getData().nodes, decode(vis.attribute));
+        vis.colorScale.domain(vis.colorDomain);
 
         // update attraction force
         vis.linkForce.distance(vis.nodeDistance());
