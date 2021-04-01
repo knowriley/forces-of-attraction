@@ -47,7 +47,7 @@ body {
 }
 
 #visA {
-    padding: 50px;
+    padding: 10px;
 }
 
 .tick line, .domain {
@@ -84,4 +84,8 @@ body {
     padding: 8px;
     min-width: 100px;
     color: #333;
+}
+
+#waveInput {
+    width: 100%;
 }

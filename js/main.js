@@ -51,7 +51,7 @@ d3.csv('data/speedDating.csv').then((data) => {
 
   // Initialize charts
   barChart = new BarChart({ parentElement: '#bar' }, barChartData, 'career_c', 'Lawyer');
-  forceDirectedGraph = new ForceDirectedGraph({ parentElement: '#forceDirected' }, getGraphData(data), 'career_c');
+  forceDirectedGraph = new ForceDirectedGraph({ parentElement: '#forceDirected' }, getGraphData(data, 1), 'career_c');
   matrix = new Matrix({ parentElement: '#matrix', dispatch }, matrixData, 'career_c');
   legend = new Legend('#legend', forceDirectedGraph.colorDomain, forceDirectedGraph.colorScale);
 
@@ -94,6 +94,14 @@ d3.csv('data/speedDating.csv').then((data) => {
   document.getElementById('attractByAttributeSelector').onchange = (_) => {
     const dist = document.getElementById('attractByAttributeSelector').value;
     forceDirectedGraph.setNodeDistance(dist);
+    update();
+  };
+
+  document.getElementById('waveInput').onchange = (_) => {
+    const wave = document.getElementById('waveInput').value;
+    d3.select('#waveIndicator')
+      .text(`Wave: ${wave}`);
+    forceDirectedGraph.data = getGraphData(data, wave);
     update();
   };
 
@@ -207,7 +215,7 @@ const getMatchingProbabilityBars = (data, matchData, demographicData, attribute)
     Fields to map to participant nodes for tooltip/detail views
 */
 const detailFields = [
-  'gender', 'age', 'field_cd', 'undergrd', 'race', 'from', 'zipcode', 'career_c',
+  'gender', 'age', 'field_cd', 'undergrd', 'race', 'from', 'zipcode', 'career_c', 'wave',
 ];
 // create filtered object
 const mapDetails = (d) => {
@@ -216,28 +224,27 @@ const mapDetails = (d) => {
   return dts;
 };
 
-/*
-    Construct node-link structure from the data, used for network-type
-    visualization.
-*/
-const getGraphData = (data) => {
+const getGraphData = (data, wave) => {
   const nodes = {};
   const links = [];
+
   data.forEach((d) => {
     const iid = `${d.iid}`;
     const pid = `${d.pid}`;
-    if (!nodes[iid]) {
-      nodes[iid] = { id: iid, ...mapDetails(d) };
+    if (d.wave === wave) {
+      if (!nodes[iid]) {
+        nodes[iid] = { id: iid, ...mapDetails(d) };
+      }
+      if (!nodes[pid]) {
+        nodes[pid] = { id: pid, ...mapDetails(d) };
+      }
+      links.push({
+        source: iid,
+        target: pid,
+        like: d.like,
+        match: d.match,
+      });
     }
-    if (!nodes[pid]) {
-      nodes[pid] = { id: pid, ...mapDetails(d) };
-    }
-    links.push({
-      source: iid,
-      target: pid,
-      like: d.like,
-      match: d.match,
-    });
   });
   return {
     nodes: Object.keys(nodes).map((k) => nodes[k]),
