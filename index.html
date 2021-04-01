@@ -14,6 +14,7 @@
         </div>
         <div id="vis-container">
             <div id="visA">
+                <h2>Wave-by-Wave</h2>
                 Each circle is a participant in the study. Colors correspond to
                 the selection above. The distance
                 between any pair of participants is inversely proportional
@@ -38,12 +39,15 @@
                     <option value="age">Age</option>
                 </select>
                 </div>
-                <div id="legend">
-                </div>
+                <h4>Legend:</h4>
+                <div id="legend"></div>
             </div>
             <div id="visB">
-                <div id="matrix" class="chart"></div>
-                <div id="bar" class="chart"></div>
+                <h2>Summary</h2>
+                <div id="bCharts">
+                    <div id="matrix" class="chart"></div>
+                    <div id="bar" class="chart"></div>
+                </div>
             </div>
         </div>
     </div>
