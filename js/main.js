@@ -1,7 +1,7 @@
 /**
  *      <3    FORCES OF ATTRACTION   <3
  *
- * Rowan Lindsay, Thanky To, Rowan Lindsay
+ * Riley Knowles, Thanky To, Rowan Lindsay
  *
  * Main script
  * Load data from CSV file asynchronously, process, and render charts
