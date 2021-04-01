@@ -121,8 +121,8 @@ class ForceDirectedGraph extends View {
 
     vis.graph.on('tick', () => {
       nodes
-        .attr('cx', (d) => { d.x = Math.max(4, Math.min(vis.getWidth() - 4, d.x)); }) // https://bl.ocks.org/mbostock/1129492
-        .attr('cy', (d) => { d.y = Math.max(4, Math.min(vis.getHeight() - 4, d.y)); });
+        .attr('cx', (d) => { d.x = Math.max(4, Math.min(vis.getWidth() - 4, d.x)); return d.x; }) // https://bl.ocks.org/mbostock/1129492
+        .attr('cy', (d) => { d.y = Math.max(4, Math.min(vis.getHeight() - 4, d.y)); return d.y; });
       links
         .attr('x1', (d) => d.source.x)
         .attr('y1', (d) => d.source.y)

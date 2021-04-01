@@ -235,7 +235,8 @@ const getGraphData = (data, wave) => {
   data.forEach((d) => {
     const iid = `${d.iid}`;
     const pid = `${d.pid}`;
-    if (d.wave === wave) {
+    // eslint-disable-next-line eqeqeq
+    if (d.wave == wave) {
       if (!nodes[iid]) {
         nodes[iid] = { id: iid, ...mapDetails(d) };
       }
