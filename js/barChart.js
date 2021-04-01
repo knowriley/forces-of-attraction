@@ -3,9 +3,9 @@ class BarChart {
   constructor(_config, _data, _attribute, _selected) {
     this.config = {
       parentElement: _config.parentElement,
-      containerWidth: 600,
-      containerHeight: 350,
-      margin: { top: 20, right: 20, bottom: 20, left: 100 }
+      containerWidth: 500,
+      containerHeight: 440,
+      margin: { top: 90, right: 20, bottom: 20, left: 160 }
       // TODO: Margin is super large to accomodate super large labels
     }
     this.data = _data;
@@ -61,7 +61,7 @@ class BarChart {
       .attr('x', 0)
       .attr('y', 0)
       .attr('dy', '.80em')
-      .text(`Probability of ${vis.gender} ${vis.selected} matching with another person`);
+      .text(`Prob. of ${vis.gender} ${vis.selected} matching with another person`);
   }
 
   updateVis() {
@@ -122,7 +122,7 @@ class BarChart {
       .attr('x', -5)
       .style('text-anchor', 'end');
 
-    vis.axisTitle.text(`Probability of ${vis.gender} ${vis.selected} matching with another person`); //https://stackoverflow.com/a/36707865
+    vis.axisTitle.text(`Prob. of ${vis.gender} ${vis.selected} matching with another person`); //https://stackoverflow.com/a/36707865
   }
 
 }
