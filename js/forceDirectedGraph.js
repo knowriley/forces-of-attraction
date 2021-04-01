@@ -17,6 +17,8 @@ class ForceDirectedGraph extends View {
   initVis() {
     super.initVis();
     const vis = this;
+
+    // Static elements for simulation
     vis.distance = DEFAULT_DISTANCE;
     vis.graph = d3.forceSimulation();
     vis.repel = d3.forceManyBody().strength(-NODE_REPEL_STRENGTH);
@@ -29,12 +31,16 @@ class ForceDirectedGraph extends View {
     vis.updateVis();
   }
 
+  // Set the forcing/attraction attribute
+  // TODO: could be converted to an enum
   setNodeDistance(dist) {
     if (dist === 'like' || dist === 'match') {
       this.distance = dist;
     }
   }
 
+  // Based on the current attraction attribute, produce
+  // the actual link distance
   nodeDistance() {
     switch (this.distance) {
       case 'like':
@@ -49,6 +55,7 @@ class ForceDirectedGraph extends View {
     super.updateVis();
     const vis = this;
 
+    // Colorize by categories in the current attr.
     vis.colorDomain = unique(vis.getData().nodes, decode(vis.attribute));
     vis.colorScale.domain(vis.colorDomain);
 
@@ -59,11 +66,12 @@ class ForceDirectedGraph extends View {
     vis.graph.force('center',
       d3.forceCenter(vis.getWidth() / 2, vis.getHeight() / 2));
 
+    // Set data for the simulation
     const { nodes } = vis.getData();
-
     vis.graph.nodes(nodes);
     vis.linkForce.links(this.distance === 'match' ? d3.filter(vis.getData().links, (l) => l.match) : vis.getData().links);
 
+    // Reboot the simulation
     vis.graph.stop();
     vis.graph.alpha(1).restart();
 

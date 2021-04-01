@@ -224,6 +224,10 @@ const mapDetails = (d) => {
   return dts;
 };
 
+/*
+    Construct node-link structure from the data, used for network-type
+    visualization.
+*/
 const getGraphData = (data, wave) => {
   const nodes = {};
   const links = [];
