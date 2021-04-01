@@ -5,7 +5,7 @@ class BarChart {
       parentElement: _config.parentElement,
       containerWidth: 500,
       containerHeight: 440,
-      margin: { top: 90, right: 20, bottom: 0, left: 160 }
+      margin: { top: 90, right: 20, bottom: 20, left: 160 }
       // TODO: Margin is super large to accomodate super large labels
     }
     this.data = _data;
