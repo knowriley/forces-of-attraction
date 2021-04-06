@@ -111,13 +111,26 @@ class BarChart {
     vis.bars = vis.chart.selectAll('.bar')
       .data(vis.barData, vis.yValue)
       .join('rect')
-      .transition()
-      .duration(1000)
       .attr('class', 'bar')
       .attr('y', (d) => vis.yScale(vis.yValue(d)))
       .attr('width', (d) => vis.xScale(vis.xValue(d)))
       .attr('height', vis.yScale.bandwidth())
-      .attr('fill', 'green');
+      .attr('fill', (d) => {console.log(d); return 'green';})
+      .on('mouseover', (e, d) => {
+        d3.select('#tooltip')
+          .style('display', 'block')
+          .html(`
+            <div>A ${vis.gender} ${vis.selected} matches with ${vis.chooseAlternateMatchType(d)} ${(d.value*100).toFixed(2)}% of the time</div>
+          `);
+      }).on('mousemove', (e) => {
+        d3.select('#tooltip')
+          .style('left', (e.pageX + vis.config.tooltipPadding) + 'px')   
+          .style('top', (e.pageY + vis.config.tooltipPadding) + 'px')
+      }).on('mouseout', (_, __) => {
+        d3.select('#tooltip').style('display', 'none');
+      });
+
+      vis.bars.transition().duration(1000);
 
     vis.xAxisG.call(vis.xAxis);
     vis.yAxisG.call(vis.yAxis)
@@ -127,5 +140,15 @@ class BarChart {
       .style('text-anchor', 'end');
 
     vis.axisTitle.text(`Prob. of ${vis.gender} ${vis.selected} matching with another person`); // https://stackoverflow.com/a/36707865
+  }
+
+  chooseAlternateMatchType(d) {
+    let vis = this;
+    const gender = getOtherGender(vis.gender);
+    if (d.rowLabel === 'Total') {
+      return `any ${gender}`
+    } else {
+      return `a ${gender} ${d.rowLabel}`
+    }
   }
 }

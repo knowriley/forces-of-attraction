@@ -215,3 +215,11 @@ const getCode = (attribute, label) => {
     default: return '';
   }
 };
+
+const getOtherGender = (gender) => {
+  switch (gender) {
+    case 'male': return 'female';
+    case 'female': return 'male';
+    default: return '';
+  }
+}
