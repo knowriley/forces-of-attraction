@@ -120,7 +120,7 @@ class BarChart {
         d3.select('#tooltip')
           .style('display', 'block')
           .html(`
-            <div>A ${vis.gender} ${vis.selected} matches with ${vis.chooseAlternateMatchType(d)} ${(d.value*100).toFixed(2)}% of the time</div>
+            <div> A <strong>${vis.gender} ${vis.selected}</strong> and <strong>${vis.chooseAlternateMatchType(d)}</strong> match <strong>${d3.format('.0%')(d.value)} </strong> of the time</div>
           `);
       }).on('mousemove', (e) => {
         d3.select('#tooltip')
@@ -148,7 +148,7 @@ class BarChart {
     if (d.rowLabel === 'Total') {
       return `any ${gender}`
     } else {
-      return `a ${gender} ${d.rowLabel}`
+      return `${gender} ${d.rowLabel}`
     }
   }
 }

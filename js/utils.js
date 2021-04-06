@@ -56,27 +56,26 @@ const careerCodeToCareerGroupMapping = [ // 8 unique groups
   'Engineering', // Architecture
 ];
 
-// For matrix and barChart TODO: Do we but this in a utils or constants file?
 // eslint-disable-next-line no-unused-vars
 const careerCodeToCareerMapping = [
   '',
   'Lawyer',
-  'Academic/ Research',
+  'Academic/Researcher',
   'Psychologist',
-  'Doctor/Medicine',
+  'Medical Professional',
   'Engineer',
-  'Creative Arts/Entertainment',
-  'Banking/Consulting/Finance/Marketing/Business/CEO/Entrepreneur/Admin',
-  'Real Estate',
+  'Artist/Entertainer',
+  'Business',
+  'Real Estate Agent',
   'International/Humanitarian Affairs',
-  'Undecided',
-  'Social Work',
-  'Speech Pathology',
-  'Politics',
-  'Pro sports/Athletics',
+  'TODO (Undecided)',
+  'Social Worker',
+  'Speech Pathologist',
+  'Politician',
+  'Athlete',
   'Other',
-  'Journalism',
-  'Architecture',
+  'Journalist',
+  'Architect',
 ];
 
 // eslint-disable-next-line no-unused-vars
