@@ -119,7 +119,6 @@ class ForceDirectedGraph extends View {
           .style('top', `${e.pageY}px`)
           .html(`
                 <h1>Participant ${decode('id')(d)}</h1>
-                <p>Wave: ${decode('wave')(d)}<p>
                 <p>Field: ${decode('field_cd')(d)}<p>
                 <p>Career: ${decode('career_c')(d)}<p>
                 <p>race: ${decode('race')(d)}<p>
