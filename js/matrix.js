@@ -1,6 +1,6 @@
 // eslint-disable-next-line no-unused-vars
 class Matrix {
-  constructor(_config, _data, _attribute) {
+  constructor(_config, _data, _attribute, _selectedLabel, _selectedGender) {
     this.config = {
       parentElement: _config.parentElement,
       dispatch: _config.dispatch || null,
@@ -12,6 +12,8 @@ class Matrix {
     };
     this.data = _data;
     this.attribute = _attribute;
+    this.selectedLabel = _selectedLabel;
+    this.selectedGender = _selectedGender;
     this.dispatch = this.config.dispatch;
     this.initVis();
   }
@@ -203,11 +205,17 @@ class Matrix {
     vis.yAxisGroup.call(vis.yAxis);
 
     d3.selectAll(`${vis.config.parentElement} .y-axis .tick`) // https://stackoverflow.com/a/32658330
+      .attr('font-weight', d => {
+        return d == vis.selectedLabel && vis.selectedGender == 'male' ? 'bolder' : 'normal';
+      })
       .on('click', (event, selected) => {
         vis.dispatch.call('matrixClick', selected, selected, 'male');
       });
 
     d3.selectAll(`${vis.config.parentElement} .x-axis .tick`)
+      .attr('font-weight', d => {
+        return d == vis.selectedLabel && vis.selectedGender == 'female' ? 'bolder' : 'normal';
+      })
       .on('click', (event, selected) => {
         vis.dispatch.call('matrixClick', selected, selected, 'female');
       });
