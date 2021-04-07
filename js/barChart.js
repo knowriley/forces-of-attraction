@@ -115,7 +115,7 @@ class BarChart {
       .attr('y', (d) => vis.yScale(vis.yValue(d)))
       .attr('width', (d) => vis.xScale(vis.xValue(d)))
       .attr('height', vis.yScale.bandwidth())
-      .attr('fill', (d) => {console.log(d); return 'green';})
+      .attr('fill', 'green')
       .on('mouseover', (e, d) => {
         d3.select('#tooltip')
           .style('display', 'block')
