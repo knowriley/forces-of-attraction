@@ -83,6 +83,7 @@ body {
     padding: 8px;
     min-width: 100px;
     color: #333;
+    pointer-events: none;
 }
 
 #waveInput {
