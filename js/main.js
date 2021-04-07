@@ -237,11 +237,8 @@ const getGraphData = (data, wave) => {
     const pid = `${d.pid}`;
     // eslint-disable-next-line eqeqeq
     if (d.wave == wave) {
-      if (!nodes[iid]) {
+      if (!nodes[iid] || !nodes[iid].set) {
         nodes[iid] = { id: iid, ...mapDetails(d) };
-      }
-      if (!nodes[pid]) {
-        nodes[pid] = { id: pid, ...mapDetails(d) };
       }
       links.push({
         source: iid,
