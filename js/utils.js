@@ -205,6 +205,10 @@ const getDefaultLabel = (attribute) => {
   }
 };
 
+const getDefautGender = () => {
+  return 'male';
+}
+
 // eslint-disable-next-line no-unused-vars
 const getCode = (attribute, label) => {
   switch (attribute) {
