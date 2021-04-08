@@ -14,8 +14,6 @@ class Matrix {
     this.attribute = _attribute;
     this.selectedLabel = _selectedLabel;
     this.selectedGender = _selectedGender;
-    this.highlightedMaleLabel = NONE;
-    this.highlightedFemaleLabel = NONE;
     this.dispatch = this.config.dispatch;
     this.initVis();
   }
@@ -47,8 +45,6 @@ class Matrix {
     // Initialize scales and axes
     vis.colorScale = d3.scaleSequential()
       .interpolator(d3.interpolateGreens);
-    vis.highlightedColorScale = d3.scaleSequential()
-      .interpolator(d3.interpolateOranges);
 
     vis.xScale = d3.scaleBand()
       .range([0, vis.config.width])
@@ -127,7 +123,6 @@ class Matrix {
     vis.colorValue = (d) => d.value;
 
     vis.colorScale.domain(d3.extent(vis.cellData.map(vis.colorValue)));
-    vis.highlightedColorScale.domain(d3.extent(vis.cellData.map(vis.colorValue)));
     vis.xScale.domain(vis.cellData.map(vis.xValue));
     vis.yScale.domain(vis.cellData.map(vis.yValue));
 
@@ -148,24 +143,14 @@ class Matrix {
 
     // Enter + update
     cellEnter.merge(cell)
-      .transition().duration(500)
+      .transition().duration(1000)
       .attr('class', 'cell')
       .attr('x', (d) => (d.col - 1) * cellWidth) // -1 because code are 1-indexed
       .attr('y', (d) => (d.row - 1) * cellHeight)
       .attr('width', cellWidth)
       .attr('height', cellHeight)
       .attr('stroke', 'white')
-      .attr('fill', (d) => {
-        if (d.col === 0 || d.row === 0) {
-          return 'white'
-        } else {
-          if (d.rowLabel == vis.highlightedMaleLabel || d. colLabel == vis.highlightedFemaleLabel) {
-            return vis.highlightedColorScale(vis.colorValue(d))
-          } else {
-            return vis.colorScale(vis.colorValue(d));
-          }
-        }
-      });
+      .attr('fill', (d) => (d.col === 0 || d.row === 0 ? 'white' : vis.colorScale(vis.colorValue(d))));
 
     cellEnter.on('mouseover', (e, d) => { // Tooltip: https://github.com/UBC-InfoVis/2021-436V-case-studies/blob/097d13b05d587f4fab3e3fcd23f5e99274397c2c/case-study_measles-and-vaccines/css/style.css
       d3.select('#tooltip')
@@ -179,12 +164,6 @@ class Matrix {
         `);
     }).on('mouseout', (_, __) => {
       d3.select('#tooltip').style('display', 'none');
-    }).on('click', (e, d) => {
-      if (d.rowLabel == vis.highlightedMaleLabel && d.colLabel == vis.highlightedFemaleLabel) {
-        vis.dispatch.call('matrixCellClick', d, NONE, NONE);
-      } else {
-        vis.dispatch.call('matrixCellClick', d, d.rowLabel, d.colLabel);
-      }
     });
 
     // Exit
@@ -230,7 +209,7 @@ class Matrix {
         return d == vis.selectedLabel && vis.selectedGender == 'male' ? 'bolder' : 'normal';
       })
       .on('click', (event, selected) => {
-        vis.dispatch.call('matrixLabelClick', selected, selected, 'male');
+        vis.dispatch.call('matrixClick', selected, selected, 'male');
       });
 
     d3.selectAll(`${vis.config.parentElement} .x-axis .tick`)
@@ -238,7 +217,7 @@ class Matrix {
         return d == vis.selectedLabel && vis.selectedGender == 'female' ? 'bolder' : 'normal';
       })
       .on('click', (event, selected) => {
-        vis.dispatch.call('matrixLabelClick', selected, selected, 'female');
+        vis.dispatch.call('matrixClick', selected, selected, 'female');
       });
   }
 }

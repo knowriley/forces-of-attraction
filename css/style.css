@@ -62,12 +62,6 @@ body {
     font-weight: bold;
 }
 
-#matrix rect.cell:hover {
-    cursor: pointer;
-    stroke: black;
-    stroke-width: 2;
-}
-
 #bar {
     width: 50%;
 }

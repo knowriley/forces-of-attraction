@@ -5,7 +5,6 @@ const NUM_OF_FIELDS = 19;
 const NUM_OF_CAREERS = 18;
 const NUM_OF_RACES = 7; // MAX_AGE (6) + 1
 const NUM_OF_AGES = 56; // MAX_AGE (55) + 1
-const NONE = 'none';
 
 /**
  * Attribute group mapping
