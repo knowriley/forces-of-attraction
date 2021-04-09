@@ -19,6 +19,7 @@ d3.csv('data/speedDating.csv').then((data) => {
   });
 
   // PROCESSING PHASE
+  const DEFAULT_ATTRIBUTE = 'career_c';
 
   // filter for probability calculations
   const femaleData = getGenderedData(data, 0);
@@ -30,8 +31,8 @@ d3.csv('data/speedDating.csv').then((data) => {
   const demographicData = getSubjectDemographicdata(data);
 
   // construct view-specific datasets
-  let matrixData = getMatchingProbabilityMatrix(maleData, maleMatchData, demographicData, 'career_c');
-  let barChartData = getMatchingProbabilityBars(maleData, maleMatchData, demographicData, 'career_c');
+  let matrixData = getMatchingProbabilityMatrix(maleData, maleMatchData, demographicData, DEFAULT_ATTRIBUTE);
+  let barChartData = getMatchingProbabilityBars(maleData, maleMatchData, demographicData, DEFAULT_ATTRIBUTE);
 
   // DOCUMENT PHASE
 
@@ -50,9 +51,9 @@ d3.csv('data/speedDating.csv').then((data) => {
   const dispatch = d3.dispatch('matrixClick');
 
   // Initialize charts
-  barChart = new BarChart({ parentElement: '#bar' }, barChartData, 'career_c', 'Lawyer');
+  barChart = new BarChart({ parentElement: '#bar' }, barChartData, DEFAULT_ATTRIBUTE, getDefaultLabel(DEFAULT_ATTRIBUTE), getDefautGender());
   forceDirectedGraph = new ForceDirectedGraph({ parentElement: '#forceDirected' }, getGraphData(data), 'career_c');
-  matrix = new Matrix({ parentElement: '#matrix', dispatch }, matrixData, 'career_c');
+  matrix = new Matrix({ parentElement: '#matrix', dispatch }, matrixData, DEFAULT_ATTRIBUTE, getDefaultLabel(DEFAULT_ATTRIBUTE), getDefautGender());
   legend = new Legend('#legend', forceDirectedGraph.colorDomain, forceDirectedGraph.colorScale);
 
   // Set up a routine to call any required functions when document state changes
@@ -76,13 +77,15 @@ d3.csv('data/speedDating.csv').then((data) => {
     matrixData = getMatchingProbabilityMatrix(maleData, maleMatchData, demographicData, attribute);
     matrix.data = matrixData;
     matrix.attribute = attribute;
+    matrix.selectedLabel = getDefaultLabel(attribute);
+    matrix.selectedGender = getDefautGender();
 
     barChartData = getMatchingProbabilityBars(maleData, maleMatchData, demographicData, attribute);
 
     barChart.data = barChartData;
     barChart.attribute = attribute;
-    barChart.selected = getDefaultLabel(attribute);
-    barChart.gender = 'male';
+    barChart.selectedLabel = getDefaultLabel(attribute);
+    barChart.selectedGender = getDefautGender();
 
     forceDirectedGraph.setAttribute(attribute);
 
@@ -115,10 +118,14 @@ d3.csv('data/speedDating.csv').then((data) => {
         femaleMatchData, demographicData, matrix.attribute);
     }
 
+    matrix.selectedLabel = selected;
+    matrix.selectedGender = gender;
+
     barChart.data = barChartData;
-    barChart.selected = selected;
-    barChart.gender = gender;
-    barChart.updateVis();
+    barChart.selectedLabel = selected;
+    barChart.selectedGender = gender;
+
+    update();
   });
 
   // Set up updates for any change to viewbox dimensions
