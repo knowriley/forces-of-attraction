@@ -70,12 +70,14 @@ class Matrix {
       .attr('x', -20)
       .attr('y', 10)
       .style('text-anchor', 'end')
+      .style('font-weight', 'bold')
       .text('Female');
 
     vis.chart.append('text')
       .attr('x', -20)
       .attr('y', -10)
       .style('text-anchor', 'end')
+      .style('font-weight', 'bold')
       .text('Male');
 
     vis.chart.append('text')
@@ -83,6 +85,16 @@ class Matrix {
       .attr('y', vis.config.height + 15)
       .style('text-anchor', 'start')
       .text('* Click on axis labels to see detailed probability');
+
+    // Add line separating male and female labels
+    vis.chart.append('line')
+      .attr('class', 'label-line')
+      .attr('x1', -60)
+      .attr('y1', -60)
+      .attr('x2', -10)
+      .attr('y2', -10)
+      .style('stroke', 'black')
+      .style('stroke-width', 1);
 
     vis.updateVis();
   }
@@ -192,7 +204,7 @@ class Matrix {
         .style('stroke', 'black')
         .style('stroke-width', 1);
     } else {
-      vis.chartArea.selectAll('line').remove();
+      vis.chartArea.selectAll('line.age-line').remove();
     }
 
     // Update axes
