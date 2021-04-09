@@ -172,8 +172,8 @@ class Matrix {
     cellEnter.on('mouseover', (e, d) => { // Tooltip: https://github.com/UBC-InfoVis/2021-436V-case-studies/blob/097d13b05d587f4fab3e3fcd23f5e99274397c2c/case-study_measles-and-vaccines/css/style.css
       d3.select('#tooltip')
         .style('display', 'block')
-        .style('left', `${e.pageX}px`)
-        .style('top', `${e.pageY}px`)
+        .style('left', `${e.pageX+10}px`)
+        .style('top', `${e.pageY+10}px`)
         .html(`
           <div>A male ${getLabel(vis.attribute, d.row)} and </div>
           <div>a female ${getLabel(vis.attribute, d.col)} </div>
