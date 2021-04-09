@@ -79,14 +79,17 @@ d3.csv('data/speedDating.csv').then((data) => {
     matrix.attribute = attribute;
     matrix.selectedLabel = getDefaultLabel(attribute);
     matrix.selectedGender = getDefautGender();
+    matrix.highlightedMaleLabel = NONE;
+    matrix.highlightedFemaleLabel = NONE;
 
     barChartData = getMatchingProbabilityBars(maleData, maleMatchData, demographicData, attribute);
-
     barChart.data = barChartData;
     barChart.attribute = attribute;
     barChart.selectedLabel = getDefaultLabel(attribute);
     barChart.selectedGender = getDefautGender();
 
+    forceDirectedGraph.highlightedMaleLabel = NONE;
+    forceDirectedGraph.highlightedFemaleLabel = NONE;
     forceDirectedGraph.setAttribute(attribute);
 
     update();
