@@ -47,8 +47,8 @@ class Matrix {
     // Initialize scales and axes
     vis.colorScale = d3.scaleSequential()
       .interpolator(d3.interpolateGreens);
-    vis.highlightedColorScale = d3.scaleSequential()
-      .interpolator(d3.interpolateOranges);
+    vis.unhighlightedColorScale = d3.scaleSequential()
+      .interpolator(d3.interpolateGreys);
 
     vis.xScale = d3.scaleBand()
       .range([0, vis.config.width])
@@ -127,7 +127,7 @@ class Matrix {
     vis.colorValue = (d) => d.value;
 
     vis.colorScale.domain(d3.extent(vis.cellData.map(vis.colorValue)));
-    vis.highlightedColorScale.domain(d3.extent(vis.cellData.map(vis.colorValue)));
+    vis.unhighlightedColorScale.domain(d3.extent(vis.cellData.map(vis.colorValue)));
     vis.xScale.domain(vis.cellData.map(vis.xValue));
     vis.yScale.domain(vis.cellData.map(vis.yValue));
 
@@ -159,10 +159,12 @@ class Matrix {
         if (d.col === 0 || d.row === 0) {
           return 'white'
         } else {
-          if (d.rowLabel == vis.highlightedMaleLabel || d. colLabel == vis.highlightedFemaleLabel) {
-            return vis.highlightedColorScale(vis.colorValue(d))
-          } else {
+          if (vis.highlightedMaleLabel == NONE && vis.highlightedFemaleLabel == NONE) {
             return vis.colorScale(vis.colorValue(d));
+          } else if (d.rowLabel == vis.highlightedMaleLabel || d. colLabel == vis.highlightedFemaleLabel) {
+            return vis.colorScale(vis.colorValue(d));
+          } else {
+            return vis.unhighlightedColorScale(vis.colorValue(d));
           }
         }
       });
