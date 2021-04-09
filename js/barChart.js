@@ -119,13 +119,9 @@ class BarChart {
       .on('mouseover', (e, d) => {
         d3.select('#tooltip')
           .style('display', 'block')
-          .html(`
-            <div> A <strong>${vis.gender} ${vis.selected}</strong> and <strong>${vis.chooseAlternateMatchType(d)}</strong> match <strong>${d3.format('.0%')(d.value)} </strong> of the time</div>
-          `);
-      }).on('mousemove', (e) => {
-        d3.select('#tooltip')
-          .style('left', (e.pageX + vis.config.tooltipPadding) + 'px')   
-          .style('top', (e.pageY + vis.config.tooltipPadding) + 'px')
+          .style('left', `${e.pageX}px`)
+          .style('top', `${e.pageY}px`)
+          .html(vis.generateHtml(d));
       }).on('mouseout', (_, __) => {
         d3.select('#tooltip').style('display', 'none');
       });
@@ -149,6 +145,17 @@ class BarChart {
       return `any ${gender}`
     } else {
       return `${gender} ${d.rowLabel}`
+    }
+  }
+
+  generateHtml(d) {
+    let vis = this;
+    if (vis.attribute === 'field_cd') {
+      return `<div> A <strong>${vis.gender} ${vis.selected} student </strong>has a <strong>${d3.format('.0%')(d.value)}</strong> chance of matching with <strong>${vis.chooseAlternateMatchType(d)} student</strong></div>`;
+    } else if (vis.attribute === 'age'){
+      return `<div> A <strong>${vis.gender} ${vis.selected} year old </strong> has a <strong>${d3.format('.0%')(d.value)}</strong> chance of matching with <strong>${vis.chooseAlternateMatchType(d)} year old</strong></div>`;
+    } else {
+      return `<div> A <strong>${vis.gender} ${vis.selected}</strong> has a <strong>${d3.format('.0%')(d.value)}</strong> chance of matching with <strong>${vis.chooseAlternateMatchType(d)}</strong></div>`;
     }
   }
 }
