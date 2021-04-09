@@ -52,7 +52,7 @@ d3.csv('data/speedDating.csv').then((data) => {
 
   // Initialize charts
   barChart = new BarChart({ parentElement: '#bar' }, barChartData, DEFAULT_ATTRIBUTE, getDefaultLabel(DEFAULT_ATTRIBUTE), getDefautGender());
-  forceDirectedGraph = new ForceDirectedGraph({ parentElement: '#forceDirected' }, getGraphData(data, 1), DEFAULT_ATTRIBUTE);
+  forceDirectedGraph = new ForceDirectedGraph({ parentElement: '#forceDirected' }, getGraphData(data), 'career_c');
   matrix = new Matrix({ parentElement: '#matrix', dispatch }, matrixData, DEFAULT_ATTRIBUTE, getDefaultLabel(DEFAULT_ATTRIBUTE), getDefautGender());
   legend = new Legend('#legend', forceDirectedGraph.colorDomain, forceDirectedGraph.colorScale);
 
@@ -101,10 +101,10 @@ d3.csv('data/speedDating.csv').then((data) => {
   };
 
   document.getElementById('waveInput').onchange = (_) => {
-    const wave = document.getElementById('waveInput').value;
+    const wave = parseInt(document.getElementById('waveInput').value, 10);
     d3.select('#waveIndicator')
       .text(`Wave: ${wave}`);
-    forceDirectedGraph.data = getGraphData(data, wave);
+    forceDirectedGraph.setWave(wave);
     update();
   };
 
@@ -222,7 +222,7 @@ const getMatchingProbabilityBars = (data, matchData, demographicData, attribute)
     Fields to map to participant nodes for tooltip/detail views
 */
 const detailFields = [
-  'gender', 'age', 'field_cd', 'undergrd', 'race', 'from', 'zipcode', 'career_c', 'wave',
+  'gender', 'age', 'field_cd', 'undergrd', 'race', 'from', 'zipcode', 'career_c',
 ];
 // create filtered object
 const mapDetails = (d) => {
@@ -235,28 +235,59 @@ const mapDetails = (d) => {
     Construct node-link structure from the data, used for network-type
     visualization.
 */
-const getGraphData = (data, wave) => {
+const getGraphData = (data) => {
   const nodes = {};
+  // const partnerNodes = {};
   const links = [];
 
   data.forEach((d) => {
     const iid = `${d.iid}`;
     const pid = `${d.pid}`;
-    // eslint-disable-next-line eqeqeq
-    if (d.wave == wave) {
-      if (!nodes[iid] || !nodes[iid].set) {
-        nodes[iid] = { id: iid, ...mapDetails(d) };
+    if (!nodes[iid]) {
+      // new node from iid, we use the data from this record
+      nodes[iid] = {
+        id: iid, ...mapDetails(d), waves: [d.wave], complete: true,
+      };
+    } else {
+      // existing node
+      // record wave inclusion
+      if (!nodes[iid].waves.includes(d.wave)) {
+        nodes[iid].waves.push(d.wave);
       }
-      links.push({
-        source: iid,
-        target: pid,
-        like: d.like,
-        match: d.match,
-      });
+      const n = nodes[iid];
+      // copy record data if existing node is incomplete
+      // these means that node n was first encountered as
+      // a partner
+      if (!n.complete) {
+        nodes[iid] = {
+          id: iid,
+          ...mapDetails(d),
+          waves: n.waves,
+          complete: true,
+        };
+      }
     }
+    if (!nodes[pid]) {
+      // new node from pid mark data as incomplete
+      nodes[pid] = {
+        id: pid, waves: [d.wave], complete: false,
+      };
+    }
+    // record wave inclusion of partner
+    if (!nodes[pid].waves.includes(d.wave)) {
+      nodes[pid].waves.push(d.wave);
+    }
+    links.push({
+      source: iid,
+      target: pid,
+      like: d.like,
+      match: d.match,
+      wave: d.wave,
+    });
   });
-  return {
+  const graphData = {
     nodes: Object.keys(nodes).map((k) => nodes[k]),
     links,
   };
+  return graphData;
 };
