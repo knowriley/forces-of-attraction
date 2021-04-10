@@ -1,0 +1,11 @@
+#!/bin/bash
+
+cd js
+yarn lint
+status=$?
+if [[ $status != 0 ]]; then
+	echo "There are lint errors!"
+	cd ..
+	exit $status
+fi
+cd ..
