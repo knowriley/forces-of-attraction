@@ -83,7 +83,7 @@ const fieldCodeToFieldMapping = [
   '',
   'Law',
   'Math',
-  'Social Science, Psychologist',
+  'Social Science/Psychology',
   'Medicine/Pharmacy/Bio Tech',
   'Engineering',
   'English/Creative Writing/Journalism',
