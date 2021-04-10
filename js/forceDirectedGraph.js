@@ -31,6 +31,11 @@ class ForceDirectedGraph extends View {
     vis.graph.force('link', vis.linkForce);
     // a categorical color scale
     vis.colorScale = d3.scaleOrdinal(d3.schemeCategory10);
+
+    // Highlight selection
+    vis.highlightedMaleLabel = NONE;
+    vis.highlightedFemaleLabel = NONE;
+
     vis.updateVis();
   }
 
@@ -111,6 +116,16 @@ class ForceDirectedGraph extends View {
       .attr('r', 4)
       .attr('fill', (d) => vis.colorScale(decode(vis.attribute)(d)))
       .attr('stroke', 'black')
+      .attr('opacity', (d) => {
+        if (vis.highlightedMaleLabel == NONE && vis.highlightedFemaleLabel == NONE) {
+          return 1;
+        } else if ((d.gender == 0 && getLabel(vis.attribute, d[vis.attribute]) == vis.highlightedFemaleLabel) ||
+            (d.gender == 1 && getLabel(vis.attribute, d[vis.attribute]) == vis.highlightedMaleLabel)) {
+              return 1;
+        } else {
+            return 0.1;
+        }
+      })
       .call(drag(vis.graph))
       .on('mouseover', (e, d) => {
         d3.select('#tooltip')

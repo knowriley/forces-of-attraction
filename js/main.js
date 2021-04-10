@@ -48,7 +48,7 @@ d3.csv('data/speedDating.csv').then((data) => {
   };
 
   // Events are triggered and handled using D3-dispatch
-  const dispatch = d3.dispatch('matrixClick');
+  const dispatch = d3.dispatch('matrixLabelClick', 'matrixCellClick');
 
   // Initialize charts
   barChart = new BarChart({ parentElement: '#bar' }, barChartData, DEFAULT_ATTRIBUTE, getDefaultLabel(DEFAULT_ATTRIBUTE), getDefautGender());
@@ -79,14 +79,17 @@ d3.csv('data/speedDating.csv').then((data) => {
     matrix.attribute = attribute;
     matrix.selectedLabel = getDefaultLabel(attribute);
     matrix.selectedGender = getDefautGender();
+    matrix.highlightedMaleLabel = NONE;
+    matrix.highlightedFemaleLabel = NONE;
 
     barChartData = getMatchingProbabilityBars(maleData, maleMatchData, demographicData, attribute);
-
     barChart.data = barChartData;
     barChart.attribute = attribute;
     barChart.selectedLabel = getDefaultLabel(attribute);
     barChart.selectedGender = getDefautGender();
 
+    forceDirectedGraph.highlightedMaleLabel = NONE;
+    forceDirectedGraph.highlightedFemaleLabel = NONE;
     forceDirectedGraph.setAttribute(attribute);
 
     update();
@@ -108,8 +111,8 @@ d3.csv('data/speedDating.csv').then((data) => {
     update();
   };
 
-  // Event handler for matrix
-  dispatch.on('matrixClick', (selected, gender) => {
+  // Event handler for matrix label click
+  dispatch.on('matrixLabelClick', (selected, gender) => {
     if (gender === 'male') {
       barChartData = getMatchingProbabilityBars(maleData,
         maleMatchData, demographicData, matrix.attribute);
@@ -124,6 +127,17 @@ d3.csv('data/speedDating.csv').then((data) => {
     barChart.data = barChartData;
     barChart.selectedLabel = selected;
     barChart.selectedGender = gender;
+
+    update();
+  });
+
+  // Event handler for matrix cell click
+  dispatch.on('matrixCellClick', (highlightedMaleLabel, highlightedFemaleLabel) => {
+    matrix.highlightedMaleLabel = highlightedMaleLabel;
+    matrix.highlightedFemaleLabel = highlightedFemaleLabel;
+
+    forceDirectedGraph.highlightedMaleLabel = highlightedMaleLabel;
+    forceDirectedGraph.highlightedFemaleLabel = highlightedFemaleLabel;
 
     update();
   });
