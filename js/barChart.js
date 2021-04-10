@@ -1,6 +1,6 @@
 // eslint-disable-next-line no-unused-vars
 class BarChart {
-  constructor(_config, _data, _attribute, _selected) {
+  constructor(_config, _data, _attribute, _selectedLabel, _selectedGender) {
     this.config = {
       parentElement: _config.parentElement,
       containerWidth: 500,
@@ -12,8 +12,8 @@ class BarChart {
     };
     this.data = _data;
     this.attribute = _attribute;
-    this.selected = _selected;
-    this.gender = 'male';
+    this.selectedLabel = _selectedLabel;
+    this.selectedGender = _selectedGender;
     this.initVis();
   }
 
@@ -63,7 +63,7 @@ class BarChart {
       .attr('x', 0)
       .attr('y', 0)
       .attr('dy', '.80em')
-      .text(`Prob. of ${vis.gender} ${vis.selected} matching with another person`);
+      .text(`Prob. of ${vis.selectedGender} ${vis.selectedLabel} matching with another person`);
   }
 
   updateVis() {
@@ -75,7 +75,7 @@ class BarChart {
         vis.barData.push({
           row: i - 17,
           rowLabel: getLabel(vis.attribute, i),
-          value: vis.data[getCode(vis.attribute, vis.selected)][i],
+          value: vis.data[getCode(vis.attribute, vis.selectedLabel)][i],
         });
       }
     } else {
@@ -83,7 +83,7 @@ class BarChart {
         vis.barData.push({
           row: i,
           rowLabel: getLabel(vis.attribute, i),
-          value: vis.data[getCode(vis.attribute, vis.selected)][i],
+          value: vis.data[getCode(vis.attribute, vis.selectedLabel)][i],
         });
       }
     }
@@ -92,8 +92,8 @@ class BarChart {
     vis.barData.push({
       row: vis.barData.length,
       rowLabel: 'Total',
-      value: vis.data[getCode(vis.attribute, vis.selected)][vis.data.length] === 0
-        ? 0 : (1 - vis.data[getCode(vis.attribute, vis.selected)][vis.data.length]),
+      value: vis.data[getCode(vis.attribute, vis.selectedLabel)][vis.data.length] === 0
+        ? 0 : (1 - vis.data[getCode(vis.attribute, vis.selectedLabel)][vis.data.length]),
     });
 
     vis.xValue = (d) => d.value;
@@ -135,12 +135,12 @@ class BarChart {
       .attr('x', -5)
       .style('text-anchor', 'end');
 
-    vis.axisTitle.text(`Prob. of ${vis.gender} ${vis.selected} matching with another person`); // https://stackoverflow.com/a/36707865
+    vis.axisTitle.text(`Prob. of ${vis.selectedGender} ${vis.selectedLabel} matching with another person`); // https://stackoverflow.com/a/36707865
   }
 
   chooseAlternateMatchType(d) {
     let vis = this;
-    const gender = getOtherGender(vis.gender);
+    const gender = getOtherGender(vis.selectedGender);
     if (d.rowLabel === 'Total') {
       return `any ${gender}`
     } else {
@@ -151,11 +151,11 @@ class BarChart {
   generateHtml(d) {
     let vis = this;
     if (vis.attribute === 'field_cd') {
-      return `<div> A <strong>${vis.gender} ${vis.selected} student </strong>has a <strong>${d3.format('.0%')(d.value)}</strong> chance of matching with <strong>${vis.chooseAlternateMatchType(d)} student</strong></div>`;
+      return `<div> A <strong>${vis.selectedGender} ${vis.selectedLabel} student </strong>has a <strong>${d3.format('.0%')(d.value)}</strong> chance of matching with <strong>${vis.chooseAlternateMatchType(d)} student</strong></div>`;
     } else if (vis.attribute === 'age'){
-      return `<div> A <strong>${vis.gender} ${vis.selected} year old </strong> has a <strong>${d3.format('.0%')(d.value)}</strong> chance of matching with <strong>${vis.chooseAlternateMatchType(d)} year old</strong></div>`;
+      return `<div> A <strong>${vis.selectedGender} ${vis.selectedLabel} year old </strong> has a <strong>${d3.format('.0%')(d.value)}</strong> chance of matching with <strong>${vis.chooseAlternateMatchType(d)} year old</strong></div>`;
     } else {
-      return `<div> A <strong>${vis.gender} ${vis.selected}</strong> has a <strong>${d3.format('.0%')(d.value)}</strong> chance of matching with <strong>${vis.chooseAlternateMatchType(d)}</strong></div>`;
+      return `<div> A <strong>${vis.selectedGender} ${vis.selectedLabel}</strong> has a <strong>${d3.format('.0%')(d.value)}</strong> chance of matching with <strong>${vis.chooseAlternateMatchType(d)}</strong></div>`;
     }
   }
 }
