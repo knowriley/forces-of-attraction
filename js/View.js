@@ -57,7 +57,7 @@ class View {
 
   updateSize() {
     // set the usable size as seen by subclass, i.e. the size of chartArea
-    const svgHeight = document.getElementById(this.config.parentId).clientHeight;
+    const svgHeight = this.config.containerHeight;
     const svgWidth = document.getElementById(this.config.parentId).clientWidth;
     this.svg.attr('width', svgWidth).attr('height', svgHeight);
     this.width = svgWidth - this.config.margin.left - this.config.margin.right;

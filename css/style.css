@@ -20,49 +20,27 @@ body {
 }
 
 #content {
-    height: 98%;
     max-width: 1600px;
     margin-left: 5px;
     margin-right: 5px;
+}
+
+.col {
     display: flex;
     flex-direction: column;
 }
 
-#vis-container {
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-}
-
-#color {
-    height: 10%;
-}
-
-#visA {
-    width: 100%;
-    height: 40%;
-}
-
-#visB {
-    width: 100%;
-    height: 50%;
-}
-
-#bCharts {
+.row {
     display: flex;
     flex-direction: row;
 }
 
-.chart {
-    height: 100%;
-}
-
-#visA {
-    padding: 10px;
-}
-
 .tick line, .domain {
     display: none;
+}
+
+#attractByAttributeSelector {
+    display: inline;
 }
 
 #matrix {

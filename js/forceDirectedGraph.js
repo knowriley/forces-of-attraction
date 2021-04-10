@@ -18,6 +18,8 @@ class ForceDirectedGraph extends View {
     super.initVis();
     const vis = this;
 
+    vis.config.containerHeight = 400;
+
     // non-visual wave state
     vis.wave = 1;
 
