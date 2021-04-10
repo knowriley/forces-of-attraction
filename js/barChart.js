@@ -111,13 +111,22 @@ class BarChart {
     vis.bars = vis.chart.selectAll('.bar')
       .data(vis.barData, vis.yValue)
       .join('rect')
-      .transition()
-      .duration(1000)
       .attr('class', 'bar')
       .attr('y', (d) => vis.yScale(vis.yValue(d)))
       .attr('width', (d) => vis.xScale(vis.xValue(d)))
       .attr('height', vis.yScale.bandwidth())
-      .attr('fill', 'green');
+      .attr('fill', 'green')
+      .on('mouseover', (e, d) => {
+        d3.select('#tooltip')
+          .style('display', 'block')
+          .style('left', `${e.pageX}px`)
+          .style('top', `${e.pageY}px`)
+          .html(vis.generateHtml(d));
+      }).on('mouseout', (_, __) => {
+        d3.select('#tooltip').style('display', 'none');
+      });
+
+      vis.bars.transition().duration(1000);
 
     vis.xAxisG.call(vis.xAxis);
     vis.yAxisG.call(vis.yAxis)
@@ -127,5 +136,26 @@ class BarChart {
       .style('text-anchor', 'end');
 
     vis.axisTitle.text(`Prob. of ${vis.selectedGender} ${vis.selectedLabel} matching with another person`); // https://stackoverflow.com/a/36707865
+  }
+
+  chooseAlternateMatchType(d) {
+    let vis = this;
+    const gender = getOtherGender(vis.selectedGender);
+    if (d.rowLabel === 'Total') {
+      return `any ${gender}`
+    } else {
+      return `${gender} ${d.rowLabel}`
+    }
+  }
+
+  generateHtml(d) {
+    let vis = this;
+    if (vis.attribute === 'field_cd') {
+      return `<div> A <strong>${vis.selectedGender} ${vis.selectedLabel} student </strong>has a <strong>${d3.format('.0%')(d.value)}</strong> chance of matching with <strong>${vis.chooseAlternateMatchType(d)} student</strong></div>`;
+    } else if (vis.attribute === 'age'){
+      return `<div> A <strong>${vis.selectedGender} ${vis.selectedLabel} year old </strong> has a <strong>${d3.format('.0%')(d.value)}</strong> chance of matching with <strong>${vis.chooseAlternateMatchType(d)} year old</strong></div>`;
+    } else {
+      return `<div> A <strong>${vis.selectedGender} ${vis.selectedLabel}</strong> has a <strong>${d3.format('.0%')(d.value)}</strong> chance of matching with <strong>${vis.chooseAlternateMatchType(d)}</strong></div>`;
+    }
   }
 }

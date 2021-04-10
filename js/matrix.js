@@ -74,12 +74,14 @@ class Matrix {
       .attr('x', -20)
       .attr('y', 10)
       .style('text-anchor', 'end')
+      .style('font-weight', 'bold')
       .text('Female');
 
     vis.chart.append('text')
       .attr('x', -20)
       .attr('y', -10)
       .style('text-anchor', 'end')
+      .style('font-weight', 'bold')
       .text('Male');
 
     vis.chart.append('text')
@@ -87,6 +89,16 @@ class Matrix {
       .attr('y', vis.config.height + 15)
       .style('text-anchor', 'start')
       .text('* Click on axis labels to see detailed probability');
+
+    // Add line separating male and female labels
+    vis.chart.append('line')
+      .attr('class', 'label-line')
+      .attr('x1', -60)
+      .attr('y1', -60)
+      .attr('x2', -10)
+      .attr('y2', -10)
+      .style('stroke', 'black')
+      .style('stroke-width', 1);
 
     vis.updateVis();
   }
@@ -174,11 +186,7 @@ class Matrix {
         .style('display', 'block')
         .style('left', `${e.pageX+10}px`)
         .style('top', `${e.pageY+10}px`)
-        .html(`
-          <div>A male ${getLabel(vis.attribute, d.row)} and </div>
-          <div>a female ${getLabel(vis.attribute, d.col)} </div>
-          <div>matches ${d3.format('.0%')(d.value)} of the time.</div>
-        `);
+        .html(vis.generateHtml(d));
     }).on('mouseout', (_, __) => {
       d3.select('#tooltip').style('display', 'none');
     }).on('click', (e, d) => {
@@ -215,7 +223,7 @@ class Matrix {
         .style('stroke', 'black')
         .style('stroke-width', 1);
     } else {
-      vis.chartArea.selectAll('line').remove();
+      vis.chartArea.selectAll('line.age-line').remove();
     }
 
     // Update axes
@@ -242,5 +250,36 @@ class Matrix {
       .on('click', (event, selected) => {
         vis.dispatch.call('matrixLabelClick', selected, selected, 'female');
       });
+  }
+
+  chooseAlternateMatchType(d) {
+    let vis = this;
+    const gender = getOtherGender(vis.gender);
+    const label = getLabel(vis.attribute, d.row);
+    if (label === 'Total') {
+      return `any ${gender}`
+    } else {
+      return `${gender} ${label}`
+    }
+  }
+
+  generateHtml(d) {
+    let vis = this;
+    if (vis.attribute === 'field_cd') {
+      return `
+        <div>A <strong>male ${getLabel(vis.attribute, d.row)} student</strong> and </div>
+        <div>a <strong>female ${getLabel(vis.attribute, d.col)} student </strong></div>
+        <div>match <strong>${d3.format('.0%')(d.value)}</strong> of the time.</div>
+    `} else if (vis.attribute === 'age'){
+      return `
+        <div>A <strong>male ${getLabel(vis.attribute, d.row)} year old</strong> and </div>
+        <div>a <strong>female ${getLabel(vis.attribute, d.col)} year old </strong></div>
+        <div>match <strong>${d3.format('.0%')(d.value)}</strong> of the time.</div>
+    `} else {
+      return `
+        <div>A <strong>male ${getLabel(vis.attribute, d.row)}</strong> and </div>
+        <div>a <strong>female ${getLabel(vis.attribute, d.col)} </strong></div>
+        <div>match <strong>${d3.format('.0%')(d.value)}</strong> of the time.</div>
+    `}
   }
 }

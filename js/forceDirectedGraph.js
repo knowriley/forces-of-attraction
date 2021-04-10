@@ -18,6 +18,9 @@ class ForceDirectedGraph extends View {
     super.initVis();
     const vis = this;
 
+    // non-visual wave state
+    vis.wave = 1;
+
     // Static elements for simulation
     vis.distance = DEFAULT_DISTANCE;
     vis.graph = d3.forceSimulation();
@@ -34,6 +37,20 @@ class ForceDirectedGraph extends View {
     vis.highlightedFemaleLabel = NONE;
 
     vis.updateVis();
+  }
+
+  setWave(w) {
+    this.wave = w;
+  }
+
+  getWaveData() {
+    const vis = this;
+    const data = this.getData();
+    const waveData = {
+      nodes: d3.filter(data.nodes, (n) => n.waves.includes(vis.wave)),
+      links: d3.filter(data.links, (l) => l.wave === vis.wave),
+    };
+    return waveData;
   }
 
   // Set the forcing/attraction attribute
@@ -72,9 +89,9 @@ class ForceDirectedGraph extends View {
       d3.forceCenter(vis.getWidth() / 2, vis.getHeight() / 2));
 
     // Set data for the simulation
-    const { nodes } = vis.getData();
+    const { nodes, links } = vis.getWaveData();
     vis.graph.nodes(nodes);
-    vis.linkForce.links(this.distance === 'match' ? d3.filter(vis.getData().links, (l) => l.match) : vis.getData().links);
+    vis.linkForce.links(this.distance === 'match' ? d3.filter(links, (l) => l.match) : links);
 
     // Reboot the simulation
     vis.graph.stop();
@@ -86,11 +103,15 @@ class ForceDirectedGraph extends View {
   renderVis() {
     const vis = this;
 
+    const data = vis.getWaveData();
+    const nodesData = data.nodes;
+    const linksData = data.links;
+
     // Map node elements, with tooltip interactivity.
     // See tooltip example:
     // https://github.com/UBC-InfoVis/2021-436V-case-studies/blob/097d13b05d587f4fab3e3fcd23f5e99274397c2c/case-study_measles-and-vaccines/css/style.css
     const nodes = vis.getChart().selectAll('circle')
-      .data(vis.getData().nodes, (d) => d.id)
+      .data(nodesData, (d) => d.id)
       .join('circle')
       .attr('r', 4)
       .attr('fill', (d) => vis.colorScale(decode(vis.attribute)(d)))
@@ -113,10 +134,12 @@ class ForceDirectedGraph extends View {
           .style('top', `${e.pageY}px`)
           .html(`
                 <h1>Participant ${decode('id')(d)}</h1>
+                <p>Gender: ${decode('gender')(d)}<p>
+                <p>Age: ${d.age}<p>
                 <p>Wave: ${decode('wave')(d)}<p>
                 <p>Field: ${decode('field_cd')(d)}<p>
                 <p>Career: ${decode('career_c')(d)}<p>
-                <p>race: ${decode('race')(d)}<p>
+                <p>Race: ${decode('race')(d)}<p>
                 <p>From: ${decode('from')(d)}<p>
                 `);
       })
@@ -124,7 +147,7 @@ class ForceDirectedGraph extends View {
         d3.select('#tooltip').style('display', 'none');
       });
 
-    const matchLinks = d3.filter(vis.getData().links,
+    const matchLinks = d3.filter(linksData,
       (l) => l.match);
 
     const links = vis.chart.selectAll('line')

@@ -57,27 +57,26 @@ const careerCodeToCareerGroupMapping = [ // 8 unique groups
   'Engineering', // Architecture
 ];
 
-// For matrix and barChart TODO: Do we but this in a utils or constants file?
 // eslint-disable-next-line no-unused-vars
 const careerCodeToCareerMapping = [
   '',
   'Lawyer',
-  'Academic/ Research',
+  'Academic/Researcher',
   'Psychologist',
-  'Doctor/Medicine',
+  'Medical Professional',
   'Engineer',
-  'Creative Arts/Entertainment',
-  'Banking/Consulting/Finance/Marketing/Business/CEO/Entrepreneur/Admin',
-  'Real Estate',
+  'Artist/Entertainer',
+  'Business',
+  'Real Estate Agent',
   'International/Humanitarian Affairs',
-  'Undecided',
-  'Social Work',
-  'Speech Pathology',
-  'Politics',
-  'Pro sports/Athletics',
+  'TODO (Undecided)',
+  'Social Worker',
+  'Speech Pathologist',
+  'Politician',
+  'Athlete',
   'Other',
-  'Journalism',
-  'Architecture',
+  'Journalist',
+  'Architect',
 ];
 
 // eslint-disable-next-line no-unused-vars
@@ -85,16 +84,16 @@ const fieldCodeToFieldMapping = [
   '',
   'Law',
   'Math',
-  'Social Science, Psychologist',
-  'Medical Science, Pharmaceuticals, and Bio Tech',
+  'Social Science/Psychology',
+  'Medicine/Pharmacy/Bio Tech',
   'Engineering',
-  'English/Creative Writing/ Journalism',
+  'English/Creative Writing/Journalism',
   'History/Religion/Philosophy',
   'Business/Econ/Finance',
-  'Education, Academia',
-  'Biological Sciences/Chemistry/Physics',
+  'Research',
+  'Biology/Chemistry/Physics',
   'Social Work',
-  'Undergrad/ undecided',
+  'Undecided',
   'Political Science/International Affairs',
   'Film',
   'Fine Arts/Arts Administration',
@@ -220,3 +219,11 @@ const getCode = (attribute, label) => {
     default: return '';
   }
 };
+
+const getOtherGender = (gender) => {
+  switch (gender) {
+    case 'male': return 'female';
+    case 'female': return 'male';
+    default: return '';
+  }
+}
