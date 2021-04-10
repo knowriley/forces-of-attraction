@@ -157,11 +157,7 @@ class Matrix {
         .style('display', 'block')
         .style('left', `${e.pageX}px`)
         .style('top', `${e.pageY}px`)
-        .html(`
-          <div>A male ${getLabel(vis.attribute, d.row)} and </div>
-          <div>a female ${getLabel(vis.attribute, d.col)} </div>
-          <div>matches ${d3.format('.0%')(d.value)} of the time.</div>
-        `);
+        .html(vis.generateHtml(d));
     }).on('mouseout', (_, __) => {
       d3.select('#tooltip').style('display', 'none');
     });
@@ -219,5 +215,36 @@ class Matrix {
       .on('click', (event, selected) => {
         vis.dispatch.call('matrixClick', selected, selected, 'female');
       });
+  }
+
+  chooseAlternateMatchType(d) {
+    let vis = this;
+    const gender = getOtherGender(vis.gender);
+    const label = getLabel(vis.attribute, d.row);
+    if (label === 'Total') {
+      return `any ${gender}`
+    } else {
+      return `${gender} ${label}`
+    }
+  }
+
+  generateHtml(d) {
+    let vis = this;
+    if (vis.attribute === 'field_cd') {
+      return `
+        <div>A <strong>male ${getLabel(vis.attribute, d.row)} student</strong> and </div>
+        <div>a <strong>female ${getLabel(vis.attribute, d.col)} student </strong></div>
+        <div>match <strong>${d3.format('.0%')(d.value)}</strong> of the time.</div>
+    `} else if (vis.attribute === 'age'){
+      return `
+        <div>A <strong>male ${getLabel(vis.attribute, d.row)} year old</strong> and </div>
+        <div>a <strong>female ${getLabel(vis.attribute, d.col)} year old </strong></div>
+        <div>match <strong>${d3.format('.0%')(d.value)}</strong> of the time.</div>
+    `} else {
+      return `
+        <div>A <strong>male ${getLabel(vis.attribute, d.row)}</strong> and </div>
+        <div>a <strong>female ${getLabel(vis.attribute, d.col)} </strong></div>
+        <div>match <strong>${d3.format('.0%')(d.value)}</strong> of the time.</div>
+    `}
   }
 }
