@@ -158,6 +158,8 @@ const decode = (attr) => (d) => {
       return v ? careerCodeToCareerGroupMapping[v] : defaultNA;
     case 'race':
       return v ? raceCodeToRaceMapping[v] : defaultNA;
+    case 'age' :
+      return v ? getAgeGroupLabel(v) : defaultNA;
     default:
       return v;
   }
@@ -225,5 +227,19 @@ const getOtherGender = (gender) => {
     case 'male': return 'female';
     case 'female': return 'male';
     default: return '';
+  }
+}
+
+const getAgeGroupLabel = (age) => {
+  if (age <= 24) {
+    return '20-24';
+  } else if (age <= 29) {
+    return '25-29';
+  } else if (age <= 34) {
+    return '30-34';
+  } else if (age <= 39) {
+    return '35-39';
+  } else {
+    return '40-45';
   }
 }
