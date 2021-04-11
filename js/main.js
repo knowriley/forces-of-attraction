@@ -55,7 +55,7 @@ d3.csv('data/speedDating.csv').then((data) => {
   forceDirectedGraph = new ForceDirectedGraph({ parentElement: '#forceDirected' }, getGraphData(data), 'career_c');
   matrix = new Matrix({ parentElement: '#matrix', dispatch }, matrixData, DEFAULT_ATTRIBUTE, getDefaultLabel(DEFAULT_ATTRIBUTE), getDefautGender());
   legend = new Legend('#legend', forceDirectedGraph.colorDomain, forceDirectedGraph.colorScale);
-  lineChart = new LineChart({ parentElement: '#line'}, getGraphData(data));
+  lineChart = new LineChart({ parentElement: '#line'}, [1, 2, 3]);
 
   // Set up a routine to call any required functions when document state changes
   const update = () => {
@@ -190,6 +190,49 @@ const getMatchingProbability = (data, matchData, demographicData, attribute) => 
 
   return probability;
 };
+
+/**
+  * Data pre-processing for adjacency matrix
+  * The gender used for @param matchData and @param data does not influence the
+  * change the result BUT they MUST match,
+  * the gender used for will be the row, and the opposite gender on the column.
+  */
+ const getMatchingProbabilityMatrix = (data, matchData, demographicData, attribute) => {
+  const limit = getAttributeSize(attribute);
+  const allCount = new Array(limit);
+  const matchCount = new Array(limit);
+  const probability = new Array(limit);
+
+  for (let i = 0; i < limit; i += 1) {
+    allCount[i] = new Array(limit);
+    allCount[i].fill(0);
+    matchCount[i] = new Array(limit);
+    matchCount[i].fill(0);
+    probability[i] = new Array(limit);
+    probability[i].fill(0);
+  }
+
+  data.forEach((d) => {
+    if (d.pid && d[attribute]) {
+      allCount[d[attribute]][demographicData.get(d.pid)[attribute]] += 1;
+    }
+  });
+
+  matchData.forEach((d) => {
+    if (d.pid) {
+      matchCount[d[attribute]][demographicData.get(d.pid)[attribute]] += 1;
+    }
+  });
+
+  for (let i = 0; i < limit; i += 1) {
+    for (let j = 0; j < limit; j += 1) {
+      probability[i][j] = allCount[i][j] === 0 ? 0 : matchCount[i][j] / allCount[i][j];
+    }
+  }
+
+  return probability;
+};
+
 
 /**
   * Data pre-processing for bar chart
