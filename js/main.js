@@ -55,12 +55,14 @@ d3.csv('data/speedDating.csv').then((data) => {
   forceDirectedGraph = new ForceDirectedGraph({ parentElement: '#forceDirected' }, getGraphData(data), 'career_c');
   matrix = new Matrix({ parentElement: '#matrix', dispatch }, matrixData, DEFAULT_ATTRIBUTE, getDefaultLabel(DEFAULT_ATTRIBUTE), getDefautGender());
   legend = new Legend('#legend', forceDirectedGraph.colorDomain, forceDirectedGraph.colorScale);
+  lineChart = new LineChart({ parentElement: '#line'}, getGraphData(data));
 
   // Set up a routine to call any required functions when document state changes
   const update = () => {
     updateSize();
     barChart.updateVis();
     forceDirectedGraph.updateVis();
+    lineChart.updateVis();
     matrix.updateVis();
     legend.set(forceDirectedGraph.colorDomain, forceDirectedGraph.colorScale);
     legend.updateVis();
@@ -108,6 +110,7 @@ d3.csv('data/speedDating.csv').then((data) => {
     d3.select('#waveIndicator')
       .text(`Wave: ${wave}`);
     forceDirectedGraph.setWave(wave);
+    lineChart.setWave(wave);
     update();
   };
 
@@ -152,7 +155,7 @@ d3.csv('data/speedDating.csv').then((data) => {
   * change the result BUT they MUST match,
   * the gender used for will be the row, and the opposite gender on the column.
   */
-const getMatchingProbabilityMatrix = (data, matchData, demographicData, attribute) => {
+const getMatchingProbability = (data, matchData, demographicData, attribute) => {
   const limit = getAttributeSize(attribute);
   const allCount = new Array(limit);
   const matchCount = new Array(limit);
