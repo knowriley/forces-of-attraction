@@ -119,8 +119,8 @@ class BarChart {
       .on('mouseover', (e, d) => {
         d3.select('#tooltip')
           .style('display', 'block')
-          .style('left', `${e.pageX}px`)
-          .style('top', `${e.pageY}px`)
+          .style('left', `${e.pageX+10}px`)
+          .style('top', `${e.pageY+10}px`)
           .html(vis.generateHtml(d));
       }).on('mouseout', (_, __) => {
         d3.select('#tooltip').style('display', 'none');
