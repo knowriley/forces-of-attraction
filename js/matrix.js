@@ -51,12 +51,10 @@ class Matrix {
       .interpolator(d3.interpolateGreys);
 
     vis.xScale = d3.scaleBand()
-      .range([0, vis.config.width])
-      .paddingInner(0.2);
+      .range([0, vis.config.width]);
 
     vis.yScale = d3.scaleBand()
-      .range([0, vis.config.height])
-      .paddingInner(0.2);
+      .range([0, vis.config.height]);
 
     vis.xAxis = d3.axisTop(vis.xScale);
     vis.yAxis = d3.axisLeft(vis.yScale);
@@ -155,27 +153,29 @@ class Matrix {
 
     const cellWidth = vis.config.width / vis.xScale.domain().length;
     const cellHeight = vis.config.height / vis.yScale.domain().length;
+    const maxRadius = Math.min(cellWidth, cellHeight)/2;
+    vis.maxRadius = maxRadius;
+    vis.minRadius = 0.4*maxRadius;
 
     const cell = vis.chart.selectAll('.cell')
       .data(vis.cellData);
 
     // Enter
-    const cellEnter = cell.enter().append('rect');
+    const cellEnter = cell.enter().append('circle');
 
     // Enter + update
     cellEnter.merge(cell)
       .transition().duration(500)
       .attr('class', 'cell')
-      .attr('x', (d) => (d.col - 1) * cellWidth) // -1 because code are 1-indexed
-      .attr('y', (d) => (d.row - 1) * cellHeight)
-      .attr('width', cellWidth)
-      .attr('height', cellHeight)
+      .attr('cx', (d) => cellWidth/2 + (d.col - 1) * cellWidth) // -1 because code are 1-indexed
+      .attr('cy', (d) => cellHeight/2 + (d.row - 1) * cellHeight)
+      .attr('r', (d) => vis.radiusScale(d, maxRadius))
       .attr('stroke', 'white')
       .attr('fill', (d) => {
         if (d.col === 0 || d.row === 0) {
-          return 'white';
-        } else if (d.pair < 5) {
-          return 'red';
+          return 'none';
+        } else if (d.pair <= 0) {
+          return 'none';
         } else {
           if (vis.highlightedMaleLabel == NONE && vis.highlightedFemaleLabel == NONE) {
             return vis.colorScale(vis.colorValue(d));
@@ -235,7 +235,7 @@ class Matrix {
     // Update axes
     vis.xAxisGroup.call(vis.xAxis)
       .selectAll('text')
-      .attr('y', 0)
+      .attr('y', 3)
       .attr('x', -10)
       .attr('transform', 'rotate(90)')
       .style('text-anchor', 'end'); // https://bl.ocks.org/mbostock/4403522;
@@ -267,6 +267,17 @@ class Matrix {
     } else {
       return `${gender} ${label}`
     }
+  }
+
+  radiusScale(d) { //https://bl.ocks.org/guilhermesimoes/e6356aa90a16163a6f917f53600a2b4a
+    let vis = this;
+    let maxValue = Math.sqrt(d3.max(vis.cellData, d => d.pair));
+
+    let circleScale = d3.scaleLinear()
+      .domain([0, maxValue])
+      .range([vis.minRadius, vis.maxRadius]);
+
+    return circleScale(Math.sqrt(d.pair));
   }
 
   generateHtml(d) {
