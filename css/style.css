@@ -7,6 +7,12 @@ body {
     height: 200%;
 }
 
+.chart-line {
+    fill: none;
+    stroke: rgb(75, 75, 75);
+    stroke-width: 1.5px;
+}
+
 #content {
     height: 98%;
     max-width: 1600px;
@@ -93,7 +99,7 @@ body {
 }
 
 #waveInput {
-    width: 100%;
+    width: 1000px;
 }
 
 #groupSelect {

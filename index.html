@@ -33,9 +33,11 @@
                 are a match in the current wave!
                 Try dragging the nodes to see which other nodes have high linkage
                 (i.e. attract each other in the study) and using the slider to view all waves of the experiment. <br>
-                <div id="waveIndicator">Wave: 1</div> <br>
-                <div id="line" class="chart"></div>
-                <input id="waveInput" type="range" min="1" max="21" value="1" class="slider">
+                <div id="waveVis">
+                    <div id="waveIndicator">Wave: 1</div> <br>
+                    <div id="line" class="chart"></div>
+                    <input id="waveInput" type="range" min="1" max="21" value="1" class="slider">   
+                </div>
                 <div id="forceDirected" class="chart"></div>
             </div>
             <div id="color">
@@ -69,6 +71,7 @@
     <script src="js/utils.js"></script>
     <script src="js/View.js"></script>
     <script src="js/forceDirectedGraph.js"></script>
+    <script src="js/lineChart.js"></script>
     <script src="js/barChart.js"></script>
     <script src="js/matrix.js"></script>
     <script src="js/Legend.js"></script>

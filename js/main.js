@@ -51,11 +51,12 @@ d3.csv('data/speedDating.csv').then((data) => {
   const dispatch = d3.dispatch('matrixLabelClick', 'matrixCellClick');
 
   // Initialize charts
+  lineChart = new LineChart({ parentElement: '#line'}, getGraphData(data));
   barChart = new BarChart({ parentElement: '#bar' }, barChartData, DEFAULT_ATTRIBUTE, getDefaultLabel(DEFAULT_ATTRIBUTE), getDefautGender());
   forceDirectedGraph = new ForceDirectedGraph({ parentElement: '#forceDirected' }, getGraphData(data), 'career_c');
   matrix = new Matrix({ parentElement: '#matrix', dispatch }, matrixData, DEFAULT_ATTRIBUTE, getDefaultLabel(DEFAULT_ATTRIBUTE), getDefautGender());
   legend = new Legend('#legend', forceDirectedGraph.colorDomain, forceDirectedGraph.colorScale);
-  lineChart = new LineChart({ parentElement: '#line'}, [1, 2, 3]);
+  //lineChart = new LineChart({ parentElement: '#line'}, [1, 2, 3]);
 
   // Set up a routine to call any required functions when document state changes
   const update = () => {

@@ -46,12 +46,10 @@ class ForceDirectedGraph extends View {
   getWaveData() {
     const vis = this;
     const data = this.getData();
-    //console.log(data);
     const waveData = {
       nodes: d3.filter(data.nodes, (n) => n.waves.includes(vis.wave)),
       links: d3.filter(data.links, (l) => l.wave === vis.wave),
     };
-    //console.log(waveData);
     return waveData;
   }
 
