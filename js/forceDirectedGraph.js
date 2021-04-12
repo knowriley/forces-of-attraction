@@ -113,6 +113,7 @@ class ForceDirectedGraph extends View {
     const nodes = vis.getChart().selectAll('circle')
       .data(nodesData, (d) => d.id)
       .join('circle')
+      .attr('class', 'node')
       .attr('r', 4)
       .attr('fill', (d) => vis.colorScale(decode(vis.attribute)(d)))
       .attr('stroke', 'black')
@@ -153,6 +154,7 @@ class ForceDirectedGraph extends View {
     const links = vis.chart.selectAll('line')
       .data(matchLinks, (d) => [d.source, d.target])
       .join('line')
+      .attr('class', 'edge')
       .attr('opacity', 0.7)
       .attr('stroke', 'black')
       .attr('stroke-width', 0.1);
