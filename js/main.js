@@ -106,10 +106,9 @@ d3.csv('data/speedDating.csv').then((data) => {
     update();
   };
 
-  document.getElementById('waveInput').onchange = (_) => {
-    const wave = parseInt(document.getElementById('waveInput').value, 10);
-    d3.select('#waveIndicator')
-      .text(`Wave: ${wave}`);
+  
+  document.getElementById('waveSlider').onchange = (_) => {
+    const wave = parseInt(document.getElementById('waveSlider').value, 10);
     forceDirectedGraph.setWave(wave);
     lineChart.setWave(wave);
     update();
