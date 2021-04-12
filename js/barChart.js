@@ -126,7 +126,7 @@ class BarChart {
         d3.select('#tooltip').style('display', 'none');
       });
 
-      vis.bars.transition().duration(1000);
+    vis.bars.transition().duration(1000);
 
     vis.xAxisG.call(vis.xAxis);
     vis.yAxisG.call(vis.yAxis)

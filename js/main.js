@@ -31,7 +31,7 @@ d3.csv('data/speedDating.csv').then((data) => {
   const demographicData = getSubjectDemographicdata(data);
 
   // construct view-specific datasets
-  let matrixData = getMatchingProbabilityMatrix(maleData, maleMatchData, demographicData, DEFAULT_ATTRIBUTE);
+  let matrixData = getMatrixData(maleData, maleMatchData, demographicData, DEFAULT_ATTRIBUTE);
   let barChartData = getMatchingProbabilityBars(maleData, maleMatchData, demographicData, DEFAULT_ATTRIBUTE);
 
   // DOCUMENT PHASE
@@ -74,7 +74,7 @@ d3.csv('data/speedDating.csv').then((data) => {
   document.getElementById('colorByAttributeSelector').onchange = (_) => {
     const attribute = document.getElementById('colorByAttributeSelector').value;
 
-    matrixData = getMatchingProbabilityMatrix(maleData, maleMatchData, demographicData, attribute);
+    matrixData = getMatrixData(maleData, maleMatchData, demographicData, attribute);
     matrix.data = matrixData;
     matrix.attribute = attribute;
     matrix.selectedLabel = getDefaultLabel(attribute);
@@ -152,19 +152,18 @@ d3.csv('data/speedDating.csv').then((data) => {
   * change the result BUT they MUST match,
   * the gender used for will be the row, and the opposite gender on the column.
   */
-const getMatchingProbabilityMatrix = (data, matchData, demographicData, attribute) => {
+const getMatrixData = (data, matchData, demographicData, attribute) => {
   const limit = getAttributeSize(attribute);
   const allCount = new Array(limit);
   const matchCount = new Array(limit);
-  const probability = new Array(limit);
+  const matrixData = new Array(limit);
 
   for (let i = 0; i < limit; i += 1) {
     allCount[i] = new Array(limit);
     allCount[i].fill(0);
     matchCount[i] = new Array(limit);
     matchCount[i].fill(0);
-    probability[i] = new Array(limit);
-    probability[i].fill(0);
+    matrixData[i] = new Array(limit);
   }
 
   data.forEach((d) => {
@@ -181,11 +180,15 @@ const getMatchingProbabilityMatrix = (data, matchData, demographicData, attribut
 
   for (let i = 0; i < limit; i += 1) {
     for (let j = 0; j < limit; j += 1) {
-      probability[i][j] = allCount[i][j] === 0 ? 0 : matchCount[i][j] / allCount[i][j];
+      matrixData[i][j] = {
+        probability: allCount[i][j] === 0 ? 0 : matchCount[i][j] / allCount[i][j],
+        match:  matchCount[i][j],
+        pair: allCount[i][j]
+      }
     }
   }
 
-  return probability;
+  return matrixData;
 };
 
 /**
