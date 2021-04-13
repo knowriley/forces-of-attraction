@@ -51,12 +51,10 @@ class Matrix {
       .interpolator(d3.interpolateGreys);
 
     vis.xScale = d3.scaleBand()
-      .range([0, vis.config.width])
-      .paddingInner(0.2);
+      .range([0, vis.config.width]);
 
     vis.yScale = d3.scaleBand()
-      .range([0, vis.config.height])
-      .paddingInner(0.2);
+      .range([0, vis.config.height]);
 
     vis.xAxis = d3.axisTop(vis.xScale);
     vis.yAxis = d3.axisLeft(vis.yScale);
@@ -116,7 +114,9 @@ class Matrix {
             col: j - 17,
             rowLabel: getLabel(vis.attribute, i),
             colLabel: getLabel(vis.attribute, j),
-            value: vis.data[i][j],
+            probability: vis.data[i][j].probability,
+            match: vis.data[i][j].match,
+            pair: vis.data[i][j].pair
           });
         }
       }
@@ -128,7 +128,9 @@ class Matrix {
             col: j,
             rowLabel: getLabel(vis.attribute, i),
             colLabel: getLabel(vis.attribute, j),
-            value: vis.data[i][j],
+            probability: vis.data[i][j].probability,
+            match: vis.data[i][j].match,
+            pair: vis.data[i][j].pair
           });
         }
       }
@@ -136,7 +138,7 @@ class Matrix {
 
     vis.xValue = (d) => d.colLabel;
     vis.yValue = (d) => d.rowLabel;
-    vis.colorValue = (d) => d.value;
+    vis.colorValue = (d) => d.probability;
 
     vis.colorScale.domain(d3.extent(vis.cellData.map(vis.colorValue)));
     vis.unhighlightedColorScale.domain(d3.extent(vis.cellData.map(vis.colorValue)));
@@ -166,10 +168,12 @@ class Matrix {
       .attr('y', (d) => (d.row - 1) * cellHeight)
       .attr('width', cellWidth)
       .attr('height', cellHeight)
-      .attr('stroke', 'white')
+      .attr('stroke', (d) => d.pair <= 0 ? 'none' : 'white')
       .attr('fill', (d) => {
         if (d.col === 0 || d.row === 0) {
-          return 'white'
+          return 'none';
+        } else if (d.pair <= 0) {
+          return 'none';
         } else {
           if (vis.highlightedMaleLabel == NONE && vis.highlightedFemaleLabel == NONE) {
             return vis.colorScale(vis.colorValue(d));
@@ -229,7 +233,7 @@ class Matrix {
     // Update axes
     vis.xAxisGroup.call(vis.xAxis)
       .selectAll('text')
-      .attr('y', 0)
+      .attr('y', 3)
       .attr('x', -10)
       .attr('transform', 'rotate(90)')
       .style('text-anchor', 'end'); // https://bl.ocks.org/mbostock/4403522;
@@ -269,17 +273,20 @@ class Matrix {
       return `
         <div>A <strong>male ${getLabel(vis.attribute, d.row)} student</strong> and </div>
         <div>a <strong>female ${getLabel(vis.attribute, d.col)} student </strong></div>
-        <div>match <strong>${d3.format('.0%')(d.value)}</strong> of the time.</div>
+        <div>match <strong>${d3.format('.0%')(d.probability)}</strong> of the time.</div>
+        <div>(${d.match} matches of ${d.pair} pairings)</div>
     `} else if (vis.attribute === 'age'){
       return `
         <div>A <strong>male ${getLabel(vis.attribute, d.row)} year old</strong> and </div>
         <div>a <strong>female ${getLabel(vis.attribute, d.col)} year old </strong></div>
-        <div>match <strong>${d3.format('.0%')(d.value)}</strong> of the time.</div>
+        <div>match <strong>${d3.format('.0%')(d.probability)}</strong> of the time.</div>
+        <div>(${d.match} matches of ${d.pair} pairings)</div>
     `} else {
       return `
         <div>A <strong>male ${getLabel(vis.attribute, d.row)}</strong> and </div>
         <div>a <strong>female ${getLabel(vis.attribute, d.col)} </strong></div>
-        <div>match <strong>${d3.format('.0%')(d.value)}</strong> of the time.</div>
+        <div>match <strong>${d3.format('.0%')(d.probability)}</strong> of the time.</div>
+        <div>(${d.match} matches of ${d.pair} pairings)</div>
     `}
   }
 }

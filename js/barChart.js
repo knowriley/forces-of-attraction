@@ -64,6 +64,13 @@ class BarChart {
       .attr('y', 0)
       .attr('dy', '.80em')
       .text(`Prob. of ${vis.selectedGender} ${vis.selectedLabel} matching with another person`);
+
+    // Append no data label
+    vis.noDataLabel = vis.chartArea.append('text')
+      .attr('class', 'no-data-label')
+      .attr('x', -60)
+      .attr('y', vis.height/2)
+      .text('');
   }
 
   updateVis() {
@@ -72,29 +79,41 @@ class BarChart {
     vis.barData = [];
     if (vis.attribute === 'age') {
       for (let i = 18; i <= 45; i += 1) {
-        vis.barData.push({
-          row: i - 17,
-          rowLabel: getLabel(vis.attribute, i),
-          value: vis.data[getCode(vis.attribute, vis.selectedLabel)][i],
-        });
+        if (vis.data[getCode(vis.attribute, vis.selectedLabel)][i].pair > 0) {
+          vis.barData.push({
+            row: i - 17,
+            rowLabel: getLabel(vis.attribute, i),
+            value: vis.data[getCode(vis.attribute, vis.selectedLabel)][i].probability,
+            match: vis.data[getCode(vis.attribute, vis.selectedLabel)][i].match,
+            pair: vis.data[getCode(vis.attribute, vis.selectedLabel)][i].pair
+          });
+        }
       }
     } else {
       for (let i = 1; i < vis.data.length; i += 1) {
-        vis.barData.push({
-          row: i,
-          rowLabel: getLabel(vis.attribute, i),
-          value: vis.data[getCode(vis.attribute, vis.selectedLabel)][i],
-        });
+        if (vis.data[getCode(vis.attribute, vis.selectedLabel)][i].pair > 0) {
+          vis.barData.push({
+            row: i,
+            rowLabel: getLabel(vis.attribute, i),
+            value: vis.data[getCode(vis.attribute, vis.selectedLabel)][i].probability,
+            match: vis.data[getCode(vis.attribute, vis.selectedLabel)][i].match,
+            pair: vis.data[getCode(vis.attribute, vis.selectedLabel)][i].pair
+          });
+        }
       }
     }
 
     // Add bar for any match probability
-    vis.barData.push({
-      row: vis.barData.length,
-      rowLabel: 'Total',
-      value: vis.data[getCode(vis.attribute, vis.selectedLabel)][vis.data.length] === 0
-        ? 0 : (1 - vis.data[getCode(vis.attribute, vis.selectedLabel)][vis.data.length]),
-    });
+    if (vis.data[getCode(vis.attribute, vis.selectedLabel)][vis.data.length].pair > 0) {
+      vis.barData.push({
+        row: vis.barData.length,
+        rowLabel: 'Total',
+        value: vis.data[getCode(vis.attribute, vis.selectedLabel)][vis.data.length].probability === 0
+          ? 0 : vis.data[getCode(vis.attribute, vis.selectedLabel)][vis.data.length].probability,
+        match: vis.data[getCode(vis.attribute, vis.selectedLabel)][vis.data.length].match,
+        pair: vis.data[getCode(vis.attribute, vis.selectedLabel)][vis.data.length].pair
+      });
+    }
 
     vis.xValue = (d) => d.value;
     vis.yValue = (d) => d.rowLabel;
@@ -110,12 +129,25 @@ class BarChart {
 
     vis.bars = vis.chart.selectAll('.bar')
       .data(vis.barData, vis.yValue)
-      .join('rect')
-      .attr('class', 'bar')
-      .attr('y', (d) => vis.yScale(vis.yValue(d)))
-      .attr('width', (d) => vis.xScale(vis.xValue(d)))
-      .attr('height', vis.yScale.bandwidth())
-      .attr('fill', 'green')
+      .join(
+        enter => enter.append('rect')
+          .transition().duration(500)
+          .attr('class', 'bar')
+          .attr('y', (d) => vis.yScale(vis.yValue(d)))
+          .attr('width', (d) => vis.xScale(vis.xValue(d)))
+          .attr('height', vis.yScale.bandwidth())
+          .attr('fill', 'green')
+          .selection(),
+        update => update
+          .transition().duration(500)
+          .attr('y', (d) => vis.yScale(vis.yValue(d)))
+          .attr('width', (d) => vis.xScale(vis.xValue(d)))
+          .attr('height', vis.yScale.bandwidth())
+          .selection(),
+        exit => exit.remove()
+      );
+
+    vis.bars
       .on('mouseover', (e, d) => {
         d3.select('#tooltip')
           .style('display', 'block')
@@ -126,8 +158,6 @@ class BarChart {
         d3.select('#tooltip').style('display', 'none');
       });
 
-      vis.bars.transition().duration(1000);
-
     vis.xAxisG.call(vis.xAxis);
     vis.yAxisG.call(vis.yAxis)
       .selectAll('text')
@@ -136,6 +166,11 @@ class BarChart {
       .style('text-anchor', 'end');
 
     vis.axisTitle.text(`Prob. of ${vis.selectedGender} ${vis.selectedLabel} matching with another person`); // https://stackoverflow.com/a/36707865
+    if (vis.barData.length == 0) {
+      vis.noDataLabel.text('Sorry! No data is available for this selection');
+    } else {
+      vis.noDataLabel.text('');
+    }
   }
 
   chooseAlternateMatchType(d) {
@@ -151,11 +186,11 @@ class BarChart {
   generateHtml(d) {
     let vis = this;
     if (vis.attribute === 'field_cd') {
-      return `<div> A <strong>${vis.selectedGender} ${vis.selectedLabel} student </strong>has a <strong>${d3.format('.0%')(d.value)}</strong> chance of matching with <strong>${vis.chooseAlternateMatchType(d)} student</strong></div>`;
+      return `<div> A <strong>${vis.selectedGender} ${vis.selectedLabel} student </strong>has a <strong>${d3.format('.2%')(d.value)}</strong> chance of matching with <strong>${vis.chooseAlternateMatchType(d)} student</strong> (${d.match} matches of ${d.pair} pairings) </div>`;
     } else if (vis.attribute === 'age'){
-      return `<div> A <strong>${vis.selectedGender} ${vis.selectedLabel} year old </strong> has a <strong>${d3.format('.0%')(d.value)}</strong> chance of matching with <strong>${vis.chooseAlternateMatchType(d)} year old</strong></div>`;
+      return `<div> A <strong>${vis.selectedGender} ${vis.selectedLabel} year old </strong> has a <strong>${d3.format('.2%')(d.value)}</strong> chance of matching with <strong>${vis.chooseAlternateMatchType(d)} year old</strong> (${d.match} matches of ${d.pair} pairings) </div>`;
     } else {
-      return `<div> A <strong>${vis.selectedGender} ${vis.selectedLabel}</strong> has a <strong>${d3.format('.0%')(d.value)}</strong> chance of matching with <strong>${vis.chooseAlternateMatchType(d)}</strong></div>`;
+      return `<div> A <strong>${vis.selectedGender} ${vis.selectedLabel}</strong> has a <strong>${d3.format('.2%')(d.value)}</strong> chance of matching with <strong>${vis.chooseAlternateMatchType(d)}</strong> (${d.match} matches of ${d.pair} pairings) </div>`;
     }
   }
 }
