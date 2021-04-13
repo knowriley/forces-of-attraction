@@ -59,7 +59,7 @@ class LineChart {
         vis.slider = d3.sliderBottom()
             .min(1)
             .max(21)
-            .width(vis.config.width - 10)
+            .width(vis.config.width - 38)
             .ticks(21)
             .step(1)
             .default(1)
@@ -117,13 +117,13 @@ class LineChart {
         const vis = this;
 
         // points
-        vis.points = vis.chart.selectAll('.point')
-                .data(vis.processedData)
-            .join('circle')
-                .attr('r', 2)
-                .attr('fill', 'red')
-                .attr('cx', (d) => vis.xScale(vis.xValue(d)))
-                .attr('cy', (d) => vis.yScale(vis.yValue(d)));
+        // vis.points = vis.chart.selectAll('.point')
+        //         .data(vis.processedData)
+        //     .join('circle')
+        //         .attr('r', 2)
+        //         .attr('fill', 'red')
+        //         .attr('cx', (d) => vis.xScale(vis.xValue(d)))
+        //         .attr('cy', (d) => vis.yScale(vis.yValue(d)));
         
         // line
         vis.line = vis.chart.selectAll('.chart-line')
