@@ -56,10 +56,9 @@ d3.csv('data/speedDating.csv').then((data) => {
   forceDirectedGraph = new ForceDirectedGraph({ parentElement: '#forceDirected' }, getGraphData(data), 'career_c');
   matrix = new Matrix({ parentElement: '#matrix', dispatch }, matrixData, DEFAULT_ATTRIBUTE, getDefaultLabel(DEFAULT_ATTRIBUTE), getDefautGender());
   legend = new Legend('#legend', forceDirectedGraph.colorDomain, forceDirectedGraph.colorScale);
-  //lineChart = new LineChart({ parentElement: '#line'}, [1, 2, 3]);
 
   // Set up a routine to call any required functions when document state changes
-  const update = () => {
+  this.update = () => {
     updateSize();
     barChart.updateVis();
     forceDirectedGraph.updateVis();
@@ -106,14 +105,6 @@ d3.csv('data/speedDating.csv').then((data) => {
     update();
   };
 
-  
-  document.getElementById('waveSlider').onchange = (_) => {
-    const wave = parseInt(document.getElementById('waveSlider').value, 10);
-    forceDirectedGraph.setWave(wave);
-    lineChart.setWave(wave);
-    update();
-  };
-
   // Event handler for matrix label click
   dispatch.on('matrixLabelClick', (selected, gender) => {
     if (gender === 'male') {
@@ -148,6 +139,13 @@ d3.csv('data/speedDating.csv').then((data) => {
   // Set up updates for any change to viewbox dimensions
   d3.select(window).on('resize', update);
 });
+
+// helper func to handle slider updates
+const waveChangeUpdate = (wave) => {
+  forceDirectedGraph.setWave(wave);
+  lineChart.setWave(wave);
+  this.update();
+};
 
 /**
   * Data pre-processing for adjacency matrix

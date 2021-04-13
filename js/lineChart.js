@@ -65,6 +65,7 @@ class LineChart {
             .default(1)
             .on('onchange', val => {
               d3.select('p#waveValue').text(val);
+              waveChangeUpdate(val);
             });
         
           vis.sliderGroup = d3.select('#waveSlider')
@@ -115,15 +116,6 @@ class LineChart {
 
     renderVis() {
         const vis = this;
-
-        // points
-        // vis.points = vis.chart.selectAll('.point')
-        //         .data(vis.processedData)
-        //     .join('circle')
-        //         .attr('r', 2)
-        //         .attr('fill', 'red')
-        //         .attr('cx', (d) => vis.xScale(vis.xValue(d)))
-        //         .attr('cy', (d) => vis.yScale(vis.yValue(d)));
         
         // line
         vis.line = vis.chart.selectAll('.chart-line')
