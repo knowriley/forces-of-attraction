@@ -11,7 +11,13 @@ Please see the [issues page](https://github.students.cs.ubc.ca/cpsc436v-2020w-t2
 - Learned how to update the force-simulation from [Modifying a Force-Directed Graph](https://observablehq.com/@d3/modifying-a-force-directed-graph) by Mike Bostock.
 - Learned how to make nodes draggable in [this notebook](https://observablehq.com/@d3/force-directed-graph).
 - Used [this case study](https://github.com/UBC-InfoVis/2021-436V-case-studies/blob/097d13b05d587f4fab3e3fcd23f5e99274397c2c/case-study_measles-and-vaccines/css/style.css) for tooltip style and techniques.
+- Learned how to make and include slider from [d3-simple-slider](https://bl.ocks.org/johnwalley/e1d256b81e51da68f7feb632a53c3518).
 ### Matrix
 - Used [this case study](https://github.com/UBC-InfoVis/2021-436V-case-studies/blob/097d13b05d587f4fab3e3fcd23f5e99274397c2c/case-study_measles-and-vaccines/css/style.css) for tooltip style and techniques.
 - https://bl.ocks.org/mbostock/4403522
 - https://stackoverflow.com/a/32658330
+
+### Line Chart
+- Used these references as guides to create linechart and its area component
+    - line: https://github.com/UBC-InfoVis/2021-436V-examples/tree/master/d3-annotated-line-chart
+    - area: https://bl.ocks.org/d3noob/119a138ef9bd1d8f0a8d57ea72355252

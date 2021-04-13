@@ -3,8 +3,20 @@ html {
     height: 100%;
 }
 
+.area-path {
+    fill:rgb(172, 172, 172);
+    opacity: 50%;
+}
+
 body {
     height: 200%;
+}
+
+.chart-line {
+    fill: none;
+    opacity: 80%;
+    stroke: rgb(75, 75, 75);
+    stroke-width: 2px;
 }
 
 #content {
@@ -92,10 +104,6 @@ body {
     pointer-events: none;
 }
 
-#waveInput {
-    width: 100%;
-}
-
 #groupSelect {
     text-align: center;
 }
@@ -107,3 +115,21 @@ h1 {
 h2 {
     text-align: center;
 }
+
+/* TODO: Either remove or use for styling*/
+/* .track, .track-insert, .track-overlay {
+    stroke-linecap:square;
+}
+
+.track, .track-insert {
+    stroke-width: 2px;
+    stroke: black;
+}
+
+.track-overlay {
+    stroke-width: 2px;
+}
+
+.parameter-value path {
+    transform: rotate(180);
+} */
