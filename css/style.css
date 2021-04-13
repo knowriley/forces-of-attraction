@@ -86,7 +86,7 @@ body {
 
 #legend {
     height: 100%;
-    padding: 20px;
+    padding: 0px 20px;
 }
 
 /* Tooltip: https://github.com/UBC-InfoVis/2021-436V-case-studies/blob/097d13b05d587f4fab3e3fcd23f5e99274397c2c/case-study_measles-and-vaccines/css/style.css */
