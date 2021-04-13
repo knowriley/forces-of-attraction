@@ -153,24 +153,22 @@ class Matrix {
 
     const cellWidth = vis.config.width / vis.xScale.domain().length;
     const cellHeight = vis.config.height / vis.yScale.domain().length;
-    const maxRadius = Math.min(cellWidth, cellHeight)/2;
-    vis.maxRadius = maxRadius;
-    vis.minRadius = 0.4*maxRadius;
 
     const cell = vis.chart.selectAll('.cell')
       .data(vis.cellData);
 
     // Enter
-    const cellEnter = cell.enter().append('circle');
+    const cellEnter = cell.enter().append('rect');
 
     // Enter + update
     cellEnter.merge(cell)
       .transition().duration(500)
       .attr('class', 'cell')
-      .attr('cx', (d) => cellWidth/2 + (d.col - 1) * cellWidth) // -1 because code are 1-indexed
-      .attr('cy', (d) => cellHeight/2 + (d.row - 1) * cellHeight)
-      .attr('r', (d) => vis.radiusScale(d, maxRadius))
-      .attr('stroke', 'white')
+      .attr('x', (d) => (d.col - 1) * cellWidth) // -1 because code are 1-indexed
+      .attr('y', (d) => (d.row - 1) * cellHeight)
+      .attr('width', cellWidth)
+      .attr('height', cellHeight)
+      .attr('stroke', (d) => d.pair <= 0 ? 'none' : 'white')
       .attr('fill', (d) => {
         if (d.col === 0 || d.row === 0) {
           return 'none';
@@ -267,17 +265,6 @@ class Matrix {
     } else {
       return `${gender} ${label}`
     }
-  }
-
-  radiusScale(d) { //https://bl.ocks.org/guilhermesimoes/e6356aa90a16163a6f917f53600a2b4a
-    let vis = this;
-    let maxValue = Math.sqrt(d3.max(vis.cellData, d => d.pair));
-
-    let circleScale = d3.scaleLinear()
-      .domain([0, maxValue])
-      .range([vis.minRadius, vis.maxRadius]);
-
-    return circleScale(Math.sqrt(d.pair));
   }
 
   generateHtml(d) {

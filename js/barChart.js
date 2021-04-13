@@ -110,12 +110,25 @@ class BarChart {
 
     vis.bars = vis.chart.selectAll('.bar')
       .data(vis.barData, vis.yValue)
-      .join('rect')
-      .attr('class', 'bar')
-      .attr('y', (d) => vis.yScale(vis.yValue(d)))
-      .attr('width', (d) => vis.xScale(vis.xValue(d)))
-      .attr('height', vis.yScale.bandwidth())
-      .attr('fill', 'green')
+      .join(
+        enter => enter.append('rect')
+          .transition().duration(500)
+          .attr('class', 'bar')
+          .attr('y', (d) => vis.yScale(vis.yValue(d)))
+          .attr('width', (d) => vis.xScale(vis.xValue(d)))
+          .attr('height', vis.yScale.bandwidth())
+          .attr('fill', 'green')
+          .selection(),
+        update => update
+          .transition().duration(500)
+          .attr('y', (d) => vis.yScale(vis.yValue(d)))
+          .attr('width', (d) => vis.xScale(vis.xValue(d)))
+          .attr('height', vis.yScale.bandwidth())
+          .selection(),
+        exit => exit.remove()
+      );
+
+    vis.bars
       .on('mouseover', (e, d) => {
         d3.select('#tooltip')
           .style('display', 'block')
@@ -125,8 +138,6 @@ class BarChart {
       }).on('mouseout', (_, __) => {
         d3.select('#tooltip').style('display', 'none');
       });
-
-    vis.bars.transition().duration(1000);
 
     vis.xAxisG.call(vis.xAxis);
     vis.yAxisG.call(vis.yAxis)
