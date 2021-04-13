@@ -32,7 +32,7 @@ d3.csv('data/speedDating.csv').then((data) => {
 
   // construct view-specific datasets
   let matrixData = getMatrixData(maleData, maleMatchData, demographicData, DEFAULT_ATTRIBUTE);
-  let barChartData = getMatchingProbabilityBars(maleData, maleMatchData, demographicData, DEFAULT_ATTRIBUTE);
+  let barChartData = getBarChartData(maleData, maleMatchData, demographicData, DEFAULT_ATTRIBUTE);
 
   // DOCUMENT PHASE
 
@@ -82,7 +82,7 @@ d3.csv('data/speedDating.csv').then((data) => {
     matrix.highlightedMaleLabel = NONE;
     matrix.highlightedFemaleLabel = NONE;
 
-    barChartData = getMatchingProbabilityBars(maleData, maleMatchData, demographicData, attribute);
+    barChartData = getBarChartData(maleData, maleMatchData, demographicData, attribute);
     barChart.data = barChartData;
     barChart.attribute = attribute;
     barChart.selectedLabel = getDefaultLabel(attribute);
@@ -114,10 +114,10 @@ d3.csv('data/speedDating.csv').then((data) => {
   // Event handler for matrix label click
   dispatch.on('matrixLabelClick', (selected, gender) => {
     if (gender === 'male') {
-      barChartData = getMatchingProbabilityBars(maleData,
+      barChartData = getBarChartData(maleData,
         maleMatchData, demographicData, matrix.attribute);
     } else {
-      barChartData = getMatchingProbabilityBars(femaleData,
+      barChartData = getBarChartData(femaleData,
         femaleMatchData, demographicData, matrix.attribute);
     }
 
@@ -195,7 +195,7 @@ const getMatrixData = (data, matchData, demographicData, attribute) => {
   * Data pre-processing for bar chart
   * The gender used for @param matchData and @param data will the result AND they MUST match,
   */
-const getMatchingProbabilityBars = (data, matchData, demographicData, attribute) => {
+const getBarChartData = (data, matchData, demographicData, attribute) => {
   const limit = getAttributeSize(attribute);
   const total = new Array(limit); // total no of pairing for each value of an attribute for a gender
   const totalMatches = new Array(limit); // total number of matches for each value of an attribute;
@@ -203,16 +203,21 @@ const getMatchingProbabilityBars = (data, matchData, demographicData, attribute)
   totalMatches.fill(0);
 
   const matchCount = new Array(limit);
-  const probability = new Array(limit);
+  const pairCount = new Array(limit);
+  const barChartData = new Array(limit);
 
   for (let i = 0; i < limit; i += 1) {
     matchCount[i] = new Array(limit);
     matchCount[i].fill(0);
-    probability[i] = new Array(limit + 1);
-    probability[i].fill(0);
+    pairCount[i] = new Array(limit);
+    pairCount[i].fill(0);
+    barChartData[i] = new Array(limit + 1);
   }
 
   data.forEach((d) => {
+    if (d.pid) {
+      pairCount[d[attribute]][demographicData.get(d.pid)[attribute]] += 1;
+    }
     total[d[attribute]] += 1;
   });
 
@@ -225,14 +230,22 @@ const getMatchingProbabilityBars = (data, matchData, demographicData, attribute)
 
   for (let i = 0; i < limit; i += 1) {
     for (let j = 0; j < limit; j += 1) {
-      probability[i][j] = total[i] === 0 ? 0 : matchCount[i][j] / total[i];
+      barChartData[i][j] = {
+        probability : total[i] === 0 ? 0 : matchCount[i][j] / total[i],
+        match: matchCount[i][j],
+        pair: pairCount[i][j]
+      };
     }
-    // last column indicates probability of not getting any match
-    probability[i][limit] = total[i] === 0
-      ? 0 : (total[i] - totalMatches[i]) / total[i];
+
+    // last column indicates probability of getting any match
+    barChartData[i][limit] = {
+      probability: total[i] === 0 ? 0 :  totalMatches[i] / total[i],
+      match: totalMatches[i],
+      pair: total[i]
+    };
   }
 
-  return probability;
+  return barChartData;
 };
 
 /*
