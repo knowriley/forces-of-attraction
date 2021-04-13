@@ -47,37 +47,37 @@ const fieldCodeToFieldGroupMapping = [ // 7 unique groups
 
 const careerGroups = [
   '',
-  'Academia',
-  'Arts',
-  'Business',
-  'Engineering',
+  'Academic Scholar',
+  'Artist',
+  'Business Person',
+  'Engineer',
   'Other',
-  'Law',
-  'Medicine',
-  'Science',
-  'Sports'
+  'Lawyer/ Politician',
+  'Medical Doctor',
+  'Scientist',
+  'Athlete'
 ];
 
 // eslint-disable-next-line no-unused-vars
 const careerCodeToCareerGroupMapping = [ // 9 unique groups
   null,
-  'Law', // Lawyer
-  'Academia', // Academic/ Research
-  'Science', // Psychologist
-  'Medicine', // Doctor/Medicine
-  'Engineering', // Engineer
-  'Arts', // Creative Arts/Entertainment
-  'Business', // Banking/Consulting/Finance/Marketing/Business/CEO/Entrepreneur/Admin
-  'Business', // Real Estate
-  'Law', // International/Humanitarian Affairs
+  'Lawyer/ Politician', // Lawyer
+  'Academic Scholar', // Academic/ Research
+  'Scientist', // Psychologist
+  'Medical Doctor', // Doctor/Medicine
+  'Engineer', // Engineer
+  'Creative Professional', // Creative Arts/Entertainment
+  'Business Person', // Banking/Consulting/Finance/Marketing/Business/CEO/Entrepreneur/Admin
+  'Business Person', // Real Estate
+  'Lawyer/ Politician', // International/Humanitarian Affairs
   'Other', // Undecided
-  'Arts', // Social Work
-  'Science', // Speech Pathology
-  'Law', // Politics
-  'Sports', // Pro sports/Athletics
+  'Creative Professional', // Social Work
+  'Scientist', // Speech Pathology
+  'Lawyer/ Politician', // Politics
+  'Athlete', // Pro sports/Athletics
   'Other', // Other
-  'Arts', // Journalism
-  'Engineering', // Architecture
+  'Creative Professional', // Journalism
+  'Engineer', // Architecture
 ];
 
 // eslint-disable-next-line no-unused-vars
@@ -128,10 +128,10 @@ const fieldCodeToFieldMapping = [
 // eslint-disable-next-line no-unused-vars
 const raceCodeToRaceMapping = [
   '',
-  'Black/African American',
-  'European/Caucasian-American',
-  'Latino/Hispanic American',
-  'Asian/Pacific Islander/Asian-American',
+  'Black/African',
+  'European/Caucasian',
+  'Latino/Hispanic',
+  'Asian/Pacific Islander',
   'Other',
 ];
 
