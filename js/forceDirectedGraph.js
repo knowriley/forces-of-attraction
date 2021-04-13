@@ -115,6 +115,7 @@ class ForceDirectedGraph extends View {
     const nodes = vis.getChart().selectAll('circle')
       .data(nodesData, (d) => d.id)
       .join('circle')
+      .attr('class', 'node')
       .attr('r', 4)
       .attr('fill', (d) => vis.colorScale(decode(vis.attribute)(d)))
       .attr('stroke', 'black')
@@ -132,8 +133,8 @@ class ForceDirectedGraph extends View {
       .on('mouseover', (e, d) => {
         d3.select('#tooltip')
           .style('display', 'block')
-          .style('left', `${e.pageX}px`)
-          .style('top', `${e.pageY}px`)
+          .style('left', `${e.pageX+10}px`)
+          .style('top', `${e.pageY+10}px`)
           .html(`
                 <h1>Participant ${decode('id')(d)}</h1>
                 <p>Gender: ${decode('gender')(d)}<p>
@@ -154,9 +155,11 @@ class ForceDirectedGraph extends View {
     const links = vis.chart.selectAll('line')
       .data(matchLinks, (d) => [d.source, d.target])
       .join('line')
+      .attr('class', 'edge')
       .attr('opacity', 0.7)
       .attr('stroke', 'black')
-      .attr('stroke-width', 0.1);
+      .attr('stroke-width', 0.1)
+      .lower(); //https://stackoverflow.com/a/47877220
 
     vis.graph.on('tick', () => {
       nodes
