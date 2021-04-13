@@ -5,7 +5,7 @@ const NODE_LIKE_DISTANCE_FACTOR = 50;
 const NODE_MATCH_DISTANCE_FACTOR = 10;
 
 // Default attraction attribute key
-const DEFAULT_DISTANCE = 'like';
+const DEFAULT_DISTANCE = 'match';
 
 /*
     A force-directed simulation view representing unique participants
