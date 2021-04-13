@@ -1,8 +1,8 @@
 /**
  * Global Constants
  */
-const NUM_OF_FIELDS = 19;
-const NUM_OF_CAREERS = 18;
+const NUM_OF_FIELDS = 8;
+const NUM_OF_CAREERS = 10;
 const NUM_OF_RACES = 6; // MAX_RACES (5) + 1
 const NUM_OF_AGES = 56; // MAX_AGE (55) + 1
 const NONE = 'none';
@@ -11,6 +11,16 @@ const NONE = 'none';
  * Attribute group mapping
  * the index of the array correspond to the coded value, which map to a group
  */
+const fieldGroups = [
+  '',
+  'Arts',
+  'Business',
+  'Education',
+  'Engineering',
+  'Other',
+  'Law',
+  'Science',
+]
 
 // eslint-disable-next-line no-unused-vars
 const fieldCodeToFieldGroupMapping = [ // 7 unique groups
@@ -35,11 +45,24 @@ const fieldCodeToFieldGroupMapping = [ // 7 unique groups
   'Other', // Other
 ];
 
+const careerGroups = [
+  '',
+  'Academia',
+  'Arts',
+  'Business',
+  'Engineering',
+  'Other',
+  'Law',
+  'Medicine',
+  'Science',
+  'Sports'
+];
+
 // eslint-disable-next-line no-unused-vars
-const careerCodeToCareerGroupMapping = [ // 8 unique groups
+const careerCodeToCareerGroupMapping = [ // 9 unique groups
   null,
   'Law', // Lawyer
-  'Arts', // Academic/ Research
+  'Academia', // Academic/ Research
   'Science', // Psychologist
   'Medicine', // Doctor/Medicine
   'Engineering', // Engineer
@@ -152,9 +175,9 @@ const decode = (attr) => (d) => {
     case 'gender':
       return v ? 'Male' : 'Female';
     case 'field_cd':
-      return v ? fieldCodeToFieldGroupMapping[v] : defaultNA;
+      return v ? fieldGroups[v] : defaultNA;
     case 'career_c':
-      return v ? careerCodeToCareerGroupMapping[v] : defaultNA;
+      return v ? careerGroups[v] : defaultNA;
     case 'race':
       return v ? raceCodeToRaceMapping[v] : defaultNA;
     case 'age' :
@@ -187,8 +210,8 @@ const unique = (data, acc) => new Set(d3.map(data, acc));
 // eslint-disable-next-line no-unused-vars
 const getLabel = (attribute, code) => {
   switch (attribute) {
-    case 'career_c': return careerCodeToCareerMapping[code];
-    case 'field_cd': return fieldCodeToFieldMapping[code];
+    case 'career_c': return careerGroups[code];
+    case 'field_cd': return fieldGroups[code];
     case 'race': return raceCodeToRaceMapping[code];
     case 'age': return code;
     default: return '';
@@ -198,8 +221,8 @@ const getLabel = (attribute, code) => {
 // eslint-disable-next-line no-unused-vars
 const getDefaultLabel = (attribute) => {
   switch (attribute) {
-    case 'career_c': return careerCodeToCareerMapping[1];
-    case 'field_cd': return fieldCodeToFieldMapping[1];
+    case 'career_c': return careerGroups[1];
+    case 'field_cd': return fieldGroups[1];
     case 'race': return raceCodeToRaceMapping[1];
     case 'age': return '20';
     default: return '';
@@ -213,11 +236,24 @@ const getDefautGender = () => {
 // eslint-disable-next-line no-unused-vars
 const getCode = (attribute, label) => {
   switch (attribute) {
-    case 'career_c': return careerCodeToCareerMapping.indexOf(label);
-    case 'field_cd': return fieldCodeToFieldMapping.indexOf(label);
+    case 'career_c': return careerGroups.indexOf(label);
+    case 'field_cd': return fieldGroups.indexOf(label);
     case 'race': return raceCodeToRaceMapping.indexOf(label);
     case 'age': return label;
     default: return '';
+  }
+};
+
+const getGroupIndexFromCode = (attribute, code) => {
+  let index = 0;
+  switch (attribute) {
+    case 'career_c':
+      index = careerGroups.indexOf(careerCodeToCareerGroupMapping[code])
+      return index != -1 ? index : 0;
+    case 'field_cd':
+      index = fieldGroups.indexOf(fieldCodeToFieldGroupMapping[code]);
+      return index != -1 ? index : 0;
+    default: return code;
   }
 };
 
