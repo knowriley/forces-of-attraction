@@ -8,6 +8,7 @@ class Legend extends View {
     super({ parentElement: parent }, [], '');
     this.colorDomain = colorDomain;
     this.colorScale = colorScale;
+    this.config.containerHeight = 100;
   }
 
   set(colorDomain, colorScale) {

@@ -3,10 +3,10 @@ class BarChart {
   constructor(_config, _data, _attribute, _selectedLabel, _selectedGender) {
     this.config = {
       parentElement: _config.parentElement,
-      containerWidth: 500,
-      containerHeight: 440,
+      containerWidth: 600,
+      containerHeight: 300,
       margin: {
-        top: 90, right: 20, bottom: 20, left: 160,
+        top: 20, right: 160, bottom: 20, left: 160,
       },
       // TODO: Margin is super large to accomodate super large labels
     };

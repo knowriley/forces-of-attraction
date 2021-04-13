@@ -39,14 +39,6 @@ d3.csv('data/speedDating.csv').then((data) => {
   // Query the container that holds all visualization elements
   const container = document.getElementById('vis-container');
 
-  // Set up updates to element class based on dimensions
-  const updateSize = () => {
-    const height = container.clientHeight;
-    const width = container.clientWidth;
-    d3.select(`#${container.id}`)
-      .attr('class', width > height ? 'landscape' : 'portrait');
-  };
-
   // Events are triggered and handled using D3-dispatch
   const dispatch = d3.dispatch('matrixLabelClick', 'matrixCellClick');
 
@@ -59,7 +51,6 @@ d3.csv('data/speedDating.csv').then((data) => {
 
   // Set up a routine to call any required functions when document state changes
   this.update = () => {
-    updateSize();
     barChart.updateVis();
     forceDirectedGraph.updateVis();
     lineChart.updateVis();

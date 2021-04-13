@@ -1,15 +1,10 @@
 html {
     font-family: 'Courier New', Courier, monospace;
-    height: 100%;
 }
 
 .area-path {
     fill:rgb(172, 172, 172);
     opacity: 50%;
-}
-
-body {
-    height: 200%;
 }
 
 .chart-line {
@@ -20,49 +15,42 @@ body {
 }
 
 #content {
-    height: 98%;
-    max-width: 1600px;
-    margin-left: 5px;
-    margin-right: 5px;
-    display: flex;
-    flex-direction: column;
+    max-width: 1280px;
 }
 
 #vis-container {
-    height: 100%;
+    width: 1280px;
+}
+
+#wave-container {
+    width: 600px;
+    margin: 0px 20px;
+}
+
+#summary-container {
+    width: 600px;
+    margin: 0px 20px;
+}
+
+.col {
     display: flex;
     flex-direction: column;
+    margin: auto;
 }
 
-#color {
-    height: 10%;
-}
-
-#visA {
-    width: 100%;
-    height: 40%;
-}
-
-#visB {
-    width: 100%;
-    height: 50%;
-}
-
-#bCharts {
+.row {
     display: flex;
     flex-direction: row;
-}
-
-.chart {
-    height: 100%;
-}
-
-#visA {
-    padding: 10px;
+    justify-content: space-evenly;
+    margin: auto;
 }
 
 .tick line, .domain {
     display: none;
+}
+
+#attractByAttributeSelector {
+    display: inline;
 }
 
 #matrix {

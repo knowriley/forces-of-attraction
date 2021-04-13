@@ -8,21 +8,21 @@
 </head>
 
 <body>
-    <div id="content">
+    <div id="content" class='col'>
         <div id="top">
             <h1>Forces of Attraction</h1>
-            This one goes out to the data-curious and the hopeless romantics. Our site visualizes a set of more than 
+            <p>This one goes out to the data-curious and the hopeless romantics. Our site visualizes a set of more than 
             8000 pairings in experimental speed-dating 
             events by Columbia Business School professors Ray Fisman and Sheena Iyengar for their paper 
             "Gender Differences in Mate Selection: Evidence From a Speed Dating Experiment" 
             (https://www.kaggle.com/annavictoria/speed-dating-experiment). The dating takes place
             over multiple "waves", and participants get paired up with an array of partners from
-            a wide variety of backgrounds. We hope you enjoy exploring this data!
+            a wide variety of backgrounds. We hope you enjoy exploring this data!</p>
         </div>
-        <div id="vis-container">
-            <div id="visA">
+        <div id="vis-container" class='row'>
+            <div id="wave-container" class='col'>
                 <h2>Wave-by-Wave</h2>
-                Each circle is a participant in the study. Colors correspond to
+                <p>Each circle is a participant in the study. Colors correspond to
                 the selection above. The distance
                 between any pair of participants is inversely proportional
                 to
@@ -35,33 +35,32 @@
                 (i.e. attract each other in the study) and using the slider to view all waves of the experiment. <br>
                 <div id="waveVis">
                     <br>
-                    <div><strong>Wave:</strong> <p id="waveValue"></p></div>
+                    <div><strong>Wave:</strong> <span id="waveValue"></span></div>
                     <div id="line" class="chart"></div>
                     <div id="waveSlider"></div>  
                 </div>
                 <div id="forceDirected" class="chart"></div>
-            </div>
-            <div id="color">
-                <div id="groupSelect">
-                    Group by:
-                <select id="colorByAttributeSelector">
-                    <option value="career_c">Career</option>
-                    <option value="field_cd">Field of Study</option>
-                    <option value="race">Race</option>
-                    <option value="age">Age</option>
-                </select>
+                <div id="color">
+                    <div id="groupSelect">
+                        Group by:
+                    <select id="colorByAttributeSelector">
+                        <option value="career_c">Career</option>
+                        <option value="field_cd">Field of Study</option>
+                        <option value="race">Race</option>
+                        <option value="age">Age</option>
+                    </select>
+                    </div>
+                    <h4>Legend:</h4>
+                    <div id="legend"></div>
                 </div>
-                <h4>Legend:</h4>
-                <div id="legend"></div>
             </div>
-            <div id="visB">
+            <div id="summary-container" class='col'>
                 <h2>Summary</h2>
-                Here we see statistics over all of the waves, divided by group. You can use the same drop-down above
-                to select the grouping type. Click away! You may find a secret hidden in one of the groups. <br> <br>
-                <div id="bCharts">
-                    <div id="matrix" class="chart"></div>
-                    <div id="bar" class="chart"></div>
-                </div>
+                <p>Here we see statistics over all of the waves, divided by group. You can use the same drop-down above
+                to select the grouping type. Click away! You may find a secret hidden in one of the groups.</p>
+                <div id="matrix" class="chart"></div>
+                <p>Click on the labels above to see detailed probabilites for each group below.</p>
+                <div id="bar" class="chart"></div>
             </div>
         </div>
     </div>
