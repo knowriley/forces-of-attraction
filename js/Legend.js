@@ -1,5 +1,6 @@
 const ITEM_WIDTH = 150;
-const RADIUS = 8;
+const CHARACTER_WIDTH = 11;
+const RADIUS = 4;
 
 // eslint-disable-next-line no-unused-vars
 class Legend extends View {
@@ -27,6 +28,8 @@ class Legend extends View {
   updateVis() {
     super.updateVis();
     const vis = this;
+    vis.itemWidth = d3.max(vis.getData(), item => item ? item.toString().length : 0) * CHARACTER_WIDTH + 2*CHARACTER_WIDTH;
+
     vis.renderVis();
   }
 
@@ -41,10 +44,11 @@ class Legend extends View {
       .attr('transform', (d) => vis.positionLegendItem(vis.getData().indexOf(d), 3));
     vis.items.append('circle')
       .attr('r', RADIUS)
-      .attr('fill', (d) => vis.colorScale(d));
+      .attr('fill', (d) => vis.colorScale(d))
+      .attr('stroke', 'black');
     vis.items.append('text')
       .text((d) => d)
-      .attr('transform', `translate(${RADIUS + 5}, 0)`);
+      .attr('transform', `translate(${RADIUS + 6}, 4)`);
   }
 
   // Algorithm to compute position of a legend item dynamically. We enforce
@@ -54,9 +58,6 @@ class Legend extends View {
     const itemHeight = (vis.getHeight() / n) * 0.7;
     let y = i % n;
     const x = (i - y) / n;
-    if (x % 2 === 1) {
-      y += 0.5; // stagger
-    }
-    return `translate(${x * ITEM_WIDTH}, ${y * itemHeight})`;
+    return `translate(${x * vis.itemWidth}, ${y * itemHeight})`;
   }
 }
