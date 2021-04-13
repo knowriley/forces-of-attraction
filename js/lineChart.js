@@ -3,7 +3,7 @@ class LineChart {
     constructor(_config, _data) {
         this.config = {
             parentElement: _config.parentElement,
-            containerWidth: 1000,
+            containerWidth: 800,
             containerHeight: 50,
             margin: {
               top: 5, right: 10, bottom: 5, left: 10,
@@ -120,10 +120,10 @@ class LineChart {
         vis.points = vis.chart.selectAll('.point')
                 .data(vis.processedData)
             .join('circle')
-            .attr('r', 2)
-            .attr('fill', 'red')
-            .attr('cx', (d) => vis.xScale(vis.xValue(d)))
-            .attr('cy', (d) => vis.yScale(vis.yValue(d)));
+                .attr('r', 2)
+                .attr('fill', 'red')
+                .attr('cx', (d) => vis.xScale(vis.xValue(d)))
+                .attr('cy', (d) => vis.yScale(vis.yValue(d)));
         
         // line
         vis.line = vis.chart.selectAll('.chart-line')
