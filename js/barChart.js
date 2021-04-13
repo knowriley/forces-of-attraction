@@ -79,11 +79,15 @@ class BarChart {
     vis.barData = [];
     if (vis.attribute === 'age') {
       for (let i = 18; i <= 45; i += 1) {
-        vis.barData.push({
-          row: i - 17,
-          rowLabel: getLabel(vis.attribute, i),
-          value: vis.data[getCode(vis.attribute, vis.selectedLabel)][i].probability,
-        });
+        if (vis.data[getCode(vis.attribute, vis.selectedLabel)][i].pair > 0) {
+          vis.barData.push({
+            row: i - 17,
+            rowLabel: getLabel(vis.attribute, i),
+            value: vis.data[getCode(vis.attribute, vis.selectedLabel)][i].probability,
+            match: vis.data[getCode(vis.attribute, vis.selectedLabel)][i].match,
+            pair: vis.data[getCode(vis.attribute, vis.selectedLabel)][i].pair
+          });
+        }
       }
     } else {
       for (let i = 1; i < vis.data.length; i += 1) {
@@ -92,6 +96,8 @@ class BarChart {
             row: i,
             rowLabel: getLabel(vis.attribute, i),
             value: vis.data[getCode(vis.attribute, vis.selectedLabel)][i].probability,
+            match: vis.data[getCode(vis.attribute, vis.selectedLabel)][i].match,
+            pair: vis.data[getCode(vis.attribute, vis.selectedLabel)][i].pair
           });
         }
       }
@@ -104,6 +110,8 @@ class BarChart {
         rowLabel: 'Total',
         value: vis.data[getCode(vis.attribute, vis.selectedLabel)][vis.data.length].probability === 0
           ? 0 : vis.data[getCode(vis.attribute, vis.selectedLabel)][vis.data.length].probability,
+        match: vis.data[getCode(vis.attribute, vis.selectedLabel)][vis.data.length].match,
+        pair: vis.data[getCode(vis.attribute, vis.selectedLabel)][vis.data.length].pair
       });
     }
 
@@ -178,11 +186,11 @@ class BarChart {
   generateHtml(d) {
     let vis = this;
     if (vis.attribute === 'field_cd') {
-      return `<div> A <strong>${vis.selectedGender} ${vis.selectedLabel} student </strong>has a <strong>${d3.format('.2%')(d.value)}</strong> chance of matching with <strong>${vis.chooseAlternateMatchType(d)} student</strong></div>`;
+      return `<div> A <strong>${vis.selectedGender} ${vis.selectedLabel} student </strong>has a <strong>${d3.format('.2%')(d.value)}</strong> chance of matching with <strong>${vis.chooseAlternateMatchType(d)} student</strong> (${d.match} matches of ${d.pair} pairings) </div>`;
     } else if (vis.attribute === 'age'){
-      return `<div> A <strong>${vis.selectedGender} ${vis.selectedLabel} year old </strong> has a <strong>${d3.format('.2%')(d.value)}</strong> chance of matching with <strong>${vis.chooseAlternateMatchType(d)} year old</strong></div>`;
+      return `<div> A <strong>${vis.selectedGender} ${vis.selectedLabel} year old </strong> has a <strong>${d3.format('.2%')(d.value)}</strong> chance of matching with <strong>${vis.chooseAlternateMatchType(d)} year old</strong> (${d.match} matches of ${d.pair} pairings) </div>`;
     } else {
-      return `<div> A <strong>${vis.selectedGender} ${vis.selectedLabel}</strong> has a <strong>${d3.format('.2%')(d.value)}</strong> chance of matching with <strong>${vis.chooseAlternateMatchType(d)}</strong></div>`;
+      return `<div> A <strong>${vis.selectedGender} ${vis.selectedLabel}</strong> has a <strong>${d3.format('.2%')(d.value)}</strong> chance of matching with <strong>${vis.chooseAlternateMatchType(d)}</strong> (${d.match} matches of ${d.pair} pairings) </div>`;
     }
   }
 }
