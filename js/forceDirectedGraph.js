@@ -138,7 +138,6 @@ class ForceDirectedGraph extends View {
                 <h1>Participant ${decode('id')(d)}</h1>
                 <p>Gender: ${decode('gender')(d)}<p>
                 <p>Age: ${d.age}<p>
-                <p>Wave: ${decode('wave')(d)}<p>
                 <p>Field: ${decode('field_cd')(d)}<p>
                 <p>Career: ${decode('career_c')(d)}<p>
                 <p>Race: ${decode('race')(d)}<p>

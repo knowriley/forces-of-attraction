@@ -4,10 +4,10 @@ class Matrix {
     this.config = {
       parentElement: _config.parentElement,
       dispatch: _config.dispatch || null,
-      containerWidth: 500,
-      containerHeight: 500,
+      containerWidth: 600,
+      containerHeight: 400,
       margin: {
-        top: 100, right: 20, bottom: 65, left: 100,
+        top: 100, right: 160, bottom: 20, left: 160,
       },
     };
     this.data = _data;
@@ -42,7 +42,8 @@ class Matrix {
     vis.chart = vis.chartArea.append('g');
 
     vis.chartArea.append('text').text('Probability of match between groups')
-      .attr('y', vis.config.height + 55);
+      .attr('x', -10)
+      .attr('y', vis.config.height + 30);
 
     // Initialize scales and axes
     vis.colorScale = d3.scaleSequential()
@@ -83,12 +84,6 @@ class Matrix {
       .style('text-anchor', 'end')
       .style('font-weight', 'bold')
       .text('Male');
-
-    vis.chart.append('text')
-      .attr('x', -80)
-      .attr('y', vis.config.height + 15)
-      .style('text-anchor', 'start')
-      .text('* Click on axis labels to see detailed probability');
 
     // Add line separating male and female labels
     vis.chart.append('line')

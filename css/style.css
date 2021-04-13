@@ -1,15 +1,10 @@
 html {
     font-family: 'Courier New', Courier, monospace;
-    height: 100%;
 }
 
 .area-path {
     fill:rgb(172, 172, 172);
     opacity: 50%;
-}
-
-body {
-    height: 200%;
 }
 
 .chart-line {
@@ -20,19 +15,34 @@ body {
 }
 
 #content {
-    max-width: 1600px;
-    margin-left: 5px;
-    margin-right: 5px;
+    max-width: 1280px;
+}
+
+#vis-container {
+    width: 1280px;
+}
+
+#wave-container {
+    width: 600px;
+    margin: 0px 20px;
+}
+
+#summary-container {
+    width: 600px;
+    margin: 0px 20px;
 }
 
 .col {
     display: flex;
     flex-direction: column;
+    margin: auto;
 }
 
 .row {
     display: flex;
     flex-direction: row;
+    justify-content: space-evenly;
+    margin: auto;
 }
 
 .tick line, .domain {

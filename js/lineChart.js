@@ -3,8 +3,8 @@ class LineChart {
     constructor(_config, _data) {
         this.config = {
             parentElement: _config.parentElement,
-            containerWidth: 800,
-            containerHeight: 50,
+            containerWidth: 600,
+            containerHeight: 40,
             margin: {
               top: 5, right: 10, bottom: 5, left: 10,
             },
@@ -33,7 +33,7 @@ class LineChart {
         vis.chartArea = vis.svg.append('g');
 
         // Actual line
-        vis.chart = vis.chartArea.append('g')          
+        vis.chart = vis.chartArea.append('g')
             .attr('transform', `translate(${vis.config.margin.left},${vis.config.margin.top})`);
 
 
@@ -59,23 +59,24 @@ class LineChart {
         vis.slider = d3.sliderBottom()
             .min(1)
             .max(21)
-            .width(vis.config.width - 38)
+            .width(vis.config.width)
             .ticks(21)
             .step(1)
             .default(1)
             .on('onchange', val => {
-              d3.select('p#waveValue').text(val);
+              d3.select('#waveValue').text(val);
               waveChangeUpdate(val);
             });
-        
+
           vis.sliderGroup = d3.select('#waveSlider')
             .append('svg')
             .attr('width', vis.config.width)
+            .attr('height', 50)
             .append('g')
             .attr('transform', 'translate(10,10)');
-        
-          d3.select('p#waveValue').text((vis.slider.value()));
-        
+
+          d3.select('#waveValue').text((vis.slider.value()));
+
         vis.updateVis();
     }
 
