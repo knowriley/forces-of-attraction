@@ -157,7 +157,8 @@ class ForceDirectedGraph extends View {
       .attr('class', 'edge')
       .attr('opacity', 0.7)
       .attr('stroke', 'black')
-      .attr('stroke-width', 0.1);
+      .attr('stroke-width', 0.1)
+      .lower(); //https://stackoverflow.com/a/47877220
 
     vis.graph.on('tick', () => {
       nodes
