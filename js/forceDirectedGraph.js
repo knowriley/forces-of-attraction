@@ -161,6 +161,11 @@ class ForceDirectedGraph extends View {
           d3.select(this).classed('selected', true); 
           vis.dispatch.call('matrixLabelClick', d, d.gender);
         }
+      })
+      .on('click', (_, selected) => {
+          console.log(selected);
+          const val = getLabel(vis.getAttribute(), selected[vis.getAttribute()]);
+        vis.dispatch.call('matrixLabelClick', val, val, decode('gender')(selected));
       });
 
     const matchLinks = d3.filter(linksData,
