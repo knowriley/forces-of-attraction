@@ -10,6 +10,7 @@ class LineChart {
             },
           };
         this.data = _data;
+        this.color = 'green';
         this.initVis();
     }
 
@@ -123,7 +124,8 @@ class LineChart {
                 .data([vis.processedData])
             .join('path')
                 .attr('class', 'chart-line')
-                .attr('d', vis.lineFunc);
+                .attr('d', vis.lineFunc)
+                .attr('stroke', vis.color);
         
         // area
         vis.area = vis.chart.selectAll(".area-path")
@@ -143,4 +145,8 @@ class LineChart {
     setWave(w) {
         this.wave = w;
       }
+
+    setColor(color) {
+    this.color = color;
+    }
 }

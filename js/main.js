@@ -56,6 +56,7 @@ d3.csv('data/speedDating.csv').then((data) => {
   forceDirectedGraph.setGroupColors(groupColors);
   matrix.setColor(freeColor);
   barChart.setColor(freeColor);
+  lineChart.setColor(freeColor);
 
   // Set up a routine to call any required functions when document state changes
   this.update = () => {

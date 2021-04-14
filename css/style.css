@@ -10,7 +10,6 @@ html {
 .chart-line {
     fill: none;
     opacity: 80%;
-    stroke: rgb(75, 75, 75);
     stroke-width: 2px;
 }
 
