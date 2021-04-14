@@ -19,6 +19,7 @@ class ForceDirectedGraph extends View {
     const vis = this;
 
     vis.config.containerHeight = 400;
+    vis.dispatch = vis.config.dispatch;
 
     // non-visual wave state
     vis.wave = 1;
@@ -37,6 +38,8 @@ class ForceDirectedGraph extends View {
     // Highlight selection
     vis.highlightedMaleLabel = NONE;
     vis.highlightedFemaleLabel = NONE;
+
+    vis.selectedParticipantID = NONE;
 
     vis.updateVis();
   }
@@ -147,6 +150,17 @@ class ForceDirectedGraph extends View {
       })
       .on('mouseout', (_, __) => {
         d3.select('#tooltip').style('display', 'none');
+      }).on('click', (e, d) => {
+        // TODO
+        if (d.id === vis.selectedParticipantID) {
+          vis.selectedParticipantID = NONE;
+          d3.select(this).classed('selected', false); 
+          vis.dispatch.call('matrixLabelClick', d, NONE);
+        } else {
+          vis.selectedParticipantID = d.id;
+          d3.select(this).classed('selected', true); 
+          vis.dispatch.call('matrixLabelClick', d, d.gender);
+        }
       });
 
     const matchLinks = d3.filter(linksData,

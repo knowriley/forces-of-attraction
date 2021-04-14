@@ -45,7 +45,7 @@ d3.csv('data/speedDating.csv').then((data) => {
   // Initialize charts
   lineChart = new LineChart({ parentElement: '#line'}, getGraphData(data));
   barChart = new BarChart({ parentElement: '#bar' }, barChartData, DEFAULT_ATTRIBUTE, getDefaultLabel(DEFAULT_ATTRIBUTE), getDefautGender());
-  forceDirectedGraph = new ForceDirectedGraph({ parentElement: '#forceDirected' }, getGraphData(data), 'career_c');
+  forceDirectedGraph = new ForceDirectedGraph({ parentElement: '#forceDirected' , dispatch: dispatch}, getGraphData(data), 'career_c');
   matrix = new Matrix({ parentElement: '#matrix', dispatch }, matrixData, DEFAULT_ATTRIBUTE, getDefaultLabel(DEFAULT_ATTRIBUTE), getDefautGender());
   legend = new Legend('#legend', forceDirectedGraph.colorDomain, forceDirectedGraph.colorScale);
 
@@ -98,7 +98,9 @@ d3.csv('data/speedDating.csv').then((data) => {
 
   // Event handler for matrix label click
   dispatch.on('matrixLabelClick', (selected, gender) => {
-    if (gender === 'male') {
+    if (gender === NONE) {
+
+    } else if (gender === 'male') {
       barChartData = getBarChartData(maleData,
         maleMatchData, demographicData, matrix.attribute);
     } else {
