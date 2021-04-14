@@ -1,6 +1,5 @@
 const ITEM_WIDTH = 150;
 const CHARACTER_WIDTH = 11;
-const RADIUS = 4;
 
 // eslint-disable-next-line no-unused-vars
 class Legend extends View {
@@ -44,12 +43,12 @@ class Legend extends View {
       .join('g')
       .attr('transform', (d) => vis.positionLegendItem(vis.getData().indexOf(d), 3));
     vis.items.append('circle')
-      .attr('r', RADIUS)
+      .attr('r', NODE_RADIUS)
       .attr('fill', (d) => vis.colorScale(d))
       .attr('stroke', 'black');
     vis.items.append('text')
       .text((d) => d)
-      .attr('transform', `translate(${RADIUS + 6}, 4)`);
+      .attr('transform', `translate(${NODE_RADIUS + 6}, 4)`);
   }
 
   // Algorithm to compute position of a legend item dynamically. We enforce

@@ -129,3 +129,11 @@ h2 {
 .parameter-value path {
     transform: rotate(180);
 } */
+
+.node {
+    stroke-width: 1;
+}
+
+.node:hover {
+    stroke-width: 2;
+}
