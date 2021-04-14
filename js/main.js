@@ -268,7 +268,7 @@ const getBarChartData = (data, matchData, demographicData, attribute) => {
       barChartData[i][j] = {
         probability : total[i] === 0 ? 0 : matchCount[i][j] / total[i],
         match: matchCount[i][j],
-        pair: pairCount[i][j]
+        pair: total[i]
       };
     }
 
