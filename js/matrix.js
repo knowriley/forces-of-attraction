@@ -17,7 +17,7 @@ class Matrix {
     this.highlightedMaleLabel = NONE;
     this.highlightedFemaleLabel = NONE;
     this.dispatch = this.config.dispatch;
-    this.color = 'green';
+    this.color = 'gray';
     this.initVis();
   }
 

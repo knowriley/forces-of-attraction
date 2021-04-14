@@ -14,7 +14,7 @@ class BarChart {
     this.attribute = _attribute;
     this.selectedLabel = _selectedLabel;
     this.selectedGender = _selectedGender;
-    this.color = 'green';
+    this.color = 'gray';
     this.initVis();
   }
 
