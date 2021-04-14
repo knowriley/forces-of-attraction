@@ -158,7 +158,7 @@ class ForceDirectedGraph extends View {
           vis.dispatch.call('matrixLabelClick', val, val, NONE);
         } else {
           vis.selectedParticipantID = d.id;
-          d3.select(this).classed('selected', true); 
+          //d3.select(this).classed('selected', true);  TODO: THIS BREAKS THINGS
           vis.dispatch.call('matrixLabelClick', val, val, decode('gender')(d));
         }
       });
