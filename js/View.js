@@ -7,10 +7,10 @@ class View {
   constructor(_config, _data, _attribute) {
     this.config = {
       parentId: _config.parentElement.substring(1),
-      parentElement: _config.parentElement,
       margin: {
         top: 10, right: 10, bottom: 10, left: 10,
       }, // default margin
+      ..._config,
     };
     this.data = _data;
     this.attribute = _attribute;
