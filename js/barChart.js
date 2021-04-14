@@ -118,7 +118,7 @@ class BarChart {
     vis.xValue = (d) => d.value;
     vis.yValue = (d) => d.rowLabel;
 
-    vis.xScale.domain([0, 0.2]);
+    vis.xScale.domain(vis.barData.length == 0 ? [] : [0, 0.2]);
     vis.yScale.domain(vis.barData.map(vis.yValue));
 
     vis.renderVis();
