@@ -10,7 +10,6 @@ html {
 .chart-line {
     fill: none;
     opacity: 80%;
-    stroke: rgb(75, 75, 75);
     stroke-width: 2px;
 }
 
@@ -45,7 +44,15 @@ html {
     margin: auto;
 }
 
-.tick line, .domain {
+#slider-buttons.row {
+    margin-right: 50px;
+}
+
+#slider-buttons button {
+    margin: 0px 2px;
+}
+
+#matrix .tick line, #bar .tick line, .domain {
     display: none;
 }
 
@@ -129,3 +136,11 @@ h2 {
 .parameter-value path {
     transform: rotate(180);
 } */
+
+.node {
+    stroke-width: 1;
+}
+
+.node:hover {
+    stroke-width: 2;
+}
