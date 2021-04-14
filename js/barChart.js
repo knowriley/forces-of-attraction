@@ -119,7 +119,7 @@ class BarChart {
     vis.xValue = (d) => d.value;
     vis.yValue = (d) => d.rowLabel;
 
-    vis.xScale.domain([0, 0.2]);
+    vis.xScale.domain(vis.barData.length == 0 ? [] : [0, 0.2]);
     vis.yScale.domain(vis.barData.map(vis.yValue));
 
     vis.renderVis();
@@ -130,7 +130,7 @@ class BarChart {
 
     vis.bars = vis.chart.selectAll('.bar')
       .data(vis.barData, vis.yValue)
-      .join(
+      .join( //https://observablehq.com/@d3/selection-join
         enter => enter.append('rect')
           .transition().duration(500)
           .attr('class', 'bar')
