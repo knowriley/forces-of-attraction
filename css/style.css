@@ -41,7 +41,7 @@ html {
 .row {
     display: flex;
     flex-direction: row;
-    justify-content: space-evenly;
+    justify-content: space-between;
     margin: auto;
 }
 
@@ -53,7 +53,7 @@ html {
     margin: 0px 2px;
 }
 
-.tick line, .domain {
+#matrix .tick line, #bar .tick line, .domain {
     display: none;
 }
 

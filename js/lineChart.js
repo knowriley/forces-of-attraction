@@ -55,6 +55,16 @@ class LineChart {
             .attr('class', 'axis y-axis')
             .attr('display', 'none');
 
+        // prepare data
+        vis.processedData = [];
+        for (let i = MIN_WAVE; i <= MAX_WAVE; i += 1) {
+            let data = d3.filter(vis.data.nodes, (n) => n.waves.includes(i));
+            vis.processedData.push({
+                wave: i,
+                count: data.length
+            });
+        }
+
         // make slider
         vis.slider = d3.sliderBottom()
             .min(MIN_WAVE)
@@ -82,16 +92,6 @@ class LineChart {
     updateVis() {
         const vis = this;
 
-        // prepare data
-        vis.processedData = [];
-        for (let i = MIN_WAVE; i <= MAX_WAVE; i += 1) {
-            let data = d3.filter(vis.data.nodes, (n) => n.waves.includes(i));
-            vis.processedData.push({
-                wave: i,
-                count: data.length
-            });
-        }
-
         // accessor funcs
         vis.xValue = (d) => d.wave;
         vis.yValue = (d) => d.count;
@@ -116,7 +116,7 @@ class LineChart {
 
     renderVis() {
         const vis = this;
-        
+
         // line
         vis.line = vis.chart.selectAll('.chart-line')
                 .data([vis.processedData])
@@ -141,7 +141,9 @@ class LineChart {
 
     setWave(w) {
         let vis = this;
+        w = Math.round(w);
         d3.select('#waveValue').text(w);
+        d3.select('#participantValue').text(vis.processedData.filter(d => d.wave == w)[0].count);
         vis.slider.value(w);
         this.wave = w;
     }
