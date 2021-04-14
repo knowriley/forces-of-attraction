@@ -84,7 +84,7 @@ class LineChart {
             .append('g')
             .attr('transform', `translate(${vis.config.margin.left}, ${vis.config.margin.bottom})`);
 
-        d3.select('#waveValue').text((vis.slider.value()));
+        vis.setWave((vis.slider.value()));
 
         vis.updateVis();
     }
