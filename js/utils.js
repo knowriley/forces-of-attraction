@@ -69,7 +69,7 @@ const careerCodeToCareerMapping = [
   'Business',
   'Real Estate Agent',
   'International/Humanitarian Affairs',
-  'TODO (Undecided)',
+  'Undecided',
   'Social Worker',
   'Speech Pathologist',
   'Politician',
