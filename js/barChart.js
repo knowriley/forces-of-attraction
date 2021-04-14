@@ -6,7 +6,7 @@ class BarChart {
       containerWidth: 600,
       containerHeight: 300,
       margin: {
-        top: 20, right: 160, bottom: 20, left: 160,
+        top: 40, right: 160, bottom: 20, left: 160,
       },
       // TODO: Margin is super large to accomodate super large labels
     };
