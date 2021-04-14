@@ -98,23 +98,21 @@ d3.csv('data/speedDating.csv').then((data) => {
 
   // Event handler for matrix label click
   dispatch.on('matrixLabelClick', (selected, gender) => {
-      gender = gender.toLowerCase();
-    if (gender === NONE) {
+    gender = gender.toLowerCase();
+    if (gender === 'male') {
+          barChartData = getBarChartData(maleData,
+            maleMatchData, demographicData, matrix.attribute);
+        } else {
+          barChartData = getBarChartData(femaleData,
+            femaleMatchData, demographicData, matrix.attribute);
+        }
 
-    } else if (gender === 'male') {
-      barChartData = getBarChartData(maleData,
-        maleMatchData, demographicData, matrix.attribute);
-    } else {
-      barChartData = getBarChartData(femaleData,
-        femaleMatchData, demographicData, matrix.attribute);
-    }
+        matrix.selectedLabel = selected;
+        matrix.selectedGender = gender;
 
-    matrix.selectedLabel = selected;
-    matrix.selectedGender = gender;
-
-    barChart.data = barChartData;
-    barChart.selectedLabel = selected;
-    barChart.selectedGender = gender;
+        barChart.data = barChartData;
+        barChart.selectedLabel = selected;
+        barChart.selectedGender = gender;
 
     update();
   });
