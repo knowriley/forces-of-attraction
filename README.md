@@ -21,3 +21,8 @@ Please see the [issues page](https://github.students.cs.ubc.ca/cpsc436v-2020w-t2
 - Used these references as guides to create linechart and its area component
     - line: https://github.com/UBC-InfoVis/2021-436V-examples/tree/master/d3-annotated-line-chart
     - area: https://bl.ocks.org/d3noob/119a138ef9bd1d8f0a8d57ea72355252
+
+### Misc.
+Other small aspects of our code have their source of inspiration or direct reference cited as
+inline links in our source-code. Doing this allows quick navigation to sources from within the code
+and allows us to manage references through version control more easily.
