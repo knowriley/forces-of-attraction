@@ -14,6 +14,7 @@ class BarChart {
     this.attribute = _attribute;
     this.selectedLabel = _selectedLabel;
     this.selectedGender = _selectedGender;
+    this.color = 'green';
     this.initVis();
   }
 
@@ -118,7 +119,7 @@ class BarChart {
     vis.xValue = (d) => d.value;
     vis.yValue = (d) => d.rowLabel;
 
-    vis.xScale.domain([0, 0.2]);
+    vis.xScale.domain(vis.barData.length == 0 ? [] : [0, 0.2]);
     vis.yScale.domain(vis.barData.map(vis.yValue));
 
     vis.renderVis();
@@ -129,14 +130,14 @@ class BarChart {
 
     vis.bars = vis.chart.selectAll('.bar')
       .data(vis.barData, vis.yValue)
-      .join(
+      .join( //https://observablehq.com/@d3/selection-join
         enter => enter.append('rect')
           .transition().duration(500)
           .attr('class', 'bar')
           .attr('y', (d) => vis.yScale(vis.yValue(d)))
           .attr('width', (d) => vis.xScale(vis.xValue(d)))
           .attr('height', vis.yScale.bandwidth())
-          .attr('fill', 'green')
+          .attr('fill', vis.color)
           .selection(),
         update => update
           .transition().duration(500)
@@ -192,5 +193,9 @@ class BarChart {
     } else {
       return `<div> A <strong>${vis.selectedGender} ${vis.selectedLabel}</strong> has a <strong>${d3.format('.2%')(d.value)}</strong> chance of matching with <strong>${vis.chooseAlternateMatchType(d)}</strong> (${d.match} matches of ${d.pair} pairings) </div>`;
     }
+  }
+
+  setColor(color) {
+    this.color = color;
   }
 }

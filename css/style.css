@@ -10,7 +10,6 @@ html {
 .chart-line {
     fill: none;
     opacity: 80%;
-    stroke: rgb(75, 75, 75);
     stroke-width: 2px;
 }
 
@@ -45,7 +44,15 @@ html {
     margin: auto;
 }
 
-.tick line, .domain {
+#slider-buttons.row {
+    margin-right: 50px;
+}
+
+#slider-buttons button {
+    margin: 0px 2px;
+}
+
+#matrix .tick line, #bar .tick line, .domain {
     display: none;
 }
 
@@ -114,4 +121,30 @@ h1 {
 
 h2 {
     text-align: center;
+}
+
+/* TODO: Either remove or use for styling*/
+/* .track, .track-insert, .track-overlay {
+    stroke-linecap:square;
+}
+
+.track, .track-insert {
+    stroke-width: 2px;
+    stroke: black;
+}
+
+.track-overlay {
+    stroke-width: 2px;
+}
+
+.parameter-value path {
+    transform: rotate(180);
+} */
+
+.node {
+    stroke-width: 1;
+}
+
+.node:hover {
+    stroke-width: 2;
 }

@@ -12,7 +12,9 @@ d3.csv('data/speedDating.csv').then((data) => {
   // Convert columns to numerical values
   data.forEach((d) => {
     Object.keys(d).forEach((attr) => {
-      if (attr !== 'from') {
+      if (attr == 'career_c' || attr == 'field_cd') {
+        d[attr] = getGroupIndexFromCode(attr, +d[attr]);
+      } else if (attr !== 'from') {
         d[attr] = +d[attr];
       }
     });
@@ -48,6 +50,15 @@ d3.csv('data/speedDating.csv').then((data) => {
   forceDirectedGraph = new ForceDirectedGraph({ parentElement: '#forceDirected', dispatch }, getGraphData(data), 'career_c');
   matrix = new Matrix({ parentElement: '#matrix', dispatch }, matrixData, DEFAULT_ATTRIBUTE, getDefaultLabel(DEFAULT_ATTRIBUTE), getDefautGender());
   legend = new Legend('#legend', forceDirectedGraph.colorDomain, forceDirectedGraph.colorScale);
+
+  const groupColors = d3.schemeCategory10;
+  // adopt one of the colors as our main color
+  // const freeColor = groupColors.splice(4, 1); // purple
+  const freeColor = groupColors.splice(3, 1); // red
+  forceDirectedGraph.setGroupColors(groupColors);
+  matrix.setColor(freeColor);
+  barChart.setColor(freeColor);
+  lineChart.setColor(freeColor);
 
   // Set up a routine to call any required functions when document state changes
   this.update = () => {
@@ -95,6 +106,21 @@ d3.csv('data/speedDating.csv').then((data) => {
     forceDirectedGraph.setNodeDistance(dist);
     update();
   };
+
+  // Event handlers for slider button click
+  document.getElementById('left-slider-button').onclick = (_) => {
+    let wave = lineChart.slider.value();
+    if (wave > MIN_WAVE) {
+      waveChangeUpdate(wave-1);
+    }
+  }
+
+  document.getElementById('right-slider-button').onclick = (_) => {
+    let wave = lineChart.slider.value();
+    if (wave < MAX_WAVE) {
+      waveChangeUpdate(wave+1);
+    }
+  }
 
   // Event handler for matrix label click
   dispatch.on('matrixLabelClick', (selected, gender) => {
@@ -184,48 +210,6 @@ const getMatrixData = (data, matchData, demographicData, attribute) => {
   return matrixData;
 };
 
-/**
-  * Data pre-processing for adjacency matrix
-  * The gender used for @param matchData and @param data does not influence the
-  * change the result BUT they MUST match,
-  * the gender used for will be the row, and the opposite gender on the column.
-  */
- const getMatchingProbabilityMatrix = (data, matchData, demographicData, attribute) => {
-  const limit = getAttributeSize(attribute);
-  const allCount = new Array(limit);
-  const matchCount = new Array(limit);
-  const probability = new Array(limit);
-
-  for (let i = 0; i < limit; i += 1) {
-    allCount[i] = new Array(limit);
-    allCount[i].fill(0);
-    matchCount[i] = new Array(limit);
-    matchCount[i].fill(0);
-    probability[i] = new Array(limit);
-    probability[i].fill(0);
-  }
-
-  data.forEach((d) => {
-    if (d.pid && d[attribute]) {
-      allCount[d[attribute]][demographicData.get(d.pid)[attribute]] += 1;
-    }
-  });
-
-  matchData.forEach((d) => {
-    if (d.pid) {
-      matchCount[d[attribute]][demographicData.get(d.pid)[attribute]] += 1;
-    }
-  });
-
-  for (let i = 0; i < limit; i += 1) {
-    for (let j = 0; j < limit; j += 1) {
-      probability[i][j] = allCount[i][j] === 0 ? 0 : matchCount[i][j] / allCount[i][j];
-    }
-  }
-
-  return probability;
-};
-
 
 /**
   * Data pre-processing for bar chart
@@ -269,7 +253,7 @@ const getBarChartData = (data, matchData, demographicData, attribute) => {
       barChartData[i][j] = {
         probability : total[i] === 0 ? 0 : matchCount[i][j] / total[i],
         match: matchCount[i][j],
-        pair: pairCount[i][j]
+        pair: total[i]
       };
     }
 

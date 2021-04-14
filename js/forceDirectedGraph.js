@@ -7,6 +7,8 @@ const NODE_MATCH_DISTANCE_FACTOR = 10;
 // Default attraction attribute key
 const DEFAULT_DISTANCE = 'match';
 
+const NODE_RADIUS = 5;
+
 /*
     A force-directed simulation view representing unique participants
     as nodes, and allowing a user to interactively control forcing
@@ -29,7 +31,7 @@ class ForceDirectedGraph extends View {
     vis.graph = d3.forceSimulation();
     vis.repel = d3.forceManyBody().strength(-NODE_REPEL_STRENGTH);
     vis.graph.force('charge', vis.repel);
-    vis.graph.force('collision', d3.forceCollide().radius(4));
+    vis.graph.force('collision', d3.forceCollide().radius(NODE_RADIUS));
     vis.linkForce = d3.forceLink().id((d) => d.id);
     vis.graph.force('link', vis.linkForce);
     // a categorical color scale
@@ -42,6 +44,10 @@ class ForceDirectedGraph extends View {
     vis.selectedParticipantID = NONE;
 
     vis.updateVis();
+  }
+
+  setGroupColors(colors) {
+    this.colorScale.range(colors);
   }
 
   setWave(w) {
@@ -120,7 +126,7 @@ class ForceDirectedGraph extends View {
       .join('circle')
       .attr('class', 'node')
       .attr('id', (d) => `node-${d.id}`)
-      .attr('r', 4)
+      .attr('r', NODE_RADIUS)
       .attr('fill', (d) => vis.colorScale(decode(vis.attribute)(d)))
       .attr('stroke', 'black')
       .attr('opacity', (d) => {
@@ -128,9 +134,9 @@ class ForceDirectedGraph extends View {
           return 1;
         } else if ((d.gender == 0 && getLabel(vis.attribute, d[vis.attribute]) == vis.highlightedFemaleLabel) ||
             (d.gender == 1 && getLabel(vis.attribute, d[vis.attribute]) == vis.highlightedMaleLabel)) {
-              return 1;
+          return 1;
         } else {
-            return 0.1;
+          return 0.1;
         }
       })
       .call(drag(vis.graph))

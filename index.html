@@ -33,10 +33,16 @@
                 and select a single node to highlight the information for its group in the summary
                 views.<br>
                 <div id="waveVis">
-                    <br>
-                    <div><strong>Wave:</strong> <span id="waveValue"></span></div>
-                    <div id="line" class="chart"></div>
-                    <div id="waveSlider"></div>  
+                    <div class='row'>
+                        <div><strong>Wave:</strong> <span id="waveValue"></span></div>
+                        <div><strong># of Participants:</strong> <span id="participantValue"></span></div>
+                    </div>
+                    <div id="line"></div>
+                    <div id="waveSlider"></div>
+                    <div id='slider-buttons' class='row'>
+                        <button id='left-slider-button'>&lt;</button>
+                        <button id='right-slider-button'>&gt;</button>
+                    </div>
                 </div>
                 <div id="forceDirected" class="chart"></div>
                 <div id="color">
