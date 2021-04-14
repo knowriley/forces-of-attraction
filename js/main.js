@@ -49,6 +49,14 @@ d3.csv('data/speedDating.csv').then((data) => {
   matrix = new Matrix({ parentElement: '#matrix', dispatch }, matrixData, DEFAULT_ATTRIBUTE, getDefaultLabel(DEFAULT_ATTRIBUTE), getDefautGender());
   legend = new Legend('#legend', forceDirectedGraph.colorDomain, forceDirectedGraph.colorScale);
 
+  const groupColors = d3.schemeCategory10;
+  // adopt one of the colors as our main color
+  // const freeColor = groupColors.splice(4, 1); // purple
+  const freeColor = groupColors.splice(3, 1); // red
+  forceDirectedGraph.setGroupColors(groupColors);
+  matrix.setColor(freeColor);
+  barChart.setColor(freeColor);
+
   // Set up a routine to call any required functions when document state changes
   this.update = () => {
     barChart.updateVis();

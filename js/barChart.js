@@ -14,6 +14,7 @@ class BarChart {
     this.attribute = _attribute;
     this.selectedLabel = _selectedLabel;
     this.selectedGender = _selectedGender;
+    this.color = 'green';
     this.initVis();
   }
 
@@ -136,7 +137,7 @@ class BarChart {
           .attr('y', (d) => vis.yScale(vis.yValue(d)))
           .attr('width', (d) => vis.xScale(vis.xValue(d)))
           .attr('height', vis.yScale.bandwidth())
-          .attr('fill', 'green')
+          .attr('fill', vis.color)
           .selection(),
         update => update
           .transition().duration(500)
@@ -192,5 +193,9 @@ class BarChart {
     } else {
       return `<div> A <strong>${vis.selectedGender} ${vis.selectedLabel}</strong> has a <strong>${d3.format('.2%')(d.value)}</strong> chance of matching with <strong>${vis.chooseAlternateMatchType(d)}</strong> (${d.match} matches of ${d.pair} pairings) </div>`;
     }
+  }
+
+  setColor(color) {
+    this.color = color;
   }
 }

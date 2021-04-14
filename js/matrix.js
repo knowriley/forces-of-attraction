@@ -17,6 +17,7 @@ class Matrix {
     this.highlightedMaleLabel = NONE;
     this.highlightedFemaleLabel = NONE;
     this.dispatch = this.config.dispatch;
+    this.color = 'green';
     this.initVis();
   }
 
@@ -46,8 +47,7 @@ class Matrix {
       .attr('y', vis.config.height + 30);
 
     // Initialize scales and axes
-    vis.colorScale = d3.scaleSequential()
-      .interpolator(d3.interpolateGreens);
+    vis.colorScale = d3.scaleSequential();
     vis.unhighlightedColorScale = d3.scaleSequential()
       .interpolator(d3.interpolateGreys);
 
@@ -98,6 +98,7 @@ class Matrix {
 
   updateVis() {
     const vis = this;
+    vis.colorScale.interpolator(d3.interpolateRgb('white', this.color));
 
     vis.cellData = [];
 
@@ -283,5 +284,9 @@ class Matrix {
         <div>match <strong>${d3.format('.0%')(d.probability)}</strong> of the time.</div>
         <div>(${d.match} matches of ${d.pair} pairings)</div>
     `}
+  }
+
+  setColor(color) {
+    this.color = color;
   }
 }

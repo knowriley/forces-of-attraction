@@ -41,6 +41,10 @@ class ForceDirectedGraph extends View {
     vis.updateVis();
   }
 
+  setGroupColors(colors) {
+    this.colorScale.range(colors);
+  }
+
   setWave(w) {
     this.wave = w;
   }
@@ -124,9 +128,9 @@ class ForceDirectedGraph extends View {
           return 1;
         } else if ((d.gender == 0 && getLabel(vis.attribute, d[vis.attribute]) == vis.highlightedFemaleLabel) ||
             (d.gender == 1 && getLabel(vis.attribute, d[vis.attribute]) == vis.highlightedMaleLabel)) {
-              return 1;
+          return 1;
         } else {
-            return 0.1;
+          return 0.1;
         }
       })
       .call(drag(vis.graph))
