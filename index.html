@@ -34,9 +34,14 @@
                 Try dragging the nodes to see which other nodes have high linkage
                 (i.e. attract each other in the study) and using the slider to view all waves of the experiment. <br>
                 <div id="waveVis">
-                    <br>
-                    <div><strong>Wave:</strong> <span id="waveValue"></span></div>
-                    <div id="line" class="chart"></div>
+                    <div class='row'>
+                        <div><strong>Wave:</strong> <span id="waveValue"></span></div>
+                        <div class='row' id='slider-buttons'>
+                            <button id='left-slider-button'>&lt;</button>
+                            <button id='right-slider-button'>&gt;</button>
+                        </div>
+                    </div>
+                    <div id="line"></div>
                     <div id="waveSlider"></div>  
                 </div>
                 <div id="forceDirected" class="chart"></div>

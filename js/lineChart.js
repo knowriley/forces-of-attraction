@@ -6,7 +6,7 @@ class LineChart {
             containerWidth: 600,
             containerHeight: 40,
             margin: {
-              top: 5, right: 10, bottom: 5, left: 10,
+              top: 5, right: 0, bottom: 7, left: 20,
             },
           };
         this.data = _data;
@@ -39,7 +39,7 @@ class LineChart {
 
         // Initialize scales and axes
         vis.xScale = d3.scaleBand()
-            .range([0, vis.config.width]);
+            .range([0, vis.config.width-30]);
         vis.yScale = d3.scaleLinear()
             .range([vis.config.height, 0]);
 
@@ -48,7 +48,7 @@ class LineChart {
 
         // Append axis groups
         vis.xAxisGroup = vis.chart.append('g')
-            .attr('transform', `translate(0,${vis.config.height})`)
+            .attr('transform', `translate(0, ${vis.config.height})`)
             .attr('class', 'axis x-axis')
             .attr('display', 'none');
         vis.yAxisGroup = vis.chart.append('g')
@@ -57,25 +57,24 @@ class LineChart {
 
         // make slider
         vis.slider = d3.sliderBottom()
-            .min(1)
-            .max(21)
-            .width(vis.config.width)
-            .ticks(21)
+            .min(MIN_WAVE)
+            .max(MAX_WAVE)
+            .width(vis.config.width-60)
+            .ticks(MAX_WAVE)
             .step(1)
             .default(1)
             .on('onchange', val => {
-              d3.select('#waveValue').text(val);
               waveChangeUpdate(val);
             });
 
-          vis.sliderGroup = d3.select('#waveSlider')
+        vis.sliderGroup = d3.select('#waveSlider')
             .append('svg')
             .attr('width', vis.config.width)
             .attr('height', 50)
             .append('g')
-            .attr('transform', 'translate(10,10)');
+            .attr('transform', `translate(${vis.config.margin.left}, ${vis.config.margin.bottom})`);
 
-          d3.select('#waveValue').text((vis.slider.value()));
+        d3.select('#waveValue').text((vis.slider.value()));
 
         vis.updateVis();
     }
@@ -85,7 +84,7 @@ class LineChart {
 
         // prepare data
         vis.processedData = [];
-        for (let i = 1; i <= 21; i += 1) {
+        for (let i = MIN_WAVE; i <= MAX_WAVE; i += 1) {
             let data = d3.filter(vis.data.nodes, (n) => n.waves.includes(i));
             vis.processedData.push({
                 wave: i,
@@ -141,6 +140,9 @@ class LineChart {
     }
 
     setWave(w) {
+        let vis = this;
+        d3.select('#waveValue').text(w);
+        vis.slider.value(w);
         this.wave = w;
-      }
+    }
 }

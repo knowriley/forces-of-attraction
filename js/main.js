@@ -96,6 +96,21 @@ d3.csv('data/speedDating.csv').then((data) => {
     update();
   };
 
+  // Event handlers for slider button click
+  document.getElementById('left-slider-button').onclick = (_) => {
+    let wave = lineChart.slider.value();
+    if (wave > MIN_WAVE) {
+      waveChangeUpdate(wave-1);
+    }
+  }
+
+  document.getElementById('right-slider-button').onclick = (_) => {
+    let wave = lineChart.slider.value();
+    if (wave < MAX_WAVE) {
+      waveChangeUpdate(wave+1);
+    }
+  }
+
   // Event handler for matrix label click
   dispatch.on('matrixLabelClick', (selected, gender) => {
     if (gender === 'male') {

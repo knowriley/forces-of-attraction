@@ -45,6 +45,14 @@ html {
     margin: auto;
 }
 
+#slider-buttons.row {
+    margin-right: 50px;
+}
+
+#slider-buttons button {
+    margin: 0px 2px;
+}
+
 .tick line, .domain {
     display: none;
 }

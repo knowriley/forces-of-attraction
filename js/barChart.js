@@ -129,7 +129,7 @@ class BarChart {
 
     vis.bars = vis.chart.selectAll('.bar')
       .data(vis.barData, vis.yValue)
-      .join(
+      .join( //https://observablehq.com/@d3/selection-join
         enter => enter.append('rect')
           .transition().duration(500)
           .attr('class', 'bar')
