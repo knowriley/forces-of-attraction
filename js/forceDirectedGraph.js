@@ -151,11 +151,10 @@ class ForceDirectedGraph extends View {
       .on('mouseout', (_, __) => {
         d3.select('#tooltip').style('display', 'none');
       }).on('click', (e, d) => {
-        // TODO
         if (d.id === vis.selectedParticipantID) {
           vis.selectedParticipantID = NONE;
           d3.select(this).classed('selected', false); 
-          vis.dispatch.call('matrixLabelClick', d, NONE);
+          //vis.dispatch.call('matrixLabelClick', d, NONE);
         } else {
           vis.selectedParticipantID = d.id;
           d3.select(this).classed('selected', true); 
