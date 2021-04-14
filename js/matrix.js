@@ -206,13 +206,21 @@ class Matrix {
       .attr('class', 'age-line');
 
     if (vis.attribute === 'age') {
+      let ruleText = `<div>These lines show the boundary for the socially acceptable 'Half-your-age-plus-seven' rule</div>`;
       vis.ageLine1
         .attr('x1', (17 - 17) * cellWidth)
         .attr('y1', (20 - 17) * cellWidth)
         .attr('x2', (29.5 - 17) * cellWidth)
         .attr('y2', (45 - 17) * cellWidth)
         .style('stroke', 'black')
-        .style('stroke-width', 1);
+        .style('stroke-width', 1)
+        .on('mouseover', (e, d) => {
+          d3.select('#tooltip')
+            .style('display', 'block')
+            .style('left', `${e.pageX+10}px`)
+            .style('top', `${e.pageY+10}px`)
+            .html(ruleText);
+        });
 
       vis.ageLine2
         .attr('x1', (20 - 17) * cellWidth)
@@ -220,7 +228,14 @@ class Matrix {
         .attr('x2', (45 - 17) * cellWidth)
         .attr('y2', (29.5 - 17) * cellWidth)
         .style('stroke', 'black')
-        .style('stroke-width', 1);
+        .style('stroke-width', 1)
+        .on('mouseover', (e, d) => {
+          d3.select('#tooltip')
+            .style('display', 'block')
+            .style('left', `${e.pageX+10}px`)
+            .style('top', `${e.pageY+10}px`)
+            .html(ruleText);
+        });
     } else {
       vis.chartArea.selectAll('line.age-line').remove();
     }
