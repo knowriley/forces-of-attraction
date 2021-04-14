@@ -28,7 +28,7 @@ class Legend extends View {
   updateVis() {
     super.updateVis();
     const vis = this;
-    vis.itemWidth = d3.max(vis.getData(), item => item ? item.toString().length : 0) * CHARACTER_WIDTH + 2*CHARACTER_WIDTH;
+    vis.itemWidth = d3.max(vis.getData(), item => item ? item.toString().length : 0) * CHARACTER_WIDTH + CHARACTER_WIDTH;
 
     vis.renderVis();
   }
