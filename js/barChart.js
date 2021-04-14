@@ -63,6 +63,7 @@ class BarChart {
       .attr('x', 0)
       .attr('y', 0)
       .attr('dy', '.80em')
+      .attr('font-weight', 'bold')
       .text(vis.generateTitle());
 
     // Append no data label
@@ -166,6 +167,7 @@ class BarChart {
       .style('text-anchor', 'end');
 
     vis.axisTitle.text(vis.generateTitle()); // https://stackoverflow.com/a/36707865
+
     if (vis.barData.length == 0) {
       vis.noDataLabel.text('Sorry! No data is available for this selection');
     } else {
