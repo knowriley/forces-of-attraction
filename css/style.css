@@ -45,7 +45,15 @@ html {
     margin: auto;
 }
 
-.tick line, .domain {
+#slider-buttons.row {
+    margin-right: 50px;
+}
+
+#slider-buttons button {
+    margin: 0px 2px;
+}
+
+#matrix .tick line, #bar .tick line, .domain {
     display: none;
 }
 
