@@ -68,17 +68,17 @@ const careerCodeToCareerGroupMapping = [ // 9 unique groups
   'Scientist', // Psychologist
   'Medical Doctor', // Doctor/Medicine
   'Engineer', // Engineer
-  'Creative Professional', // Creative Arts/Entertainment
+  'Artist', // Creative Arts/Entertainment
   'Business Person', // Banking/Consulting/Finance/Marketing/Business/CEO/Entrepreneur/Admin
   'Business Person', // Real Estate
   'Lawyer/ Politician', // International/Humanitarian Affairs
   'Other', // Undecided
-  'Creative Professional', // Social Work
+  'Artist', // Social Work
   'Scientist', // Speech Pathology
   'Lawyer/ Politician', // Politics
   'Athlete', // Pro sports/Athletics
   'Other', // Other
-  'Creative Professional', // Journalism
+  'Artist', // Journalism
   'Engineer', // Architecture
 ];
 
