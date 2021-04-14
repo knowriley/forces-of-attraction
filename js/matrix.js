@@ -273,8 +273,8 @@ class Matrix {
         <div>(${d.match} matches of ${d.pair} pairings)</div>
     `} else if (vis.attribute === 'age'){
       return `
-        <div>A <strong>male ${getLabel(vis.attribute, d.row)} year old</strong> and </div>
-        <div>a <strong>female ${getLabel(vis.attribute, d.col)} year old </strong></div>
+        <div>A <strong>male ${d.rowLabel} year old</strong> and </div>
+        <div>a <strong>female ${d.colLabel} year old </strong></div>
         <div>match <strong>${d3.format('.0%')(d.probability)}</strong> of the time.</div>
         <div>(${d.match} matches of ${d.pair} pairings)</div>
     `} else {
