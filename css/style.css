@@ -82,7 +82,7 @@ circle.node {
 }
 
 circle .selected {
-    stroke-width: 2px;
+    stroke-width: 10px;
 }
 
 line.edge {

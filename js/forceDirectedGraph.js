@@ -119,6 +119,7 @@ class ForceDirectedGraph extends View {
       .data(nodesData, (d) => d.id)
       .join('circle')
       .attr('class', 'node')
+      .attr('id', (d) => `node-${d.id}`)
       .attr('r', 4)
       .attr('fill', (d) => vis.colorScale(decode(vis.attribute)(d)))
       .attr('stroke', 'black')
@@ -154,11 +155,15 @@ class ForceDirectedGraph extends View {
         const val = getLabel(vis.getAttribute(), d[vis.getAttribute()]);
         if (d.id === vis.selectedParticipantID) {
           vis.selectedParticipantID = NONE;
-          d3.select(this).classed('selected', false); 
+          d3.select(`#node-${d.id}`).style('stroke-width', '1px'); 
           vis.dispatch.call('matrixLabelClick', val, val, NONE);
         } else {
+          // unhighlight prev selected
+          d3.select(`#node-${vis.selectedParticipantID}`).style('stroke-width', '1px');
+          
+          // reassign and highlight newly selected
           vis.selectedParticipantID = d.id;
-          //d3.select(this).classed('selected', true);  TODO: THIS BREAKS THINGS
+          d3.select(`#node-${d.id}`).style('stroke-width', '2px');
           vis.dispatch.call('matrixLabelClick', val, val, decode('gender')(d));
         }
       });
