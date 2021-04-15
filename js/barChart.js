@@ -6,7 +6,7 @@ class BarChart {
       containerWidth: 600,
       containerHeight: 300,
       margin: {
-        top: 20, right: 160, bottom: 20, left: 160,
+        top: 40, right: 160, bottom: 20, left: 160,
       },
       // TODO: Margin is super large to accomodate super large labels
     };
@@ -64,7 +64,8 @@ class BarChart {
       .attr('x', 0)
       .attr('y', 0)
       .attr('dy', '.80em')
-      .text(`Prob. of ${vis.selectedGender} ${vis.selectedLabel} matching with another person`);
+      .attr('font-weight', 'bold')
+      .text(vis.generateTitle());
 
     // Append no data label
     vis.noDataLabel = vis.chartArea.append('text')
@@ -166,7 +167,8 @@ class BarChart {
       .attr('x', -5)
       .style('text-anchor', 'end');
 
-    vis.axisTitle.text(`Prob. of ${vis.selectedGender} ${vis.selectedLabel} matching with another person`); // https://stackoverflow.com/a/36707865
+    vis.axisTitle.text(vis.generateTitle()); // https://stackoverflow.com/a/36707865
+
     if (vis.barData.length == 0) {
       vis.noDataLabel.text('Sorry! No data is available for this selection');
     } else {
@@ -179,8 +181,25 @@ class BarChart {
     const gender = getOtherGender(vis.selectedGender);
     if (d.rowLabel === 'Total') {
       return `any ${gender}`
+    } else if (vis.attribute === 'race') {
+      return `a ${d.rowLabel} ${gender} `;
+    } else if (vis.attribute ==='age') {
+      return `a ${d.rowLabel} year old ${gender}`;
     } else {
-      return `${gender} ${d.rowLabel}`
+      return `a ${gender} ${d.rowLabel}`;
+    }
+  }
+
+  generateTitle() {
+    let vis = this;
+    if (vis.attribute === 'field_cd') {
+      return `Prob. of a ${vis.selectedGender} ${vis.selectedLabel} student matching with another person`;
+    } else if (vis.attribute === 'race') {
+      return `Prob. of a ${vis.selectedGender} ${vis.selectedLabel} person matching with another person`;
+    } else if (vis.attribute === 'age'){
+      return `Prob. of a ${vis.selectedLabel} year old ${vis.selectedGender} matching with another person`;
+    } else {
+      return `Prob. of a ${vis.selectedGender} ${vis.selectedLabel} matching with another person`;
     }
   }
 
@@ -188,8 +207,10 @@ class BarChart {
     let vis = this;
     if (vis.attribute === 'field_cd') {
       return `<div> A <strong>${vis.selectedGender} ${vis.selectedLabel} student </strong>has a <strong>${d3.format('.2%')(d.value)}</strong> chance of matching with <strong>${vis.chooseAlternateMatchType(d)} student</strong> (${d.match} matches of ${d.pair} pairings) </div>`;
+    } else if (vis.attribute === 'race'){
+      return `<div> A <strong>${vis.selectedLabel} ${vis.selectedGender}</strong> has a <strong>${d3.format('.2%')(d.value)}</strong> chance of matching with <strong>${vis.chooseAlternateMatchType(d)}</strong> (${d.match} matches of ${d.pair} pairings) </div>`;
     } else if (vis.attribute === 'age'){
-      return `<div> A <strong>${vis.selectedGender} ${vis.selectedLabel} year old </strong> has a <strong>${d3.format('.2%')(d.value)}</strong> chance of matching with <strong>${vis.chooseAlternateMatchType(d)} year old</strong> (${d.match} matches of ${d.pair} pairings) </div>`;
+      return `<div> A <strong>${vis.selectedLabel} year old ${vis.selectedGender}</strong> has a <strong>${d3.format('.2%')(d.value)}</strong> chance of matching with <strong>${vis.chooseAlternateMatchType(d)}</strong> (${d.match} matches of ${d.pair} pairings) </div>`;
     } else {
       return `<div> A <strong>${vis.selectedGender} ${vis.selectedLabel}</strong> has a <strong>${d3.format('.2%')(d.value)}</strong> chance of matching with <strong>${vis.chooseAlternateMatchType(d)}</strong> (${d.match} matches of ${d.pair} pairings) </div>`;
     }
