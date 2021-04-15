@@ -21,6 +21,7 @@ class ForceDirectedGraph extends View {
     const vis = this;
 
     vis.config.containerHeight = 400;
+    vis.dispatch = vis.config.dispatch;
 
     // non-visual wave state
     vis.wave = 1;
@@ -39,6 +40,8 @@ class ForceDirectedGraph extends View {
     // Highlight selection
     vis.highlightedMaleLabel = NONE;
     vis.highlightedFemaleLabel = NONE;
+
+    vis.selectedParticipantID = NONE;
 
     vis.updateVis();
   }
@@ -122,6 +125,7 @@ class ForceDirectedGraph extends View {
       .data(nodesData, (d) => d.id)
       .join('circle')
       .attr('class', 'node')
+      .attr('id', (d) => `node-${d.id}`)
       .attr('r', NODE_RADIUS)
       .attr('fill', (d) => vis.colorScale(decode(vis.attribute)(d)))
       .attr('stroke', 'black')
@@ -153,6 +157,18 @@ class ForceDirectedGraph extends View {
       })
       .on('mouseout', (_, __) => {
         d3.select('#tooltip').style('display', 'none');
+      }).on('click', (_, d) => {
+        const val = getLabel(vis.getAttribute(), d[vis.getAttribute()]);
+
+        // unhighlight prev selected
+        d3.select(`#node-${vis.selectedParticipantID}`).style('stroke-width', '1px');
+
+        if (d[vis.getAttribute()]) {
+          // reassign and highlight newly selected
+          vis.selectedParticipantID = d.id;
+          d3.select(`#node-${d.id}`).style('stroke-width', '2px');
+          vis.dispatch.call('matrixLabelClick', val, val, decode('gender')(d));
+        }
       });
 
     const matchLinks = d3.filter(linksData,

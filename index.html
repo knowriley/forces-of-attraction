@@ -22,17 +22,16 @@
         <div id="vis-container" class='row'>
             <div id="wave-container" class='col'>
                 <h2>Wave-by-Wave</h2>
-                <p>Each circle is a participant in the study. Colors correspond to
-                the selection above. The distance
-                between any pair of participants is inversely proportional
-                to
-                <select id="attractByAttributeSelector">
+                <p>Each node is a participant in the study, arranged according to
+                    <select id="attractByAttributeSelector">
                     <option value="match">whether or not they matched</option>
                     <option value="like">how much the they liked each other</option>
                 </select>. A line between two nodes indicates that those participants
-                are a match in the current wave!
-                Try dragging the nodes to see which other nodes have high linkage
-                (i.e. attract each other in the study) and using the slider to view all waves of the experiment. <br>
+                are a match in the current wave! <br>
+                <br>
+                You can drag the nodes to see which other participants attract each other in the study,
+                and select a single node to highlight the information for its group in the summary
+                views.<br>
                 <div id="waveVis">
                     <div class='row'>
                         <div><strong>Wave:</strong> <span id="waveValue"></span></div>
@@ -56,7 +55,7 @@
                         <option value="age">Age</option>
                     </select>
                     </div>
-                    <h4>Legend:</h4>
+                    <h4>Group Legend:</h4>
                     <div id="legend"></div>
                 </div>
             </div>

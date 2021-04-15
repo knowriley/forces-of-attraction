@@ -10,7 +10,7 @@ class LineChart {
             },
           };
         this.data = _data;
-        this.color = 'green';
+        this.color = 'gray';
         this.initVis();
     }
 

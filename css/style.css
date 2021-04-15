@@ -88,6 +88,10 @@ circle.node {
     z-index: 101;
 }
 
+circle .selected {
+    stroke-width: 10px;
+}
+
 line.edge {
     z-index: 100;
 }
