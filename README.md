@@ -1,4 +1,6 @@
 # Forces of Attraction
+A site to visualize the results of a Speed Dating experiment. Can be viewed in a browser with no additional
+steps. Optimal size is 1280x1280px, so feel free to zoom in or out depending on your display.
 ## Project Structure
 Our file layout is virtually identical to the templates provided throughout the course for the assignments. The `js` directory contains the majority of our logic and visualization
 definitions, `index.html` contains the layout, and `styles/style.css` contains some additional styling directives. The components are organized as follows:
