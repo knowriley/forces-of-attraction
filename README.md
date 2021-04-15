@@ -1,4 +1,5 @@
 # Forces of Attraction
+![](thumbnail.png)
 A site to visualize the results of a Speed Dating experiment. Can be viewed in a browser with no additional
 steps. Optimal size is 1280x1280px, so feel free to zoom in or out depending on your display.
 ## Project Structure
