@@ -213,9 +213,9 @@ const getMatrixData = (data, matchData, demographicData, attribute) => {
   */
 const getBarChartData = (data, matchData, demographicData, attribute) => {
   const limit = getAttributeSize(attribute);
-  const total = new Array(limit); // total no of pairing for each value of an attribute for a gender
+  const totalPairings = new Array(limit); // total no of pairing for each value of an attribute for a gender
   const totalMatches = new Array(limit); // total number of matches for each value of an attribute;
-  total.fill(0);
+  totalPairings.fill(0);
   totalMatches.fill(0);
 
   const matchCount = new Array(limit);
@@ -234,7 +234,7 @@ const getBarChartData = (data, matchData, demographicData, attribute) => {
     if (d.pid) {
       pairCount[d[attribute]][demographicData.get(d.pid)[attribute]] += 1;
     }
-    total[d[attribute]] += 1;
+    totalPairings[d[attribute]] += 1;
   });
 
   matchData.forEach((d) => {
@@ -247,17 +247,19 @@ const getBarChartData = (data, matchData, demographicData, attribute) => {
   for (let i = 0; i < limit; i += 1) {
     for (let j = 0; j < limit; j += 1) {
       barChartData[i][j] = {
-        probability: total[i] === 0 ? 0 : matchCount[i][j] / total[i],
+        probability: totalPairings[i] === 0 ? 0 : matchCount[i][j] / totalPairings[i],
         match: matchCount[i][j],
-        pair: total[i],
+        pair: pairCount[i][j],
+        total: totalPairings[i],
       };
     }
 
     // last column indicates probability of getting any match
     barChartData[i][limit] = {
-      probability: total[i] === 0 ? 0 : totalMatches[i] / total[i],
+      probability: totalPairings[i] === 0 ? 0 : totalMatches[i] / totalPairings[i],
       match: totalMatches[i],
-      pair: total[i],
+      pair: totalPairings[i],
+      total: totalPairings[i],
     };
   }
 
