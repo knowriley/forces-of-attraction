@@ -14,7 +14,7 @@ definitions, `index.html` contains the layout, and `styles/style.css` contains s
 
 We have also initialized our `js` directory as an NPM module, in order to use `eslint` as a code-quality checker.
 ## Tasks to Complete
-Please see the [issues page](https://github.students.cs.ubc.ca/cpsc436v-2020w-t2/436v-project_l9o1b_q9l1b_r6w0b/issues) for a list of tasks that still need to be done, or visit the [project view](https://github.students.cs.ubc.ca/cpsc436v-2020w-t2/436v-project_l9o1b_q9l1b_r6w0b/projects/1) to see task status and completion.
+Please see the [issues page](https://github.com/rlnsy/forces-of-attraction/issues) for a list of tasks that still need to be done.
 ## Data
 Dataset is from experimental speed dating events by Columbia Business School professors Ray Fisman and Sheena Iyengar for their paper Gender Differences in Mate Selection: Evidence From a Speed Dating Experiment (​https://www.kaggle.com/annavictoria/speed-dating-experiment​).
 ## References
