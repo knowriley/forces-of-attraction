@@ -181,8 +181,10 @@ class BarChart {
     const gender = getOtherGender(vis.selectedGender);
     if (d.rowLabel === 'Total') {
       return `any ${gender}`
-    } else if (vis.attribute === 'race' || vis.attribute === 'age') {
+    } else if (vis.attribute === 'race') {
       return `${d.rowLabel} ${gender} `;
+    } else if (vis.attribute ==='age') {
+      return `${d.rowLabel} year old ${gender}`;
     } else {
       return `${gender} ${d.rowLabel}`;
     }
@@ -208,7 +210,7 @@ class BarChart {
     } else if (vis.attribute === 'race'){
       return `<div> A <strong>${vis.selectedLabel} ${vis.selectedGender}</strong> has a <strong>${d3.format('.2%')(d.value)}</strong> chance of matching with a <strong>${vis.chooseAlternateMatchType(d)}</strong> (${d.match} matches of ${d.pair} pairings) </div>`;
     } else if (vis.attribute === 'age'){
-      return `<div> A <strong>${vis.selectedLabel} year old ${vis.selectedGender}</strong> has a <strong>${d3.format('.2%')(d.value)}</strong> chance of matching with a <strong>${vis.chooseAlternateMatchType(d)} year old</strong> (${d.match} matches of ${d.pair} pairings) </div>`;
+      return `<div> A <strong>${vis.selectedLabel} year old ${vis.selectedGender}</strong> has a <strong>${d3.format('.2%')(d.value)}</strong> chance of matching with a <strong>${vis.chooseAlternateMatchType(d)}</strong> (${d.match} matches of ${d.pair} pairings) </div>`;
     } else {
       return `<div> A <strong>${vis.selectedGender} ${vis.selectedLabel}</strong> has a <strong>${d3.format('.2%')(d.value)}</strong> chance of matching with a <strong>${vis.chooseAlternateMatchType(d)}</strong> (${d.match} matches of ${d.pair} pairings) </div>`;
     }
