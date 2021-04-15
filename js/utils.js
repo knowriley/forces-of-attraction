@@ -5,8 +5,11 @@ const NUM_OF_FIELDS = 8;
 const NUM_OF_CAREERS = 10;
 const NUM_OF_RACES = 6; // MAX_RACES (5) + 1
 const NUM_OF_AGES = 56; // MAX_AGE (55) + 1
+// eslint-disable-next-line no-unused-vars
 const NONE = 'none';
+// eslint-disable-next-line no-unused-vars
 const MIN_WAVE = 1;
+// eslint-disable-next-line no-unused-vars
 const MAX_WAVE = 21;
 
 /**
@@ -22,7 +25,7 @@ const fieldGroups = [
   'Other',
   'Law',
   'Science',
-]
+];
 
 // eslint-disable-next-line no-unused-vars
 const fieldCodeToFieldGroupMapping = [ // 7 unique groups
@@ -57,7 +60,7 @@ const careerGroups = [
   'Lawyer/ Politician',
   'Medical Doctor',
   'Scientist',
-  'Athlete'
+  'Athlete',
 ];
 
 // eslint-disable-next-line no-unused-vars
@@ -94,7 +97,7 @@ const careerCodeToCareerMapping = [
   'Business',
   'Real Estate Agent',
   'International/Humanitarian Affairs',
-  'TODO (Undecided)',
+  'Undecided',
   'Social Worker',
   'Speech Pathologist',
   'Politician',
@@ -182,7 +185,7 @@ const decode = (attr) => (d) => {
       return v ? careerGroups[v] : defaultNA;
     case 'race':
       return v ? raceCodeToRaceMapping[v] : defaultNA;
-    case 'age' :
+    case 'age':
       return v ? getAgeGroupLabel(v) : defaultNA;
     default:
       return v;
@@ -231,9 +234,8 @@ const getDefaultLabel = (attribute) => {
   }
 };
 
-const getDefautGender = () => {
-  return 'male';
-}
+// eslint-disable-next-line no-unused-vars
+const getDefautGender = () => 'male';
 
 // eslint-disable-next-line no-unused-vars
 const getCode = (attribute, label) => {
@@ -246,37 +248,38 @@ const getCode = (attribute, label) => {
   }
 };
 
+// eslint-disable-next-line no-unused-vars
 const getGroupIndexFromCode = (attribute, code) => {
   let index = 0;
   switch (attribute) {
     case 'career_c':
-      index = careerGroups.indexOf(careerCodeToCareerGroupMapping[code])
-      return index != -1 ? index : 0;
+      index = careerGroups.indexOf(careerCodeToCareerGroupMapping[code]);
+      return index !== -1 ? index : 0;
     case 'field_cd':
       index = fieldGroups.indexOf(fieldCodeToFieldGroupMapping[code]);
-      return index != -1 ? index : 0;
+      return index !== -1 ? index : 0;
     default: return code;
   }
 };
 
+// eslint-disable-next-line no-unused-vars
 const getOtherGender = (gender) => {
   switch (gender) {
     case 'male': return 'female';
     case 'female': return 'male';
     default: return '';
   }
-}
+};
 
 const getAgeGroupLabel = (age) => {
   if (age <= 24) {
     return '20-24';
-  } else if (age <= 29) {
+  } if (age <= 29) {
     return '25-29';
-  } else if (age <= 34) {
+  } if (age <= 34) {
     return '30-34';
-  } else if (age <= 39) {
+  } if (age <= 39) {
     return '35-39';
-  } else {
-    return '40-45';
   }
-}
+  return '40-45';
+};

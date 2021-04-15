@@ -10,29 +10,28 @@
 <body>
     <div id="content" class='col'>
         <div id="top">
-            <h1>Forces of Attraction</h1>
-            <p>This one goes out to the data-curious and the hopeless romantics. Our site visualizes a set of more than 
-            8000 pairings in experimental speed-dating 
+            <h1>❤️ Forces of Attraction ❤️</h1>
+            <p>This one goes out to the data-curious and the hopeless romantics. Our site visualizes a 
+            <a href="https://www.kaggle.com/annavictoria/speed-dating-experiment" target="_blank">dataset</a>
+            of more than 8000 pairings in experimental speed-dating 
             events by Columbia Business School professors Ray Fisman and Sheena Iyengar for their paper 
-            "Gender Differences in Mate Selection: Evidence From a Speed Dating Experiment" 
-            (https://www.kaggle.com/annavictoria/speed-dating-experiment). The dating takes place
-            over multiple "waves", and participants get paired up with an array of partners from
+            <a href="http://www.stat.columbia.edu/~gelman/stuff_for_blog/sheena.pdf" target="_blank">"Gender Differences in Mate Selection: Evidence From a Speed Dating Experiment"</a>. 
+            The dating takes place over multiple "waves", and participants get paired up with an array of partners from
             a wide variety of backgrounds. We hope you enjoy exploring this data!</p>
         </div>
         <div id="vis-container" class='row'>
             <div id="wave-container" class='col'>
                 <h2>Wave-by-Wave</h2>
-                <p>Each circle is a participant in the study. Colors correspond to
-                the selection above. The distance
-                between any pair of participants is inversely proportional
-                to
-                <select id="attractByAttributeSelector">
+                <p>Each node is a participant in the study, arranged according to
+                    <select id="attractByAttributeSelector">
                     <option value="match">whether or not they matched</option>
                     <option value="like">how much the they liked each other</option>
                 </select>. A line between two nodes indicates that those participants
-                are a match in the current wave!
-                Try dragging the nodes to see which other nodes have high linkage
-                (i.e. attract each other in the study) and using the slider to view all waves of the experiment. <br>
+                are a match in the current wave! <br>
+                <br>
+                You can drag the nodes to see which other participants attract each other in the study,
+                and select a single node to highlight the information for its group in the summary
+                views.<br>
                 <div id="waveVis">
                     <div class='row'>
                         <div><strong>Wave:</strong> <span id="waveValue"></span></div>
@@ -48,7 +47,7 @@
                 <div id="forceDirected" class="chart"></div>
                 <div id="color">
                     <div id="groupSelect">
-                        Group by:
+                        <strong>Group by:</strong>
                     <select id="colorByAttributeSelector">
                         <option value="career_c">Career</option>
                         <option value="field_cd">Field of Study</option>
@@ -56,14 +55,15 @@
                         <option value="age">Age</option>
                     </select>
                     </div>
-                    <h4>Legend:</h4>
+                    <h4>Group Legend:</h4>
                     <div id="legend"></div>
                 </div>
             </div>
             <div id="summary-container" class='col'>
                 <h2>Summary</h2>
-                <p>Here we see statistics over all of the waves, divided by group. You can use the same drop-down above
-                to select the grouping type. Click away! You may find a secret hidden in one of the groups.</p>
+                <p>Here we see statistics over all of the waves, divided by group. You can use the same drop-down below 
+                    the visualization on the left to select the grouping type. Click away! 
+                    You may find a secret hidden in one of the groups.</p>
                 <div id="matrix" class="chart"></div>
                 <p>Click on the labels above to see detailed probabilites for each group below.</p>
                 <div id="bar" class="chart"></div>

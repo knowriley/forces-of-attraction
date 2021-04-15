@@ -17,7 +17,7 @@ class Matrix {
     this.highlightedMaleLabel = NONE;
     this.highlightedFemaleLabel = NONE;
     this.dispatch = this.config.dispatch;
-    this.color = 'green';
+    this.color = 'gray';
     this.initVis();
   }
 
@@ -112,7 +112,7 @@ class Matrix {
             colLabel: getLabel(vis.attribute, j),
             probability: vis.data[i][j].probability,
             match: vis.data[i][j].match,
-            pair: vis.data[i][j].pair
+            pair: vis.data[i][j].pair,
           });
         }
       }
@@ -126,7 +126,7 @@ class Matrix {
             colLabel: getLabel(vis.attribute, j),
             probability: vis.data[i][j].probability,
             match: vis.data[i][j].match,
-            pair: vis.data[i][j].pair
+            pair: vis.data[i][j].pair,
           });
         }
       }
@@ -164,33 +164,32 @@ class Matrix {
       .attr('y', (d) => (d.row - 1) * cellHeight)
       .attr('width', cellWidth)
       .attr('height', cellHeight)
-      .attr('stroke', (d) => d.pair <= 0 ? 'none' : 'white')
+      .attr('stroke', (d) => (d.pair <= 0 ? 'none' : 'white'))
       .attr('fill', (d) => {
         if (d.col === 0 || d.row === 0) {
           return 'none';
-        } else if (d.pair <= 0) {
+        } if (d.pair <= 0) {
           return 'none';
-        } else {
-          if (vis.highlightedMaleLabel == NONE && vis.highlightedFemaleLabel == NONE) {
-            return vis.colorScale(vis.colorValue(d));
-          } else if (d.rowLabel == vis.highlightedMaleLabel || d. colLabel == vis.highlightedFemaleLabel) {
-            return vis.colorScale(vis.colorValue(d));
-          } else {
-            return vis.unhighlightedColorScale(vis.colorValue(d));
-          }
         }
+        if (vis.highlightedMaleLabel === NONE && vis.highlightedFemaleLabel === NONE) {
+          return vis.colorScale(vis.colorValue(d));
+        } if (d.rowLabel === vis.highlightedMaleLabel
+            || d.colLabel === vis.highlightedFemaleLabel) {
+          return vis.colorScale(vis.colorValue(d));
+        }
+        return vis.unhighlightedColorScale(vis.colorValue(d));
       });
 
     cellEnter.on('mouseover', (e, d) => { // Tooltip: https://github.com/UBC-InfoVis/2021-436V-case-studies/blob/097d13b05d587f4fab3e3fcd23f5e99274397c2c/case-study_measles-and-vaccines/css/style.css
       d3.select('#tooltip')
         .style('display', 'block')
-        .style('left', `${e.pageX+10}px`)
-        .style('top', `${e.pageY+10}px`)
+        .style('left', `${e.pageX + 10}px`)
+        .style('top', `${e.pageY + 10}px`)
         .html(vis.generateHtml(d));
     }).on('mouseout', (_, __) => {
       d3.select('#tooltip').style('display', 'none');
     }).on('click', (e, d) => {
-      if (d.rowLabel == vis.highlightedMaleLabel && d.colLabel == vis.highlightedFemaleLabel) {
+      if (d.rowLabel === vis.highlightedMaleLabel && d.colLabel === vis.highlightedFemaleLabel) {
         vis.dispatch.call('matrixCellClick', d, NONE, NONE);
       } else {
         vis.dispatch.call('matrixCellClick', d, d.rowLabel, d.colLabel);
@@ -207,13 +206,21 @@ class Matrix {
       .attr('class', 'age-line');
 
     if (vis.attribute === 'age') {
+      const ruleText = '<div>These lines show the boundary for the socially acceptable \'Half-your-age-plus-seven\' rule</div>';
       vis.ageLine1
         .attr('x1', (17 - 17) * cellWidth)
         .attr('y1', (20 - 17) * cellWidth)
         .attr('x2', (29.5 - 17) * cellWidth)
         .attr('y2', (45 - 17) * cellWidth)
         .style('stroke', 'black')
-        .style('stroke-width', 1);
+        .style('stroke-width', 1)
+        .on('mouseover', (e, _) => {
+          d3.select('#tooltip')
+            .style('display', 'block')
+            .style('left', `${e.pageX + 10}px`)
+            .style('top', `${e.pageY + 10}px`)
+            .html(ruleText);
+        });
 
       vis.ageLine2
         .attr('x1', (20 - 17) * cellWidth)
@@ -221,7 +228,14 @@ class Matrix {
         .attr('x2', (45 - 17) * cellWidth)
         .attr('y2', (29.5 - 17) * cellWidth)
         .style('stroke', 'black')
-        .style('stroke-width', 1);
+        .style('stroke-width', 1)
+        .on('mouseover', (e, _) => {
+          d3.select('#tooltip')
+            .style('display', 'block')
+            .style('left', `${e.pageX + 10}px`)
+            .style('top', `${e.pageY + 10}px`)
+            .html(ruleText);
+        });
     } else {
       vis.chartArea.selectAll('line.age-line').remove();
     }
@@ -236,54 +250,58 @@ class Matrix {
     vis.yAxisGroup.call(vis.yAxis);
 
     d3.selectAll(`${vis.config.parentElement} .y-axis .tick`) // https://stackoverflow.com/a/32658330
-      .attr('font-weight', d => {
-        return d == vis.selectedLabel && vis.selectedGender == 'male' ? 'bolder' : 'normal';
-      })
+      .attr('font-weight', (d) => (d === vis.selectedLabel && vis.selectedGender === 'male' ? 'bolder' : 'normal'))
       .on('click', (event, selected) => {
         vis.dispatch.call('matrixLabelClick', selected, selected, 'male');
       });
 
     d3.selectAll(`${vis.config.parentElement} .x-axis .tick`)
-      .attr('font-weight', d => {
-        return d == vis.selectedLabel && vis.selectedGender == 'female' ? 'bolder' : 'normal';
-      })
+      .attr('font-weight', (d) => (d === vis.selectedLabel && vis.selectedGender === 'female' ? 'bolder' : 'normal'))
       .on('click', (event, selected) => {
         vis.dispatch.call('matrixLabelClick', selected, selected, 'female');
       });
   }
 
   chooseAlternateMatchType(d) {
-    let vis = this;
+    const vis = this;
     const gender = getOtherGender(vis.gender);
     const label = getLabel(vis.attribute, d.row);
     if (label === 'Total') {
-      return `any ${gender}`
-    } else {
-      return `${gender} ${label}`
+      return `any ${gender}`;
     }
+    return `${gender} ${label}`;
   }
 
   generateHtml(d) {
-    let vis = this;
+    const vis = this;
     if (vis.attribute === 'field_cd') {
       return `
         <div>A <strong>male ${getLabel(vis.attribute, d.row)} student</strong> and </div>
         <div>a <strong>female ${getLabel(vis.attribute, d.col)} student </strong></div>
         <div>match <strong>${d3.format('.0%')(d.probability)}</strong> of the time.</div>
         <div>(${d.match} matches of ${d.pair} pairings)</div>
-    `} else if (vis.attribute === 'age'){
+    `;
+    } if (vis.attribute === 'age') {
       return `
-        <div>A <strong>male ${getLabel(vis.attribute, d.row)} year old</strong> and </div>
-        <div>a <strong>female ${getLabel(vis.attribute, d.col)} year old </strong></div>
+      <div>A <strong>male ${d.rowLabel} year old</strong> and </div>
+      <div>a <strong>female ${d.colLabel} year old </strong></div>
         <div>match <strong>${d3.format('.0%')(d.probability)}</strong> of the time.</div>
         <div>(${d.match} matches of ${d.pair} pairings)</div>
-    `} else {
+    `;
+    } if (vis.attribute === 'race') {
       return `
+        <div>A <strong>${getLabel(vis.attribute, d.row)} male</strong> and </div>
+        <div>a <strong>${getLabel(vis.attribute, d.col)} female</strong></div>
+        <div>match <strong>${d3.format('.0%')(d.probability)}</strong> of the time.</div>
+        <div>(${d.match} matches of ${d.pair} pairings)</div>
+    `;
+    }
+    return `
         <div>A <strong>male ${getLabel(vis.attribute, d.row)}</strong> and </div>
         <div>a <strong>female ${getLabel(vis.attribute, d.col)} </strong></div>
         <div>match <strong>${d3.format('.0%')(d.probability)}</strong> of the time.</div>
         <div>(${d.match} matches of ${d.pair} pairings)</div>
-    `}
+    `;
   }
 
   setColor(color) {

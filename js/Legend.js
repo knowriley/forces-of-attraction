@@ -1,4 +1,3 @@
-const ITEM_WIDTH = 150;
 const CHARACTER_WIDTH = 11;
 
 // eslint-disable-next-line no-unused-vars
@@ -28,7 +27,8 @@ class Legend extends View {
   updateVis() {
     super.updateVis();
     const vis = this;
-    vis.itemWidth = d3.max(vis.getData(), item => item ? item.toString().length : 0) * CHARACTER_WIDTH + CHARACTER_WIDTH;
+    vis.itemWidth = d3.max(vis.getData(),
+      (item) => (item ? item.toString().length : 0)) * CHARACTER_WIDTH + CHARACTER_WIDTH;
 
     vis.renderVis();
   }
@@ -56,7 +56,7 @@ class Legend extends View {
   positionLegendItem(i, n) {
     const vis = this;
     const itemHeight = (vis.getHeight() / n) * 0.7;
-    let y = i % n;
+    const y = i % n;
     const x = (i - y) / n;
     return `translate(${x * vis.itemWidth}, ${y * itemHeight})`;
   }

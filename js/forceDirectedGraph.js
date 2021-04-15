@@ -21,6 +21,7 @@ class ForceDirectedGraph extends View {
     const vis = this;
 
     vis.config.containerHeight = 400;
+    vis.dispatch = vis.config.dispatch;
 
     // non-visual wave state
     vis.wave = 1;
@@ -39,6 +40,8 @@ class ForceDirectedGraph extends View {
     // Highlight selection
     vis.highlightedMaleLabel = NONE;
     vis.highlightedFemaleLabel = NONE;
+
+    vis.selectedParticipantID = NONE;
 
     vis.updateVis();
   }
@@ -122,25 +125,27 @@ class ForceDirectedGraph extends View {
       .data(nodesData, (d) => d.id)
       .join('circle')
       .attr('class', 'node')
+      .attr('id', (d) => `node-${d.id}`)
       .attr('r', NODE_RADIUS)
       .attr('fill', (d) => vis.colorScale(decode(vis.attribute)(d)))
       .attr('stroke', 'black')
       .attr('opacity', (d) => {
-        if (vis.highlightedMaleLabel == NONE && vis.highlightedFemaleLabel == NONE) {
+        if (vis.highlightedMaleLabel === NONE && vis.highlightedFemaleLabel === NONE) {
           return 1;
-        } else if ((d.gender == 0 && getLabel(vis.attribute, d[vis.attribute]) == vis.highlightedFemaleLabel) ||
-            (d.gender == 1 && getLabel(vis.attribute, d[vis.attribute]) == vis.highlightedMaleLabel)) {
+        } if ((d.gender === 0
+            && getLabel(vis.attribute, d[vis.attribute]) === vis.highlightedFemaleLabel)
+            || (d.gender === 1
+                && getLabel(vis.attribute, d[vis.attribute]) === vis.highlightedMaleLabel)) {
           return 1;
-        } else {
-          return 0.1;
         }
+        return 0.1;
       })
       .call(drag(vis.graph))
       .on('mouseover', (e, d) => {
         d3.select('#tooltip')
           .style('display', 'block')
-          .style('left', `${e.pageX+10}px`)
-          .style('top', `${e.pageY+10}px`)
+          .style('left', `${e.pageX + 10}px`)
+          .style('top', `${e.pageY + 10}px`)
           .html(`
                 <h1>Participant ${decode('id')(d)}</h1>
                 <p>Gender: ${decode('gender')(d)}<p>
@@ -153,6 +158,19 @@ class ForceDirectedGraph extends View {
       })
       .on('mouseout', (_, __) => {
         d3.select('#tooltip').style('display', 'none');
+      })
+      .on('click', (_, d) => {
+        const val = getLabel(vis.getAttribute(), d[vis.getAttribute()]);
+
+        // un-highlight prev selected
+        d3.select(`#node-${vis.selectedParticipantID}`).style('stroke-width', '1px');
+
+        if (d[vis.getAttribute()]) {
+          // reassign and highlight newly selected
+          vis.selectedParticipantID = d.id;
+          d3.select(`#node-${d.id}`).style('stroke-width', '2px');
+          vis.dispatch.call('matrixLabelClick', val, val, decode('gender')(d));
+        }
       });
 
     const matchLinks = d3.filter(linksData,
@@ -165,7 +183,7 @@ class ForceDirectedGraph extends View {
       .attr('opacity', 0.7)
       .attr('stroke', 'black')
       .attr('stroke-width', 0.1)
-      .lower(); //https://stackoverflow.com/a/47877220
+      .lower(); // https://stackoverflow.com/a/47877220
 
     vis.graph.on('tick', () => {
       nodes
