@@ -147,4 +147,5 @@ h2 {
 
 .node:hover {
     stroke-width: 2;
+    cursor: pointer;
 }
