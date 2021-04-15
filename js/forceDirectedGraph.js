@@ -162,11 +162,13 @@ class ForceDirectedGraph extends View {
 
         // unhighlight prev selected
         d3.select(`#node-${vis.selectedParticipantID}`).style('stroke-width', '1px');
-        
-        // reassign and highlight newly selected
-        vis.selectedParticipantID = d.id;
-        d3.select(`#node-${d.id}`).style('stroke-width', '2px');
-        vis.dispatch.call('matrixLabelClick', val, val, decode('gender')(d));
+
+        if (d[vis.getAttribute()]) {
+          // reassign and highlight newly selected
+          vis.selectedParticipantID = d.id;
+          d3.select(`#node-${d.id}`).style('stroke-width', '2px');
+          vis.dispatch.call('matrixLabelClick', val, val, decode('gender')(d));
+        }
       });
 
     const matchLinks = d3.filter(linksData,
