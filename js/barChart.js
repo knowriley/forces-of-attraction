@@ -88,6 +88,7 @@ class BarChart {
             value: vis.data[getCode(vis.attribute, vis.selectedLabel)][i].probability,
             match: vis.data[getCode(vis.attribute, vis.selectedLabel)][i].match,
             pair: vis.data[getCode(vis.attribute, vis.selectedLabel)][i].pair,
+            total: vis.data[getCode(vis.attribute, vis.selectedLabel)][i].total,
           });
         }
       }
@@ -100,6 +101,7 @@ class BarChart {
             value: vis.data[getCode(vis.attribute, vis.selectedLabel)][i].probability,
             match: vis.data[getCode(vis.attribute, vis.selectedLabel)][i].match,
             pair: vis.data[getCode(vis.attribute, vis.selectedLabel)][i].pair,
+            total: vis.data[getCode(vis.attribute, vis.selectedLabel)][i].total,
           });
         }
       }
@@ -115,6 +117,7 @@ class BarChart {
           ? 0 : vis.data[getCode(vis.attribute, vis.selectedLabel)][vis.data.length].probability,
         match: vis.data[getCode(vis.attribute, vis.selectedLabel)][vis.data.length].match,
         pair: vis.data[getCode(vis.attribute, vis.selectedLabel)][vis.data.length].pair,
+        total: vis.data[getCode(vis.attribute, vis.selectedLabel)][vis.data.length].total,
       });
     }
 
@@ -205,13 +208,13 @@ class BarChart {
   generateHtml(d) {
     const vis = this;
     if (vis.attribute === 'field_cd') {
-      return `<div> A <strong>${vis.selectedGender} ${vis.selectedLabel} student </strong>has a <strong>${d3.format('.2%')(d.value)}</strong> chance of matching with <strong>${vis.chooseAlternateMatchType(d)} student</strong> (${d.match} matches of ${d.pair} pairings) </div>`;
+      return `<div> A <strong>${vis.selectedGender} ${vis.selectedLabel} student </strong>has a <strong>${d3.format('.2%')(d.value)}</strong> chance of matching with <strong>${vis.chooseAlternateMatchType(d)} student</strong> (${d.match} matches of ${d.total} pairings) </div>`;
     } if (vis.attribute === 'race') {
-      return `<div> A <strong>${vis.selectedLabel} ${vis.selectedGender}</strong> has a <strong>${d3.format('.2%')(d.value)}</strong> chance of matching with <strong>${vis.chooseAlternateMatchType(d)}</strong> (${d.match} matches of ${d.pair} pairings) </div>`;
+      return `<div> A <strong>${vis.selectedLabel} ${vis.selectedGender}</strong> has a <strong>${d3.format('.2%')(d.value)}</strong> chance of matching with <strong>${vis.chooseAlternateMatchType(d)}</strong> (${d.match} matches of ${d.total} pairings) </div>`;
     } if (vis.attribute === 'age') {
-      return `<div> A <strong>${vis.selectedLabel} year old ${vis.selectedGender}</strong> has a <strong>${d3.format('.2%')(d.value)}</strong> chance of matching with <strong>${vis.chooseAlternateMatchType(d)}</strong> (${d.match} matches of ${d.pair} pairings) </div>`;
+      return `<div> A <strong>${vis.selectedLabel} year old ${vis.selectedGender}</strong> has a <strong>${d3.format('.2%')(d.value)}</strong> chance of matching with <strong>${vis.chooseAlternateMatchType(d)}</strong> (${d.match} matches of ${d.total} pairings) </div>`;
     }
-    return `<div> A <strong>${vis.selectedGender} ${vis.selectedLabel}</strong> has a <strong>${d3.format('.2%')(d.value)}</strong> chance of matching with <strong>${vis.chooseAlternateMatchType(d)}</strong> (${d.match} matches of ${d.pair} pairings) </div>`;
+    return `<div> A <strong>${vis.selectedGender} ${vis.selectedLabel}</strong> has a <strong>${d3.format('.2%')(d.value)}</strong> chance of matching with <strong>${vis.chooseAlternateMatchType(d)}</strong> (${d.match} matches of ${d.total} pairings) </div>`;
   }
 
   setColor(color) {
