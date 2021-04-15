@@ -12,7 +12,7 @@ d3.csv('data/speedDating.csv').then((data) => {
   // Convert columns to numerical values
   data.forEach((d) => {
     Object.keys(d).forEach((attr) => {
-      if (attr == 'career_c' || attr == 'field_cd') {
+      if (attr === 'career_c' || attr === 'field_cd') {
         d[attr] = getGroupIndexFromCode(attr, +d[attr]);
       } else if (attr !== 'from') {
         d[attr] = +d[attr];
@@ -38,14 +38,11 @@ d3.csv('data/speedDating.csv').then((data) => {
 
   // DOCUMENT PHASE
 
-  // Query the container that holds all visualization elements
-  const container = document.getElementById('vis-container');
-
   // Events are triggered and handled using D3-dispatch
   const dispatch = d3.dispatch('matrixLabelClick', 'matrixCellClick');
 
   // Initialize charts
-  lineChart = new LineChart({ parentElement: '#line'}, getGraphData(data));
+  lineChart = new LineChart({ parentElement: '#line' }, getGraphData(data));
   barChart = new BarChart({ parentElement: '#bar' }, barChartData, DEFAULT_ATTRIBUTE, getDefaultLabel(DEFAULT_ATTRIBUTE), getDefautGender());
   forceDirectedGraph = new ForceDirectedGraph({ parentElement: '#forceDirected', dispatch }, getGraphData(data), 'career_c');
   matrix = new Matrix({ parentElement: '#matrix', dispatch }, matrixData, DEFAULT_ATTRIBUTE, getDefaultLabel(DEFAULT_ATTRIBUTE), getDefautGender());
@@ -109,36 +106,36 @@ d3.csv('data/speedDating.csv').then((data) => {
 
   // Event handlers for slider button click
   document.getElementById('left-slider-button').onclick = (_) => {
-    let wave = lineChart.slider.value();
+    const wave = lineChart.slider.value();
     if (wave > MIN_WAVE) {
-      waveChangeUpdate(wave-1);
+      waveChangeUpdate(wave - 1);
     }
-  }
+  };
 
   document.getElementById('right-slider-button').onclick = (_) => {
-    let wave = lineChart.slider.value();
+    const wave = lineChart.slider.value();
     if (wave < MAX_WAVE) {
-      waveChangeUpdate(wave+1);
+      waveChangeUpdate(wave + 1);
     }
-  }
+  };
 
   // Event handler for matrix label click
   dispatch.on('matrixLabelClick', (selected, gender) => {
     gender = gender.toLowerCase();
     if (gender === 'male') {
-          barChartData = getBarChartData(maleData,
-            maleMatchData, demographicData, matrix.attribute);
-        } else {
-          barChartData = getBarChartData(femaleData,
-            femaleMatchData, demographicData, matrix.attribute);
-        }
+      barChartData = getBarChartData(maleData,
+        maleMatchData, demographicData, matrix.attribute);
+    } else {
+      barChartData = getBarChartData(femaleData,
+        femaleMatchData, demographicData, matrix.attribute);
+    }
 
-        matrix.selectedLabel = selected;
-        matrix.selectedGender = gender;
+    matrix.selectedLabel = selected;
+    matrix.selectedGender = gender;
 
-        barChart.data = barChartData;
-        barChart.selectedLabel = selected;
-        barChart.selectedGender = gender;
+    barChart.data = barChartData;
+    barChart.selectedLabel = selected;
+    barChart.selectedGender = gender;
 
     update();
   });
@@ -201,15 +198,14 @@ const getMatrixData = (data, matchData, demographicData, attribute) => {
     for (let j = 0; j < limit; j += 1) {
       matrixData[i][j] = {
         probability: allCount[i][j] === 0 ? 0 : matchCount[i][j] / allCount[i][j],
-        match:  matchCount[i][j],
-        pair: allCount[i][j]
-      }
+        match: matchCount[i][j],
+        pair: allCount[i][j],
+      };
     }
   }
 
   return matrixData;
 };
-
 
 /**
   * Data pre-processing for bar chart
@@ -251,17 +247,17 @@ const getBarChartData = (data, matchData, demographicData, attribute) => {
   for (let i = 0; i < limit; i += 1) {
     for (let j = 0; j < limit; j += 1) {
       barChartData[i][j] = {
-        probability : total[i] === 0 ? 0 : matchCount[i][j] / total[i],
+        probability: total[i] === 0 ? 0 : matchCount[i][j] / total[i],
         match: matchCount[i][j],
-        pair: total[i]
+        pair: total[i],
       };
     }
 
     // last column indicates probability of getting any match
     barChartData[i][limit] = {
-      probability: total[i] === 0 ? 0 :  totalMatches[i] / total[i],
+      probability: total[i] === 0 ? 0 : totalMatches[i] / total[i],
       match: totalMatches[i],
-      pair: total[i]
+      pair: total[i],
     };
   }
 
