@@ -159,19 +159,14 @@ class ForceDirectedGraph extends View {
         d3.select('#tooltip').style('display', 'none');
       }).on('click', (_, d) => {
         const val = getLabel(vis.getAttribute(), d[vis.getAttribute()]);
-        if (d.id === vis.selectedParticipantID) {
-          vis.selectedParticipantID = NONE;
-          d3.select(`#node-${d.id}`).style('stroke-width', '1px'); 
-          vis.dispatch.call('matrixLabelClick', val, val, NONE);
-        } else {
-          // unhighlight prev selected
-          d3.select(`#node-${vis.selectedParticipantID}`).style('stroke-width', '1px');
-          
-          // reassign and highlight newly selected
-          vis.selectedParticipantID = d.id;
-          d3.select(`#node-${d.id}`).style('stroke-width', '2px');
-          vis.dispatch.call('matrixLabelClick', val, val, decode('gender')(d));
-        }
+
+        // unhighlight prev selected
+        d3.select(`#node-${vis.selectedParticipantID}`).style('stroke-width', '1px');
+        
+        // reassign and highlight newly selected
+        vis.selectedParticipantID = d.id;
+        d3.select(`#node-${d.id}`).style('stroke-width', '2px');
+        vis.dispatch.call('matrixLabelClick', val, val, decode('gender')(d));
       });
 
     const matchLinks = d3.filter(linksData,
